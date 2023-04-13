@@ -114,7 +114,7 @@ function StartMeeting(roomName, dispNme) {
         },
         participantLeft: function (data) {
             console.log('participantLeft', data);
-            alert();
+            skip_query();
         },
         videoConferenceJoined: function(data){
             console.log("videoConferenceJoined",data);

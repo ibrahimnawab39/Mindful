@@ -28,6 +28,8 @@ Route::get('/get-started',[AllController::class,'settings'])->name('front.get-st
 Route::post('/get-started/store',[AllController::class,'store'])->name('front.get-started-store');
 Route::get('/settings',[AllController::class,'settings'])->name('front.settings');
 Route::get('/video',[AllController::class,'video'])->name('front.video');
+Route::post('/connect-with',[AllController::class,'connect_with'])->name('front.connect-with');
+Route::get('/Skipping',[AllController::class,'skipping'])->name('front.skipping');
 Route::get('/testing',function(){
     return view("testing"); 
 });
