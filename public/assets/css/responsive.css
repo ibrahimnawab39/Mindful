@@ -1,0 +1,63 @@
+@media (max-width:1220px) {}
+
+
+@media (max-width:991px) {}
+
+
+@media (max-width:767px) {
+    .getStartedColumnLeft {
+        height: 50%;
+        padding: 20px 40px;
+    }
+
+    .brandLogo {
+        padding-top: 20px;
+        width: 150px;
+    }
+    .getStartedPage>.row {
+        height: 100%;
+        margin: 0;
+    }
+    .getStartedColumnRight {
+        height: 50%;
+        background-position: center;
+    }
+    .stickybar {
+        position: relative; 
+        height: 100px !important;
+    }
+}
+/* 4K SCREEN SIZE   */
+@media (min-width:1450px) and (max-width:3000px)  {
+    .welcome-page .left-content {
+        padding-right: 400px;
+        padding-bottom: 40px;
+    }
+    .welcome-page .left-content .logo-container{
+        margin-bottom: 100px;
+    }
+}
+/* TABLET SCREEN */
+@media (min-width:655px) and (max-width:786px)  {
+    .welcome-page .left-content {
+        padding-right: 20px;
+        padding-left: 20px;
+        padding-bottom: 40px;
+    }
+    .welcome-page .left-content .logo-container{
+        margin-bottom: 18px;
+        width: 250px;
+    }
+}
+/* MOBILE SCREEN */
+@media screen and (max-width:650px)  {
+    .welcome-page .left-content {
+        padding-right: 20px;
+        padding-left: 20px;
+        padding-bottom: 40px;
+    }
+    .welcome-page .left-content .logo-container{
+        margin-bottom: 18px;
+        width: 150px;
+    }
+}
