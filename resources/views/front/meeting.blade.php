@@ -226,6 +226,8 @@
     <script src="{{ asset('assets/js/meeting.js') }}"></script>
     <script>
         var mic = true;
+        var myid = 0;
+        var otherid = 0;
         var video = true;
         var dispNme = "{{ $user->username }}";
         var meeting_id = "585689757";
@@ -287,22 +289,61 @@
         function skip_query() {
             var icon = $("#skip_call").find(".mdi");
             skiping_video(video, mic);
-            $.ajax({
-                url: "{{ route('front.skipping') }}",
-                type: "GET",
-                data: {},
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                dataType: "JSON",
-                success: function(result) {
-                    if (result["res"] == "success") {
-                        icon.removeClass("mdi-spin");
-                        BindEvent();
-                        StartMeeting(result["room"]["room_name"], dispNme, video, mic);
+            if (myid != 0 && otherid != 0) {
+                $.ajax({
+                    url: "{{ route('front.skipping') }}",
+                    type: "POST",
+                    data: {
+                        myid:myid,
+                        otherid:otherid
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    dataType: "JSON",
+                    success: function(result) {
+                        if (result["res"] == "success") {
+                            if (result["room"] != null) {
+                                icon.removeClass("mdi-spin");
+                                BindEvent();
+                                myid = result["room"]["my_id"];
+                                otherid = result["room"]["other_id"];
+                                StartMeeting(result["room"]["room_name"], dispNme, video, mic);
+
+                            } else {
+                                skip_query();
+                            }
+                        }
                     }
-                }
-            })
+                })
+            } else {
+                $.ajax({
+                    url: "{{ route('front.skipping') }}",
+                    type: "POST",
+                    data: {
+                        myid:0,
+                        otherid:0
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    dataType: "JSON",
+                    success: function(result) {
+                        if (result["res"] == "success") {
+                            if (result["room"] != null) {
+                                icon.removeClass("mdi-spin");
+                                BindEvent();
+                                myid = result["room"]["my_id"];
+                                otherid = result["room"]["other_id"];
+                                StartMeeting(result["room"]["room_name"], dispNme, video, mic);
+
+                            } else {
+                                skip_query();
+                            }
+                        }
+                    }
+                })
+            }
         }
     </script>
 @endsection
