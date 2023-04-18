@@ -121,14 +121,14 @@ function StartMeeting(roomName, dispNme) {
             
         }
     });
-    if(video == false) {
-        if (!apiObj.isVideoMuted()) {
-            apiObj.executeCommand('toggleVideo');
-        }
-    }
-    if(mic == false){
-        if (!apiObj.isAudioMuted()) {
-            apiObj.executeCommand('toggleAudio');
-        }
-    }
+    // if(video == false) {
+    //     if (!apiObj.isVideoMuted()) {
+    //         apiObj.executeCommand('toggleVideo');
+    //     }
+    // }
+    // if(mic == false){
+    //     if (!apiObj.isAudioMuted()) {
+    //         apiObj.executeCommand('toggleAudio');
+    //     }
+    // }
 }

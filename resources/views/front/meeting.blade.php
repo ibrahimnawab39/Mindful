@@ -172,7 +172,11 @@
     <section class="meeting-section">
         <div class="row">
             <div class="col-md-8">
-                <a class="btn btn-dark rounded Goback-Btn" href="{{ route('front.main') }}">Go Back to Dashboard</a>
+                <a class="btn btn-dark rounded gotodashboard Goback-Btn" href="{{ route('front.main') }}">
+                    <img src="{{asset('assets/images/svg/arrowleft.svg')}}" class='showLight'>
+                    <img src="{{asset('assets/images/svg/arrowleftDark.svg')}}" class='showdark'>
+                    Go Back to Dashboard
+                    </a>
                 <div class="mt-4 myVideo connected-video">
                     <div id="local-video"></div>
                     <div class='videoActions'>
@@ -201,7 +205,7 @@
                     </div>
                 </div>
                 <div class="row justify-content-center">
-                    <button class="btn skip-btn rounded btn-small" type="button" id="skip_call"><i
+                    <button class="btn skip-video-btn rounded btn-small" type="button" id="skip_call"><i
                             class="mdi mdi-24px mdi-reload"></i> Skip</button>
                 </div>
                 <div class='row mt-4'>

@@ -29,7 +29,7 @@ Route::post('/get-started/store',[AllController::class,'store'])->name('front.ge
 Route::get('/settings',[AllController::class,'settings'])->name('front.settings');
 Route::get('/video',[AllController::class,'video'])->name('front.video');
 Route::post('/connect-with',[AllController::class,'connect_with'])->name('front.connect-with');
-Route::post('/Skipping',[AllController::class,'skipping'])->name('front.skipping');
+Route::post('/skip',[AllController::class,'skipping'])->name('front.skipping');
 Route::get('/testing',function(){
     return view("testing"); 
 });

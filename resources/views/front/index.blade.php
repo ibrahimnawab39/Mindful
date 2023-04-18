@@ -12,8 +12,8 @@
     </style>
 @endsection
 @section('content')
-    <section class='dashboard-section'>
-        <div class='deahboardSecLeft col-md-5 col-lg-6 '>
+    <section class='dashboard-section standard'>
+        <div class='deahboardSecLeft col-md-5 col-lg-6 pr-0'>
             <h1>Connecting Minds</h1>
             <p>Mindful is a social networking application that encourages lively debates on a range of topics, with an
                 emphasis on religion and science. Users can engage in random video or text chats to challenge their
@@ -21,13 +21,18 @@
                 and intellectually curious individuals.</p>
             <button class='btn btn-light-dark rounded-pill btn-small'>Start Chatting</button>
             <div class='dashboardbtngrp'>
-                <a class='btn btn-light-dark rounded '>Text</a>
-                <a class='btn btn-dark rounded ' href="{{ route('front.video') }}">Video</a>
+                <a class='btn btn-light-dark rounded '>
+                    <img src="{{asset('assets/images/svg/envelope.svg')}}" class='showLight'>
+                    <img src="{{asset('assets/images/svg/envelope-dark.svg')}}" class='showdark'>
+                    Text</a>
+                <a class='btn btn-dark rounded ' href="{{ route('front.video') }}"> 
+                    <img src="{{asset('assets/images/svg/video.svg')}}" class=''>
+                    Video</a>
             </div>
             <div class="row">
                 <div class="col-md-12 mt-4">
-                    <label for="">Connect (Optional)</label>
-                    <select id="connect-dropdown" class="form-control">
+                    <label for="">Connect to <span class='text-muted'>(Optional)</span></label>
+                    <select id="connect-dropdown"  >
                         <option value="" selected disabled>Select from drop down</option>
                         <option value="Everyone">Everyone</option>
                         <option value="Jews">Jews</option>
@@ -47,7 +52,9 @@
             <p>
                 Chat GPT: Generative Pre-trained Transformer for Open-Domain Conversational AI
             </p>
-            <button class='btn btn-dark rounded '>Open GPT</button>
+            <button class='btn btn-dark rounded '>
+            <img src="{{asset('assets/images/svg/openai.svg')}}" class=''>
+                Open GPT</button>
         </div>
     </section>
 @endsection

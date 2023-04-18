@@ -46,7 +46,15 @@ $(document).ready(function () {
     $(".next-step").click(function (e) {
 
         var active = $('.wizard .nav-tabs li.active');
-        active.addClass('completeTab').find('.round-tab').html('<i class="fa-solid fa-check"></i>')
+             console.log('next step')
+        $('.tab-pane.active input').each(function(i){
+            console.log(i)
+            if($(this).val() == null){
+               return toastr.warning("Please complete the field before proceeding to the next step.");
+            }
+        });
+        
+        active.addClass('completeTab').find('.round-tab').html('<i class="fa fa-solid fa-check"></i>')
         active.next().removeClass('disabled');
         nextTab(active);
 

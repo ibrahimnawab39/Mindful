@@ -118,22 +118,24 @@ class AllController extends Controller
         }
         $date = date("Y-m-d");
         $room_name = rand(99999999, 10000000);
+        // return $this->all_online_user($user->id);
         while (true) {
             $online_users = $this->all_online_user($user->id);
             if (count($online_users) >= 2) {
                 $other = 0;
-                $user1 = $online_users[0]["user_id"];
-                $user2 = $online_users[1]["user_id"];
+                $user1 = $online_users[0]["id"];
+                $user2 = $online_users[1]["id"];
                 if ($user1 == $user->id || $user2 == $user2) {
                     $room = Rooms::where('room_date', $date)->where('my_id', $user->id)->orwhere('other_id', $user->id)->first();
-                    UserList::where('id', $user1)->update([
-                        "status" => 1
-                    ]);
-                    UserList::where('id', $user2)->update([
-                        "status" => 1
-                    ]);
-
+                    
                     if (!empty($room)) {
+                        UserList::where('id', $user->id)->update([
+                        "status" => 1
+                    ]);
+                    // UserList::where('id', $user2)->update([
+                    //     "status" => 1
+                    // ]);
+
                         return response()->json(["res" => "success", "room" => $room]);
                     } else {
                         Rooms::create([
@@ -142,6 +144,13 @@ class AllController extends Controller
                             'room_date' => $date,
                             'room_name' => $room_name
                         ]);
+                        UserList::where('id', $user->id)->update([
+                        "status" => 1
+                    ]);
+                    // UserList::where('id', $user2)->update([
+                    //     "status" => 1
+                    // ]);
+
                         $room = Rooms::where('room_date', $date)->where('my_id', $user->id)->orwhere('other_id', $user->id)->first();
 
                         return response()->json(["res" => "success", "room" => $room]);
@@ -156,6 +165,43 @@ class AllController extends Controller
     }
     public function all_online_user($id)
     {
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $user =  UserList::where('ip_address', $ip)->first();
+        $allusers = null;
+        if (!empty($user->connect_with)) {
+            $allusers = UserList::where('online_status', 1)
+                ->where('connect_with', $user->connect_with)
+                ->where('status', 0)
+                ->orwhere('status', 2)
+                ->get();
+        } elseif (!empty($user->interest)) {
+            $allusers = UserList::where('online_status', 1)
+                ->whereIn('interest', $user->interest)
+                ->where('status', 0)
+                ->orwhere('status', 2)
+                ->inRandomOrder()
+                ->limit(2)
+                ->get()
+                ->toArray();
+        } elseif (!empty($user->interest) && !empty($user->connect_with)) {
+            $allusers = UserList::where('online_status', 1)
+                ->whereIn('interest', $user->interest)
+                ->where('connect_with', $user->connect_with)
+                ->where('status', 0)
+                ->orwhere('status', 2)
+                ->inRandomOrder()
+                ->limit(2)
+                ->get()
+                ->toArray();
+        } else {
+            $allusers = UserList::where('online_status', 1)
+                ->where('status', 0)
+                ->orwhere('status', 2)
+                ->inRandomOrder()
+                ->limit(2)
+                ->get()
+                ->toArray();
+        }
         $allonline_users = OnlineUsers::inRandomOrder()->limit(2)->get()->toArray();
         return $allonline_users;
     }

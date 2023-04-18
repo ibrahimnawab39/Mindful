@@ -1,10 +1,79 @@
-@media (max-width:1220px) {}
+@media (max-width:1400px) {
+    .welcome-page .content-container p {
+    font-size: clamp(14px, 1vw, 2rem);
+}
+    .welcome-page .content-container button, .welcome-page .content-container a {
+    padding: 10px 10px;
+    font-size: clamp(.7rem, 1vw, 2rem);
+}
+.welcome-page .content-container h3 {
+    font-size: 24px;
+}
+}
+
+@media (max-width:1220px) {
+.welcome-page .content-container p {
+    font-size: clamp(12px, 1vw, 2rem);
+}
+.welcome-page .content-container button, .welcome-page .content-container a {
+    padding: 8px 10px;
+    font-size: clamp(.6rem, 1vw, 2rem);
+}
+.welcome-page .left-content .logo-container {
+    margin-bottom: 20px;
+    width: 60%;
+}
+
+.welcome-page .content-container h3 {
+    font-size: 22px;
+}
+
+   .deahboardSecLeft h1 {
+        font-size:2rem;
+    }
 
 
-@media (max-width:991px) {}
+
+
+
+}
+
+
+@media (max-width:991px) {
+    .deahboardSecLeft h1 {
+        font-size:2rem;
+    }
+    .deahboardSecLeft { 
+    padding-left: 0px;
+}
+}
 
 
 @media (max-width:767px) {
+    .mindfulNevbar { 
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    section.dashboard-section {
+        display: flex; 
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        height: 100%; 
+        padding:10px;
+    }
+    
+    .deahboardSecLeft { 
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding-left: 0px;
+    }
+    
+    .deahboardSecLeft p {  
+        text-align: center;
+    }
     .getStartedColumnLeft {
         height: 50%;
         padding: 20px 40px;
@@ -29,8 +98,7 @@
 }
 /* 4K SCREEN SIZE   */
 @media (min-width:1450px) and (max-width:3000px)  {
-    .welcome-page .left-content {
-        padding-right: 400px;
+    .welcome-page .left-content { 
         padding-bottom: 40px;
     }
     .welcome-page .left-content .logo-container{
@@ -51,6 +119,9 @@
 }
 /* MOBILE SCREEN */
 @media screen and (max-width:650px)  {
+      .deahboardSecLeft h1 {
+        font-size:2rem;
+    }
     .welcome-page .left-content {
         padding-right: 20px;
         padding-left: 20px;
