@@ -1,14 +1,11 @@
 <?php
-
 namespace App\Http\Controllers\Front;
-
 use App\Http\Controllers\Controller;
 use App\Models\OnlineUsers;
 use App\Models\Rooms;
 use App\Models\UserList;
 use Illuminate\Http\Request;
 use Nette\Utils\Random;
-
 class AllController extends Controller
 {
     public function welcome()
@@ -107,9 +104,7 @@ class AllController extends Controller
                 ->orwhere('status', 2)
                 ->get();
         }
-
         foreach ($allusers as $alluser) {
-
             if (empty(OnlineUsers::where('user_id', $alluser->id)->first())) {
                 OnlineUsers::create([
                     'user_id' => $alluser->id
@@ -126,16 +121,8 @@ class AllController extends Controller
                 $user1 = $online_users[0]["id"];
                 $user2 = $online_users[1]["id"];
                 if ($user1 == $user->id || $user2 == $user2) {
-                    $room = Rooms::where('room_date', $date)->where('my_id', $user->id)->orwhere('other_id', $user->id)->first();
-                    
+                    $room = Rooms::where('room_date', $date)->where('my_id', $user->id)->orwhere('other_id', $user->id)->orderBy('created_at', 'desc')->first();
                     if (!empty($room)) {
-                        UserList::where('id', $user->id)->update([
-                        "status" => 1
-                    ]);
-                    // UserList::where('id', $user2)->update([
-                    //     "status" => 1
-                    // ]);
-
                         return response()->json(["res" => "success", "room" => $room]);
                     } else {
                         Rooms::create([
@@ -144,15 +131,7 @@ class AllController extends Controller
                             'room_date' => $date,
                             'room_name' => $room_name
                         ]);
-                        UserList::where('id', $user->id)->update([
-                        "status" => 1
-                    ]);
-                    // UserList::where('id', $user2)->update([
-                    //     "status" => 1
-                    // ]);
-
-                        $room = Rooms::where('room_date', $date)->where('my_id', $user->id)->orwhere('other_id', $user->id)->first();
-
+                        $room = Rooms::where('room_date', $date)->where('my_id', $user->id)->orwhere('other_id', $user->id)->orderBy('created_at', 'desc')->first();
                         return response()->json(["res" => "success", "room" => $room]);
                     }
                     OnlineUsers::where('user_id', $user1)->delete();
@@ -203,6 +182,16 @@ class AllController extends Controller
                 ->toArray();
         }
         $allonline_users = OnlineUsers::inRandomOrder()->limit(2)->get()->toArray();
-        return $allonline_users;
+        return $allusers;
+    }
+    public function change_status(Request $request)
+    {
+        UserList::where('id', $request->myid)->update([
+            "status" => 1
+        ]);
+        UserList::where('id', $request->otherid)->update([
+            "status" => 1
+        ]);
+        return response()->json(["res" => "success"]);
     }
 }

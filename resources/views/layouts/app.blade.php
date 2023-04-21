@@ -11,7 +11,9 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
         rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
     <!-- Add the slick-theme.css if you want default styling -->
@@ -74,9 +76,35 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"
+        integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous">
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     @yield('scripts')
     <script>
+        var user_id = "{{ $user->id }}";
+        // $(function() {
+        let ip_address = '127.0.0.1';
+        let socket_port = '3000';
+        let socket = io(ip_address + ":" + socket_port);
+        socket.on("connection");
+        socket.on('sendChatToClient', (message) => {
+            const messageLi = document.createElement('li');
+            // Add the message content to the list item
+            messageLi.innerHTML = message.content;
+            console.log(message.senderID);
+            // Determine if the message was sent by the current user or another user
+            if (message.senderID === user_id) {
+                // The message was sent by the current user
+                messageLi.classList.add('my-message'); // add a CSS class to style the message
+            } else {
+                // The message was sent by another user
+                messageLi.classList.add('other-message'); // add a CSS class to style the message
+            }
+            // Add the list item to the chat window
+            document.getElementById('chat-messages').appendChild(messageLi);
+        });
+        // });
         toastr.options = {
             "closeButton": false,
             "debug": false,

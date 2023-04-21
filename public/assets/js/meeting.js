@@ -111,6 +111,7 @@ function StartMeeting(roomName, dispNme) {
         participantJoined: function (data) {
             console.log('participantJoined', data);
             apiObj.executeCommand('toggleTileView');
+            change_status();
         },
         participantLeft: function (data) {
             console.log('participantLeft', data);
