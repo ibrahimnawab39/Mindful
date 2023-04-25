@@ -145,6 +145,10 @@
             left: 50%;
             transform: translateX(-50%);
         }
+        .chat-box .card-body {
+            height: 500px;
+            overflow: auto;
+        }
         #chat-messages {
             list-style: none;
             margin: 0;
@@ -154,14 +158,17 @@
             display: block;
             margin-bottom: 10px;
         }
-        #chat-messages li:nth-child(odd) {
+        #chat-messages li.other-message {
             float: left;
             clear: both;
             background-color: #F0F0F0;
             padding: 10px;
             border-radius: 5px;
         }
-        #chat-messages li:nth-child(even) {
+        #chat-messages li:last-child {
+            margin-bottom: 20px
+        }
+        #chat-messages li.my-message {
             float: right;
             clear: both;
             background-color: #6EB8FF;
@@ -225,7 +232,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card h-100">
+                <div class="card chat-box h-100">
                     <div class="card-header text-center bg-white">
                         <h6 class="text-dark">Live Chat</h6>
                     </div>
@@ -253,8 +260,8 @@
     <script src="{{ asset('assets/js/external_api.js') }}"></script>
     <script src="{{ asset('assets/js/meeting.js') }}"></script>
     <script>
-        
         var mic = true;
+        var room ="0";
         var myid = 0;
         var otherid = 0;
         var video = true;
@@ -289,9 +296,9 @@
             icon.addClass("mdi-spin");
             skip_query();
         });
-        // $(function() {
-        //     skip_query();
-        // });
+        $(function() {
+            skip_query();
+        });
         function skiping_video(video, audio) {
             $("#local-video").empty();
             $(".connected-video").addClass("d-none");
@@ -315,7 +322,7 @@
         }
         function skip_query() {
             var icon = $("#skip_call").find(".mdi");
-            skiping_video(video, mic);
+            // skiping_video(video, mic);
             if (myid != 0 && otherid != 0) {
                 $.ajax({
                     url: "{{ route('front.skipping') }}",
@@ -335,7 +342,9 @@
                                 BindEvent();
                                 myid = result["room"]["my_id"];
                                 otherid = result["room"]["other_id"];
-                                StartMeeting(result["room"]["room_name"], dispNme, video, mic);
+                                room = result["room"]["room_name"];
+                                StartMeeting(room, dispNme, video, mic);
+                                chat_list(room);
                             } else {
                                 skip_query();
                             }
@@ -361,7 +370,9 @@
                                 BindEvent();
                                 myid = result["room"]["my_id"];
                                 otherid = result["room"]["other_id"];
-                                StartMeeting(result["room"]["room_name"], dispNme, video, mic);
+                                room = result["room"]["room_name"];
+                                StartMeeting(room, dispNme, video, mic);
+                                chat_list(room);
                             } else {
                                 skip_query();
                             }
@@ -389,12 +400,33 @@
                 }
             })
         }
+        function chat_list(room) {
+            socket.on("connection");
+            socket.emit('joinRoom', room);
+            socket.on('sendChatToClient', (message) => {
+                const messageLi = document.createElement('li');
+                // Add the message content to the list item
+                messageLi.innerHTML = message.content;
+                console.log(message.senderID);
+                // Determine if the message was sent by the current user or another user
+                if (message.senderID === user_id) {
+                    // The message was sent by the current user
+                    messageLi.classList.add('my-message'); // add a CSS class to style the message
+                } else {
+                    // The message was sent by another user
+                    messageLi.classList.add('other-message'); // add a CSS class to style the message
+                }
+                // Add the list item to the chat window
+                document.getElementById('chat-messages').appendChild(messageLi);
+            });
+        }
         $("#chat-from").on("submit", function(e) {
             e.preventDefault();
             var message = $(this).find("input[name='message']");
             if (message.val() != "") {
                 const conent = {
                     content: message.val(),
+                    room: room,
                     sender: user_id // where currentUserID is the unique ID of the current user
                 };
                 socket.emit('sendChatToServer', conent);

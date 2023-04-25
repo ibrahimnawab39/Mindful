@@ -1,11 +1,14 @@
 <?php
+
 namespace App\Http\Controllers\Front;
+
 use App\Http\Controllers\Controller;
 use App\Models\OnlineUsers;
 use App\Models\Rooms;
 use App\Models\UserList;
 use Illuminate\Http\Request;
 use Nette\Utils\Random;
+
 class AllController extends Controller
 {
     public function welcome()
@@ -14,7 +17,12 @@ class AllController extends Controller
     }
     public function dashboard()
     {
-        return view("front.index");
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $user =  UserList::where('ip_address', $ip)->first();
+        if (empty($user)) {
+            return redirect()->route('front.get-started');
+        }
+        return view('front.index', compact('user'));
     }
     public function settings()
     {

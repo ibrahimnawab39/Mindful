@@ -84,27 +84,9 @@
     <script>
         var user_id = "{{ $user->id }}";
         // $(function() {
-        let ip_address = '127.0.0.1';
-        let socket_port = '3000';
+        let ip_address = "{{ env('APP_NODE_IP_ADDRESS') }}";
+        let socket_port = "{{ env('APP_NODE_PORT') }}";
         let socket = io(ip_address + ":" + socket_port);
-        socket.on("connection");
-        socket.on('sendChatToClient', (message) => {
-            const messageLi = document.createElement('li');
-            // Add the message content to the list item
-            messageLi.innerHTML = message.content;
-            console.log(message.senderID);
-            // Determine if the message was sent by the current user or another user
-            if (message.senderID === user_id) {
-                // The message was sent by the current user
-                messageLi.classList.add('my-message'); // add a CSS class to style the message
-            } else {
-                // The message was sent by another user
-                messageLi.classList.add('other-message'); // add a CSS class to style the message
-            }
-            // Add the list item to the chat window
-            document.getElementById('chat-messages').appendChild(messageLi);
-        });
-        // });
         toastr.options = {
             "closeButton": false,
             "debug": false,
