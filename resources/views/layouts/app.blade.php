@@ -86,7 +86,10 @@
         // $(function() {
         let ip_address = "{{ env('APP_NODE_IP_ADDRESS') }}";
         let socket_port = "{{ env('APP_NODE_PORT') }}";
-        let socket = io(ip_address + ":" + socket_port);
+        let socket = io(ip_address);
+        socket.on("connection", (socket) => {
+            console.log("connection");
+        });
         toastr.options = {
             "closeButton": false,
             "debug": false,

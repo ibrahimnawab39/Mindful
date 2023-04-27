@@ -3,6 +3,7 @@
 use App\Http\Controllers\Front\AllController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\Proxy;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,20 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/meeting/{username}/{useremail}/{mid}', function ($username,$useremail,$mid) {
     return view("meeting",compact("mid",'username','useremail'));
+});
+
+Route::get('/start-node-server', function () {
+    $command = base_path().'/server.js';
+
+    exec($command, $output, $status);
+
+
+    if ($status !== 0) {
+        // handle error
+        
+    }
+
+    return response()->json(["status"=>$status,"message"=>'Node.js server started']);
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -34,3 +49,11 @@ Route::post('/skip',[AllController::class,'skipping'])->name('front.skipping');
 Route::get('/testing',function(){
     return view("testing"); 
 });
+
+Route::any('/node/{path?}', function ($path = '') {
+    return app(ProxyMiddleware::class)->handle(
+        request(), 
+        function () {},
+        'http://localhost:3000' // replace with your Node.js server's base URL
+    );
+})->where('path', '.*');

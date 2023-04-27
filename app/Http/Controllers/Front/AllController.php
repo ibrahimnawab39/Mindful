@@ -59,6 +59,10 @@ class AllController extends Controller
         $user =  UserList::where('ip_address', $ip)->first();
         if (empty($user)) {
             return redirect()->route('front.get-started');
+        }else{
+            UserList::where('id',$user->id)->update([
+                'status'=> 0
+            ]);
         }
         return view('front.meeting', compact('user'));
     }
