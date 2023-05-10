@@ -3,7 +3,7 @@ const { Socket } = require('socket.io');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server, {
-    cors: { origin: "*" }
+    cors: { origin: "192.168.0.101" }
 })
 io.on('connection', (socket) => {
     console.log("connection");

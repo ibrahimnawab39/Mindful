@@ -29,6 +29,7 @@ function StartMeeting(roomName, dispNme) {
     const domain = 'meet.jit.si';
     const options = {
         roomName: roomName,
+        maxParticipants: 2,
         width: '100%',
         height: '100%',
         parentNode: document.querySelector('#local-video'),
