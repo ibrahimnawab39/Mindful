@@ -7,6 +7,9 @@
     font-size: clamp(.7rem, 1vw, 2rem);
 }
 .welcome-page .content-container h3 {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 800;
     font-size: 24px;
 }
 }
@@ -19,7 +22,7 @@
     padding: 8px 10px;
     font-size: clamp(.6rem, 1vw, 2rem);
 }
-.welcome-page .left-content .logo-container {
+.welcome-page .logo-container {
     margin-bottom: 20px;
     width: 60%;
 }
@@ -46,10 +49,32 @@
     .deahboardSecLeft { 
     padding-left: 0px;
 }
+
 }
 
 
 @media (max-width:767px) {
+    .left-contentx img.img-fluid.top-logo {
+    width: 180px;
+    margin: 6px 20px;
+}
+
+    .right-images-slider {
+    padding: 0px 15px;
+}
+      .left-content .logo-container{
+       display:none;
+   }
+    .left-contentx.msa {
+    display: block;
+}
+    .welcome-page .left-content{
+            height: 50vh;
+    }
+    .welcome-page .right-images-slider img {
+    height: 35vh;
+    object-fit: cover;
+}
     .mindfulNevbar { 
         padding-left: 15px;
         padding-right: 15px;
@@ -101,7 +126,7 @@
     .welcome-page .left-content { 
         padding-bottom: 40px;
     }
-    .welcome-page .left-content .logo-container{
+    .welcome-page.logo-container{
         margin-bottom: 100px;
     }
 }
@@ -112,7 +137,7 @@
         padding-left: 20px;
         padding-bottom: 40px;
     }
-    .welcome-page .left-content .logo-container{
+    .welcome-page .logo-container{
         margin-bottom: 18px;
         width: 250px;
     }
@@ -127,7 +152,7 @@
         padding-left: 20px;
         padding-bottom: 40px;
     }
-    .welcome-page .left-content .logo-container{
+    .welcome-page .logo-container{
         margin-bottom: 18px;
         width: 150px;
     }

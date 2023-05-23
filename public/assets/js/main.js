@@ -43,10 +43,22 @@ $(document).ready(function () {
             return false;
         }
     });
-    $(".next-step").click(function (e) {
-
+   
+    $(".prev-step").click(function (e) {
+        let complete = $('.nav-tabs .completeTab');
+        let count = complete.attr('data-count');
+        complete.removeClass('completeTab').find('.round-tab').html(count);
         var active = $('.wizard .nav-tabs li.active');
-             console.log('next step')
+        prevTab(active);
+
+    });
+})
+    
+   function nextFunction(e) {
+       if($('#step1').hasClass('active')){
+              e.preventDefault()
+       }
+           var active = $('.wizard .nav-tabs li.active'); 
         $('.tab-pane.active input').each(function(i){
             console.log(i)
             if($(this).val() == null){
@@ -57,17 +69,21 @@ $(document).ready(function () {
         active.addClass('completeTab').find('.round-tab').html('<i class="fa fa-solid fa-check"></i>')
         active.next().removeClass('disabled');
         nextTab(active);
+       
+   }
+     $(".next-step").click(function (e) {
+
+         nextFunction(e)
 
     });
-    $(".prev-step").click(function (e) {
-        let complete = $('.nav-tabs .completeTab');
-        let count = complete.attr('data-count');
-        complete.removeClass('completeTab').find('.round-tab').html(count);
-        var active = $('.wizard .nav-tabs li.active');
-        prevTab(active);
+   $("body").on("keydown", function(event) {
+        // Check if the pressed key is Enter (key code 13)
+        if (event.keyCode === 13 && $('#step1').hasClass('active')) {
+            nextFunction(event)
+        }
+      });
 
-    });
-})
+
 // Theme Button 
 $(document).on('click', '.switch-icon-button', function () {
     let cuurentTheme = $('html').attr('theme');

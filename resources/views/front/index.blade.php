@@ -21,7 +21,7 @@
                 and intellectually curious individuals.</p>
             <button class='btn btn-light-dark rounded-pill btn-small'>Start Chatting</button>
             <div class='dashboardbtngrp'>
-                <a class='btn btn-light-dark rounded '>
+                <a class='btn btn-light-dark rounded ' href="{{route('front.text')}}">
                     <img src="{{asset('assets/images/svg/envelope.svg')}}" class='showLight'>
                     <img src="{{asset('assets/images/svg/envelope-dark.svg')}}" class='showdark'>
                     Text</a>

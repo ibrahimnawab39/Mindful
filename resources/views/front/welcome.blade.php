@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" theme='lightTheme'>
-
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" theme='lightTheme'> 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,6 +24,17 @@
 <body>
     <div class="main-content welcome-page">
         <div class="row">
+                  <div class="col-md-6">
+                <div class="left-contentx msa">
+                    <div class="logo-container pt-2">
+                        <img src="{{ asset('assets/images/logo/logo.png') }}" alt="" class="img-fluid top-logo">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6"></div>
+        </div>
+        <div class="row flex-column-reverse flex-md-row flex-lg-row flex-sm-column-reverse">
+      
             <div class="col-md-6">
                 <div class="left-content">
                     <div class="logo-container pt-2">

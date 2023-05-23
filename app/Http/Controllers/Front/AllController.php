@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\OnlineUsers;
 use App\Models\Rooms;
 use App\Models\UserList;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Http\Request;
 use Nette\Utils\Random;
 
@@ -17,6 +18,7 @@ class AllController extends Controller
     }
     public function dashboard()
     {
+        Artisan::call('optimize', ['--quiet' => true]);
         $ip = $_SERVER['REMOTE_ADDR'];
         $user =  UserList::where('ip_address', $ip)->first();
         if (empty($user)) {
@@ -60,11 +62,26 @@ class AllController extends Controller
         if (empty($user)) {
             return redirect()->route('front.get-started');
         }else{
-            UserList::where('id',$user->id)->update([
-                'status'=> 0
+            UserList::where('id', $user->id)->update([
+                "type" => "video",
+                "status" => 0
             ]);
         }
         return view('front.meeting', compact('user'));
+    }
+    public function text()
+    {
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $user =  UserList::where('ip_address', $ip)->first();
+        if (empty($user)) {
+            return redirect()->route('front.get-started');
+        }else{
+            UserList::where('id', $user->id)->update([
+                "type" => "text",
+                "status" => 0
+            ]);
+        }
+        return view('front.text-meeting', compact('user'));
     }
     public function connect_with(Request $request)
     {
@@ -162,12 +179,14 @@ class AllController extends Controller
         if (!empty($user->connect_with)) {
             $allusers = UserList::where('online_status', 1)
                 ->where('connect_with', $user->connect_with)
+                ->where('type',$user->type)
                 ->where('status', 0)
                 ->orwhere('status', 2)
                 ->get();
         } elseif (!empty($user->interest)) {
             $allusers = UserList::where('online_status', 1)
                 ->whereIn('interest', $user->interest)
+                ->where('type',$user->type)
                 ->where('status', 0)
                 ->orwhere('status', 2)
                 ->inRandomOrder()
@@ -178,6 +197,7 @@ class AllController extends Controller
             $allusers = UserList::where('online_status', 1)
                 ->whereIn('interest', $user->interest)
                 ->where('connect_with', $user->connect_with)
+                ->where('type',$user->type)
                 ->where('status', 0)
                 ->orwhere('status', 2)
                 ->inRandomOrder()
@@ -186,6 +206,7 @@ class AllController extends Controller
                 ->toArray();
         } else {
             $allusers = UserList::where('online_status', 1)
+                ->where('type',$user->type)
                 ->where('status', 0)
                 ->orwhere('status', 2)
                 ->inRandomOrder()
@@ -205,5 +226,16 @@ class AllController extends Controller
             "status" => 1
         ]);
         return response()->json(["res" => "success"]);
+    }
+    public function change_intrest(Request $request)
+    {
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $user =  UserList::where('ip_address', $ip)->first();
+        if (!empty($user)){
+            UserList::where('id', $user->id)->update([
+                "interest" => $request->intrest
+            ]);
+            return response()->json(["res" => "success"]);
+        }
     }
 }

@@ -1,5 +1,5 @@
 <IfModule mod_rewrite.c>
-Options +FollowSymLinks
+# Options +FollowSymLinks
 RewriteEngine On
 RewriteCond %{REQUEST_URI} !^/public/ 
 RewriteCond %{REQUEST_FILENAME} !-d
@@ -7,5 +7,8 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ /public/$1 
 #RewriteRule ^ index.php [L]
 RewriteRule ^(/)?$ public/index.php [L] 
-RewriteRule ^(.*)$ http://localhost:3000/$1 [P,L]
+
+# Route requests to the Node.js server
+# RewriteRule ^node(.*)$ http://localhost:8000/$1 [P,L]
+
 </IfModule>

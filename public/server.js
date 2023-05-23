@@ -1,9 +1,10 @@
 const express = require('express');
 const { Socket } = require('socket.io');
 const app = express();
+// const port = process.env.PORT || 3000;
 const server = require('http').createServer(app);
 const io = require('socket.io')(server, {
-    cors: { origin: "node.suzukichampionmotors.com" }
+    cors: { origin: "mindful.xiomstudio.com" }
 })
 io.on('connection', (socket) => {
     console.log("connection");
@@ -29,6 +30,6 @@ io.on('connection', (socket) => {
         console.log("Disconnect");
     })
 })
-server.listen(8000, () => {
+server.listen(3000, () => {
     console.log("server is running");
 })

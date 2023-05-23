@@ -15,6 +15,7 @@ class UserList extends Model
         "status",
         "connect_with",
         "interest",
-        "ip_address"
+        "ip_address",
+        "type"
     ];
 }
