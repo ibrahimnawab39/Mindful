@@ -1,20 +1,23 @@
 @extends('layouts.app')
 @section('pagename', 'Video')
 @section('styles')
-    <link href="{{asset('assets/css/perfect-scrollbar.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/perfect-scrollbar.css') }}" rel="stylesheet" type="text/css" />
     <style>
         .chrome-extension-banner {
             display: none !important;
         }
+
         #sideToolbarContainer {
             background-color: #4DC2C1 !important;
         }
+
         .vi {
             margin-top: 7px;
             position: absolute;
             margin-left: 6px;
             width: 15%;
         }
+
         .leftwatermark {
             left: 372px !important;
             top: 113px !important;
@@ -22,6 +25,7 @@
             background-repeat: no-repea !important;
             background-size: contain !important;
         }
+
         .watermark {
             display: none !important;
             position: absolute !important;
@@ -31,6 +35,7 @@
             background-repeat: no-repeat !important;
             z-index: 1 !important;
         }
+
         @media screen and (max-width:650px) {
             .leftwatermark {
                 left: 84px !important;
@@ -39,9 +44,11 @@
                 background-repeat: no-repeat !important;
                 background-size: contain !important;
             }
+
             .dispName {
                 font-size: 16px !important;
             }
+
             .watermark {
                 display: none !important;
                 position: absolute !important;
@@ -51,17 +58,20 @@
                 background-repeat: no-repeat !important;
                 z-index: 1 !important;
             }
+
             .vi {
                 margin-top: 23px !important;
                 margin-left: 24px !important;
                 width: 54% !important;
             }
         }
+
         @media screen and (max-width:768px) {
             .disName {
                 font-size: 32px !important;
             }
         }
+
         @media (min-width:652px) and (max-width:769px) {
             .leftwatermark {
                 left: 218px !important;
@@ -70,11 +80,13 @@
                 background-repeat: no-repea !important;
                 background-size: contain !important;
             }
+
             .vi {
                 margin-top: 30px !important;
                 margin-left: 24px !important;
                 width: 19% !important;
             }
+
             .watermark {
                 display: none !important;
                 position: absolute !important;
@@ -85,14 +97,17 @@
                 z-index: 1 !important;
             }
         }
+
         .watermark__performanceStats {
             display: none;
         }
+
         .video-container {
             display: grid;
             grid-template-columns: repeat(1, 1fr);
             grid-gap: 10px;
         }
+
         #local-video,
         #remote-video,
         #localVideo,
@@ -103,11 +118,13 @@
             border-radius: 5px;
             object-fit: cover;
         }
+
         #local-video iframe,
         #remote-video iframe {
             border-radius: 5px;
             pointer-events: none;
         }
+
         #left-video-container {
             position: absolute;
             top: 0;
@@ -116,6 +133,7 @@
             height: 100%;
             background-color: black;
         }
+
         #right-video-container {
             position: absolute;
             top: 0;
@@ -124,6 +142,7 @@
             height: 100%;
             background-color: black;
         }
+
         #left-video,
         #right-video {
             position: absolute;
@@ -133,6 +152,7 @@
             height: 100%;
             overflow: hidden;
         }
+
         #left-video video,
         #right-video video {
             position: absolute;
@@ -142,25 +162,27 @@
             height: 100%;
             object-fit: cover;
         }
+
         .skip-video .myVideo .videoActions {
             left: 50%;
             transform: translateX(-50%);
         }
+
         .chat-box .card-body {
             height: 500px;
             overflow: auto;
         }
+
         #chat-messages {
             list-style: none;
             margin: 0;
             padding: 0;
-            height:485px;
+            height: 485px;
         }
- 
+
         #chat-messages li:last-child {
             margin-bottom: 20px
         }
-      
     </style>
 @endsection
 @section('content')
@@ -209,7 +231,7 @@
                         <input type='text' class='form--control w-100' id="intrest-input">
                     </div>
                     <div class='col-md-7 mt-4' id="multiple-intrest">
-                        
+
                     </div>
                 </div>
             </div>
@@ -220,16 +242,16 @@
                     </div>
                     <div class="card-body chat-body">
                         <ul id="chat-messages" class="chat-conversation-box">
-                          
+
                         </ul>
                     </div>
                     <div class="card-footer  chat-footer">
                         <form id="chat-from">
                             <div class="chat-input-group">
-                                <input class="chat-input" placeholder="Type your message" type="text" name="message"> 
+                                <input class="chat-input" placeholder="Type your message" type="text" name="message">
                                 <button class="chat-btn">
                                     <img src="{{ asset('assets/images/svg/send_msg.svg') }}">
-                                </button> 
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -241,10 +263,10 @@
 @section('scripts')
     <script src="{{ asset('assets/js/external_api.js') }}"></script>
     <script src="{{ asset('assets/js/meeting.js') }}"></script>
-    <script src="{{asset('assets/js/perfect-scrollbar.min.js')}}"></script>
+    <script src="{{ asset('assets/js/perfect-scrollbar.min.js') }}"></script>
     <script>
         var mic = true;
-        var room ="0";
+        var room = "0";
         var myid = 0;
         var otherid = 0;
         var video = true;
@@ -282,6 +304,7 @@
         $(function() {
             skip_query();
         });
+
         function skiping_video(video, audio) {
             $("#local-video").empty();
             $(".connected-video").addClass("d-none");
@@ -303,9 +326,10 @@
                 })
                 .catch(error => console.log(error));
         }
+
         function skip_query() {
             var icon = $("#skip_call").find(".mdi");
-            skiping_video(video, mic);
+            // skiping_video(video, mic);
             if (myid != 0 && otherid != 0) {
                 $.ajax({
                     url: "{{ route('front.skipping') }}",
@@ -363,8 +387,9 @@
                     }
                 })
             }
-            
+
         }
+
         function change_status() {
             $.ajax({
                 url: "{{ route('front.change-status') }}",
@@ -384,15 +409,16 @@
                 }
             })
         }
+
         function chat_list(room) {
             socket.on("connection");
             socket.emit('joinRoom', room);
             socket.on('sendChatToClient', (message) => {
-                    
+
                 const messageLi = document.createElement('li');
                 // Add the message content to the list item
                 messageLi.innerHTML = message.content;
-                console.log(message.senderID); 
+                console.log(message.senderID);
                 // Determine if the message was sent by the current user or another user
                 if (message.senderID === user_id) {
                     // The message was sent by the current user
@@ -408,11 +434,11 @@
             });
         }
         const ps = new PerfectScrollbar('.chat-conversation-box', {
-    suppressScrollX : true
-  });
+            suppressScrollX: true
+        });
 
-  const getScrollContainer = document.querySelector('.chat-conversation-box');
-  getScrollContainer.scrollBottom = 0;
+        const getScrollContainer = document.querySelector('.chat-conversation-box');
+        getScrollContainer.scrollBottom = 0;
         $("#chat-from").on("submit", function(e) {
             e.preventDefault();
             var message = $(this).find("input[name='message']");
@@ -425,16 +451,16 @@
                 socket.emit('sendChatToServer', conent);
                 message.val("");
                 const getScrollContainer = document.querySelector('.chat-conversation-box');
-  getScrollContainer.scrollBottom = 0;
+                getScrollContainer.scrollBottom = 0;
             }
         });
         var intrest_count = 0;
-        var intrest  = [];
-        $("#intrest-input").on("change",function(){
-            var value =$(this).val();
-            if(value !=""){
-               const newLength =  intrest.push(value);
-               intrest_count = newLength-1;
+        var intrest = [];
+        $("#intrest-input").on("change", function() {
+            var value = $(this).val();
+            if (value != "") {
+                const newLength = intrest.push(value);
+                intrest_count = newLength - 1;
                 $("#multiple-intrest").append(`<div class='btn btn-small rounded-pill btn-light-dark interest-${intrest_count} mb-1 mr-1'>
                             ${value} <span onClick="remove_intrest(${intrest_count},'${value}')"
                                 class="px-2">&times;</span>
@@ -442,28 +468,29 @@
                 $(this).val("");
                 console.log(intrest);
                 $.ajax({
-                url: "{{ route('front.change-intrest') }}",
-                type: "POST",
-                data: {
-                    intrest: intrest.join(","),
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                dataType: "JSON",
-                success: function(result) {
-                    if (result["res"] == "success") {
-                        toastr["success"]("Intrest Added Successfully!")
+                    url: "{{ route('front.change-intrest') }}",
+                    type: "POST",
+                    data: {
+                        intrest: intrest.join(","),
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    dataType: "JSON",
+                    success: function(result) {
+                        if (result["res"] == "success") {
+                            toastr["success"]("Intrest Added Successfully!")
+                        }
                     }
-                }
-            })
-                
+                })
+
             }
         })
-        function remove_intrest(idd,value){
+
+        function remove_intrest(idd, value) {
             const index = intrest.indexOf(value);
             if (index !== -1) {
-              intrest.splice(index, 1);
+                intrest.splice(index, 1);
             }
             $(`.interest-${idd}`).remove();
             console.log(intrest);
@@ -484,5 +511,6 @@
                 }
             })
         }
+        console.clear();
     </script>
 @endsection

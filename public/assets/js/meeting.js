@@ -26,7 +26,8 @@ function BindEvent() {
 function StartMeeting(roomName, dispNme) {
     $(".connected-video").removeClass("d-none");
     $(".skip-video").addClass("d-none");
-    const domain = 'meet.jit.si';
+    // const domain = 'meet.jit.si';
+    const domain = '8x8.vc';
     const options = {
         roomName: roomName,
         width: '100%',
@@ -44,7 +45,10 @@ function StartMeeting(roomName, dispNme) {
             toolbarVisible: false,
             remoteVideoMenu: {
                 disableKick: false
-            }
+            },
+            constraints: {
+                maxParticipants: 2, // Set the maximum number of participants per room
+            },
         },
         localRecording: {
             enabled: false,
@@ -53,15 +57,18 @@ function StartMeeting(roomName, dispNme) {
         //      },
         interfaceConfigOverwrite: {
             // noSsl: true,
+            BRAND_WATERMARK_LINK: '',
             SHOW_JITSI_WATERMARK: false,
             DISABLE_TRANSCRIPTION_SUBTITLES: true,
             HIDE_DEEP_LINKING_LOGO: true,
             SHOW_BRAND_WATERMARK: false,
+            VIDEO_QUALITY_LABEL_DISABLED: false,
             SHOW_WATERMARK_FOR_GUESTS: false,
             SHOW_POWERED_BY: false,
+            TILE_VIEW_MAX_COLUMNS: 2,
             SHOW_CHROME_EXTENSION_BANNER: false,
             DEFAULT_BACKGROUND: '#fff',
-            DISABLE_VIDEO_BACKGROUND : true,
+            DISABLE_VIDEO_BACKGROUND: true,
             CHAT_EDIT_MESSAGE_BACKGROUND: "#fff",
             TOOLBAR_BUTTONS: []
         },
@@ -73,7 +80,7 @@ function StartMeeting(roomName, dispNme) {
     };
     apiObj = new JitsiMeetExternalAPI(domain, options);
     // apiObj.executeCommand('subject', 'New Room 2');
-    
+
     apiObj.addEventListeners({
         readyToClose: function () {
             $('#local-video').empty();
@@ -85,22 +92,22 @@ function StartMeeting(roomName, dispNme) {
             if (data.muted) {
                 mic = false;
                 $("#btnCustomMic").html('<i class="mdi mdi-microphone-off"></i>');
-           } else{
+            } else {
                 mic = true;
                 $("#btnCustomMic").html('<i class="mdi mdi-microphone"></i>');
-           }
+            }
         },
         videoMuteStatusChanged: function (data) {
             if (data.muted) {
                 video = false;
                 $("#btnCustomCamera").html('<i class="mdi mdi-video-off"></i>');
-           } else{
+            } else {
                 video = true;
                 $("#btnCustomCamera").html('<i class="mdi mdi-video"></i>');
-           }
+            }
         },
         tileViewChanged: function (data) {
-            console.log("tileViewChanged",data);
+            console.log("tileViewChanged", data);
         },
         screenSharingStatusChanged: function (data) {
             if (data.on)
@@ -117,9 +124,9 @@ function StartMeeting(roomName, dispNme) {
             console.log('participantLeft', data);
             skip_query();
         },
-        videoConferenceJoined: function(data){
-            console.log("videoConferenceJoined",data);
-            
+        videoConferenceJoined: function (data) {
+            console.log("videoConferenceJoined", data);
+
         }
     });
     // if(video == false) {
