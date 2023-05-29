@@ -13,6 +13,7 @@ class UserList extends Model
         "username",
         "religion",
         "status",
+        "online_status",
         "connect_with",
         "interest",
         "ip_address",

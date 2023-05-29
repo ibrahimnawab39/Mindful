@@ -32,6 +32,7 @@ Route::post('/get-started/store',[AllController::class,'store'])->name('front.ge
 Route::get('/settings',[AllController::class,'settings'])->name('front.settings');
 Route::get('/video',[AllController::class,'video'])->name('front.video');
 Route::get('/text',[AllController::class,'text'])->name('front.text');
+Route::get('/update-status',[AllController::class,'updateStatus'])->name('front.change-time');
 Route::post('/connect-with',[AllController::class,'connect_with'])->name('front.connect-with');
 Route::post('/change-status',[AllController::class,'change_status'])->name('front.change-status');
 Route::post('/change-intrest',[AllController::class,'change_intrest'])->name('front.change-intrest');

@@ -83,7 +83,7 @@
         var user_id = "{{ $user->id }}";
         let ip_address = "{{ env('APP_NODE_IP_ADDRESS') }}";
         // const port = process.env.PORT || 3000;
-        let socket = io(ip_address);
+        let socket = io("node.suzukichampionmotors.com");
         console.log("D");
         socket.on("connection", (socket) => {
             console.log("connection");

@@ -122,6 +122,7 @@ function StartMeeting(roomName, dispNme) {
         },
         participantLeft: function (data) {
             console.log('participantLeft', data);
+            apiObj.executeCommand('endConference');
             skip_query();
         },
         videoConferenceJoined: function (data) {

@@ -41,7 +41,7 @@
                             </li>
                         </ul>
                     </div>
-                    <form role="form" action="{{route('front.get-started-store')}}" method="post"  class="login-box">
+                    <form role="form" action="{{route('front.get-started-store')}}" method="post" class="login-box">
                         @csrf
                         <div class="tab-content" id="main_form">
                             <div class="tab-pane active" role="tabpanel" id="step1">
