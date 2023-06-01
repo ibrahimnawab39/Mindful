@@ -6,6 +6,13 @@
     <title>Mindful | Get Started</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/favicon/apple-touch-icon.png')}} ">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/favicon/favicon-32x32.png')}} ">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/favicon/favicon-16x16.png')}} ">
+    <link rel="manifest" href="{{ asset('assets/favicon/site.webmanifest')}} ">
+    <link rel="mask-icon" href="{{ asset('assets/favicon/safari-pinned-tab.svg')}} " color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#f1f1f1">
     <link
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
         rel="stylesheet">
@@ -62,7 +69,7 @@
                                 </ul>
                             </div>
                             <div class="tab-pane" role="tabpanel" id="step2">
-                                <h2>Which religion do you follow?</h2>
+                                <h2>Which thought / belief system do you follow?</h2>
                                 <div class="row flex-column">
                                     <div class="col-md-12">
                                         <div class="form-group">

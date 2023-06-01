@@ -1057,7 +1057,54 @@ button.chat-btn {
     align-items: center;
     justify-content: center;
 }
+.rules-heading{
+    font-weight: 900;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    border-bottom: 1px solid;
+    padding-bottom: 10px;
+}
+ul.rules-list {
+    list-style: outside;
+    padding-left: 20px;
+}
 
+ul.rules-list li {
+    margin-bottom: 14px;
+    font-size: 18px;
+    font-weight: 500;
+    opacity: .9;
+}
+button.report-btn {
+    position: absolute;
+    bottom: 5px;
+    border: none;
+    right: 5px;
+    border-radius: 2px;
+    padding: 5px 15px;
+    background: #de473c;
+    color: #fff;
+    outline:none;
+}
+button.report-btn:focus {
+    box-shadow: 0px 0px 91px 16px #e9a3a3;
+}
+.block-card {
+    background-color: var(--stepper-bg);
+    padding: 20px; 
+    /*width: fit-content;*/
+    margin: 40px auto;
+}
+span#seemore {
+    color: #5f61d1;
+    cursor: pointer;
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+.rules{
+    padding-bottom:80px;
+}
 
 
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Front\AllController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::get('/',[AllController::class,'welcome'])->name('front.welcome');
 Route::get('/dashboard',[AllController::class,'dashboard'])->name('front.main');
+
 Route::get('/get-started',[AllController::class,'settings'])->name('front.get-started');
 Route::post('/get-started/store',[AllController::class,'store'])->name('front.get-started-store');
 Route::get('/settings',[AllController::class,'settings'])->name('front.settings');
@@ -37,6 +39,10 @@ Route::post('/connect-with',[AllController::class,'connect_with'])->name('front.
 Route::post('/change-status',[AllController::class,'change_status'])->name('front.change-status');
 Route::post('/change-intrest',[AllController::class,'change_intrest'])->name('front.change-intrest');
 Route::post('/skip',[AllController::class,'skipping'])->name('front.skipping');
+Route::get('/rules',[AllController::class,'rules'])->name('front.rules');
+Route::post('/report',[AllController::class,'report'])->name('front.report');
+Route::get('/blocked',[AllController::class,'blocked'])->name('front.blocked');
+  
 Route::get('/testing',function(){
     return view("testing"); 
 });

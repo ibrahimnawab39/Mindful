@@ -4,6 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Mindful | @yield('pagename')</title>
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/favicon/apple-touch-icon.png')}} ">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/favicon/favicon-32x32.png')}} ">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/favicon/favicon-16x16.png')}} ">
+    <link rel="manifest" href="{{ asset('assets/favicon/site.webmanifest')}} ">
+    <link rel="mask-icon" href="{{ asset('assets/favicon/safari-pinned-tab.svg')}} " color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#f1f1f1">
+    
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,20 +53,15 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mx-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="">{{ __('Home') }}</a>
+                            <a class="nav-link" href="{{route('front.main')}}">{{ __('Home') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href=" ">{{ __('Rules') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href=" ">{{ __('Events') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href=" ">{{ __('Blogs') }}</a>
+                            <a class="nav-link" href="{{route('front.rules')}}">{{ __('Rules') }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('front.settings') }}">{{ __('Settings') }}</a>
                         </li>
+                        
                     </ul>
                 </div>
                 <a href="javascript:void(0)" class="switch-icon-button">
@@ -80,7 +83,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     @yield('scripts')
     <script>
-        var user_id = "{{ $user->id }}";
+        var user_id = "{{ @$user->id }}";
         let ip_address = "{{ env('APP_NODE_IP_ADDRESS') }}";
         // const port = process.env.PORT || 3000;
         let socket = io("node.suzukichampionmotors.com");

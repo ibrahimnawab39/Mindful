@@ -1,7 +1,9 @@
 @extends('layouts.app')
 @section('pagename', 'Video')
+
 @section('styles')
     <link href="{{asset('assets/css/perfect-scrollbar.css')}}" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         .chrome-extension-banner {
             display: none !important;
@@ -160,7 +162,28 @@
         #chat-messages li:last-child {
             margin-bottom: 20px
         }
-      
+        .watermaker-logo {
+            position: absolute;
+            background: #000;
+            padding: 10px;
+            width: 166px;
+            left: 0%;
+            border-radius: 5px;
+        }
+        @media screen and (max-width:786px) {
+            .watermaker-logo {
+                width: 125px;
+                height: 65px;
+                left: 0%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                top: 3px;
+            }
+            #local-video, #remote-video, #localVideo, #remoteVideo {
+                height:185px;
+            }
+        }
     </style>
 @endsection
 @section('content')
@@ -174,7 +197,7 @@
                 </a>
                 <div class="mt-4 myVideo connected-video">
                     <div class="watermaker-logo">
-                        <img src="" /> 
+                        <img src="{{asset('assets/images/logo/logo-dark.png')}}"  class="img-fluid"/> 
                     </div>
                     <div id="local-video"></div>
                     <div class='videoActions'>
@@ -185,9 +208,12 @@
                             <i class="mdi mdi-video" aria-hidden="true"></i>
                         </button>
                     </div>
+                    <div class="reportuser">
+                        <button class="report-btn">Report</button>    
+                    </div>
                 </div>
                 <div class="justify-content-center justify-content-md-start mt-4 row skip-video d-none">
-                    <div class="col-md-6 col-6 pr-2 myVideo">
+                    <div class="col-md-6 mb-3 pr-md-2 myVideo">
                         <video id="localVideo" autoplay muted></video>
                         <div class='videoActions'>
                             <button class='actionIcon' id="skip_mic">
@@ -198,7 +224,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="col-md-6 col-6 pl-2 oponentVideo">
+                    <div class="col-md-6 mb-3 pl-md-2 oponentVideo">
                         <video id="remoteVideo" autoplay muted></video>
                     </div>
                 </div>
@@ -308,8 +334,10 @@
         }
         function skip_query() {
             var icon = $("#skip_call").find(".mdi");
+             $("#chat-messages").html("");
             skiping_video(video, mic);
             if (myid != 0 && otherid != 0) {
+                socket.emit('leaveRoom', room);
                 $.ajax({
                     url: "{{ route('front.skipping') }}",
                     type: "POST",
@@ -322,7 +350,10 @@
                     },
                     dataType: "JSON",
                     success: function(result) {
-                        if (result["res"] == "success") {
+                        if (result["res"] == "ipblocked") {
+                            window.open("{{ route('front.blocked') }}",'_self')
+                        }
+                       else if (result["res"] == "success") {
                             if (result["room"] != null) {
                                 icon.removeClass("mdi-spin");
                                 BindEvent();
@@ -350,6 +381,9 @@
                     },
                     dataType: "JSON",
                     success: function(result) {
+                        if (result["res"] == "ipblocked") {
+                            window.open("{{ route('front.blocked') }}",'_self')
+                        }
                         if (result["res"] == "success") {
                             if (result["room"] != null) {
                                 icon.removeClass("mdi-spin");
@@ -502,5 +536,66 @@
             
             
         }
+        const blockedWords = [{!!'"'.implode('","', $blockwords).'"'!!}];
+        
+        function hasBlockedWords(input) {
+          for (let i = 0; i < blockedWords.length; i++) {
+            const blockedWord = blockedWords[i];
+            const regex = new RegExp(`\\b${blockedWord}\\b`, 'gi'); // Create a case-insensitive word boundary regular expression
+            
+            if (regex.test(input)) {
+              return true; // Return true if a blocked word is found
+            }
+          }
+          
+          return false; // Return false if no blocked words are found
+        }
+        
+        
+
+        $("input[name='message']").on("input",function(){
+            const userInput = $(this).val();
+            const containsBlockedWords = hasBlockedWords(userInput.toLowerCase());
+            if (containsBlockedWords) {
+                $("#chat-from button").attr("disabled",true);
+                 toastr["warning"]("If You Are Using illegal, nudity/sexual any kind of words!");
+            //   console.log("Input contains blocked words. Please revise your message.");
+            } else {
+                $("#chat-from button").attr("disabled",false);
+              console.log("Input is clean. Proceed with further processing.");
+            }
+        });
+        
+        
+        $(document).on('click','.report-btn',function(){
+              if (myid != 0 && otherid != 0) {
+            Swal.fire({
+                  title: 'Are you sure?',
+                  text: "You want to report him/her ?",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Yes, report it!'
+                }).then((result) => {
+                    if(result.isConfirmed){
+                      $.ajax({
+                          url: "{{ route('front.report') }}",
+                          type: "POST", 
+                          data:{otherid:otherid,myid:myid},
+                          headers: {
+                              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                          },
+                          success:function(result){
+                              if (result['res'] == 'success') {
+                                skip_query();
+                                toastr["success"]("Report successfully submited");
+                            }
+                          }
+                        })
+                    }
+                })
+              }
+        })
     </script>
 @endsection
