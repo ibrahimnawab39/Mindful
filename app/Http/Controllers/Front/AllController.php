@@ -258,6 +258,7 @@ class AllController extends Controller
                 $user1 = $online_users[0]["id"];
                 $user2 = $online_users[1]["id"];
                 $other = ($user1 != $user->id )? $user1 :(($user2 != $user->id) ? $user2 : 0);
+                $otheruser =  UserList::where('id', $other)->first();
                 if ($user1 == $user->id || $user2 == $user->id) {
                     $room = Rooms::where('room_date', $date)->where('my_id', $user->id)->orwhere('other_id', $user->id)->orderBy('created_at', 'desc')->first();
                     if (!empty($room)) {
@@ -269,7 +270,7 @@ class AllController extends Controller
                                     "status" => 1
                                 ]);
                             }
-                        return response()->json(["res" => "success", "room" => $room]);
+                        return response()->json(["res" => "success", "room" => $room,"other_username"=>$otheruser->username]);
                     } else {
                     $room = Rooms::where('room_date', $date)->where('my_id', $other)->orwhere('other_id', $other)->orderBy('created_at', 'desc')->first();
                     if (empty($room)) {
@@ -282,7 +283,7 @@ class AllController extends Controller
                             $room = Rooms::where('room_date', $date)->where('my_id', $user->id)->orwhere('other_id', $user->id)->orderBy('created_at', 'desc')->first();
                             OnlineUsers::where('user_id', $user1)->delete();
                             OnlineUsers::where('user_id', $user2)->delete();
-                            return response()->json(["res" => "success", "room" => $room]);
+                            return response()->json(["res" => "success", "room" => $room,"other_username"=>$otheruser->username]);
                         }
                         exit();
                     }

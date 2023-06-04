@@ -77,6 +77,10 @@
                                             <label for="Christianity">Christianity</label>
                                         </div>
                                         <div class="form-group">
+                                            <input type="radio" id="Judaism" value="Judaism" name="religion" />
+                                            <label for="Judaism">Judaism</label>
+                                        </div>
+                                        <div class="form-group">
                                             <input type="radio" id="Islam" value="Islam" name="religion" />
                                             <label for="Islam">Islam</label>
                                         </div>

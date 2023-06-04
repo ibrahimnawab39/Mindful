@@ -144,7 +144,7 @@
                                 myid = result["room"]["my_id"];
                                 otherid = result["room"]["other_id"];
                                 room = result["room"]["room_name"];
-                                $(".room-number").html(room);
+                                $(".room-number").html(result["other_username"]);
                                 chat_list(room);
                                 clearInterval(clearinterval);
                                 statusconntion = setInterval(ChangeStatus, 2000)
@@ -172,8 +172,9 @@
                                 myid = result["room"]["my_id"];
                                 otherid = result["room"]["other_id"];
                                 room = result["room"]["room_name"];
+                                
                                 chat_list(room);
-                                $(".room-number").html(room);
+                                $(".room-number").html(result["other_username"]);
                                 clearInterval(clearinterval);
                                 statusconntion = setInterval(ChangeStatus, 2000)
                             } else {

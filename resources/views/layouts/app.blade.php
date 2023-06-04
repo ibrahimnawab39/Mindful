@@ -32,6 +32,13 @@
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/responsive.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <style>
+        @media screen and (max-width:786px){
+            .desktop-switch-button {
+                display:none;
+            }
+        }
+    </style>
     @yield('styles')
 </head>
 <body>
@@ -44,11 +51,11 @@
                     <img src="{{ asset('assets/images/logo/logo-dark.png') }}" alt=""
                         class="img-fluid showdark top-logo" style='display:none'>
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="fa fa-bars"></span></button>
+               <a href="javascript:void(0)" class="switch-icon-button navbar-toggler">
+                    <img src="{{ asset('assets/images/svg/moon.svg') }}" class="light ml-2">
+                    <img src="{{ asset('assets/images/svg/moonDark.svg') }}" class="dark ml-2">
+                </a>
                 <div class="collapse navbar-collapse justify-content-md-center" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mx-auto">
@@ -64,7 +71,7 @@
                         
                     </ul>
                 </div>
-                <a href="javascript:void(0)" class="switch-icon-button">
+                <a href="javascript:void(0)" class="switch-icon-button desktop-switch-button">
                     <img src="{{ asset('assets/images/svg/moon.svg') }}" class="light ml-2">
                     <img src="{{ asset('assets/images/svg/moonDark.svg') }}" class="dark ml-2">
                 </a>
