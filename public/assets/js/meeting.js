@@ -107,7 +107,7 @@ function StartMeeting(roomName, dispNme) {
             }
         },
         tileViewChanged: function (data) {
-            console.log("tileViewChanged", data);
+            // console.log("tileViewChanged", data);
         },
         screenSharingStatusChanged: function (data) {
             if (data.on)
@@ -116,18 +116,27 @@ function StartMeeting(roomName, dispNme) {
                 $("#btnScreenShareCustom").html('<i class="mdi mdi-share"></i>');
         },
         participantJoined: function (data) {
-            console.log('participantJoined', data);
+            // console.log('participantJoined', data);
             apiObj.executeCommand('toggleTileView');
             change_status();
         },
         participantLeft: function (data) {
-            console.log('participantLeft', data);
+            // console.log('participantLeft', data);
             apiObj.executeCommand('endConference');
             skip_query();
         },
         videoConferenceJoined: function (data) {
-            console.log("videoConferenceJoined", data);
-
+            // console.log("videoConferenceJoined", data);
+            const isModerator = apiObj.isModerator();
+              if (isModerator) {
+                console.log('User is a moderator');
+                // Perform moderator-specific actions
+              } else {
+                console.log('User is a participant');
+                // Perform participant-specific actions
+              }
+                change_status();
+            
         }
     });
     // if(video == false) {

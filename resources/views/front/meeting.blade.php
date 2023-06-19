@@ -149,14 +149,16 @@
             transform: translateX(-50%);
         }
         .chat-box .card-body {
-            height: 500px;
-            overflow: auto;
+          padding-right: 0;
         }
         #chat-messages {
             list-style: none;
             margin: 0;
             padding: 0;
-            height:485px;
+            height: 420px;
+            position: relative;
+            margin-bottom: 40px;
+            padding-right: 20px;
         }
  
         #chat-messages li:last-child {
@@ -184,18 +186,26 @@
                 height:185px;
             }
         }
+        main.py-4 {
+    padding: 0 !important;
+}
     </style>
 @endsection
 @section('content')
     <section class="meeting-section">
         <div class="row">
-            <div class="col-md-8">
-                <a class="btn btn-dark rounded gotodashboard Goback-Btn" href="{{ route('front.main') }}">
+            <div class="col-lg-8 col-md-7 videolefttt">
+                <div class="row mx-0 justify-content-between">
+                <a class="btn btn-dark rounded gotodashboard Goback-Btn" href="{{ route('front.main') }}" style="width:fit-content">
                     <img src="{{ asset('assets/images/svg/arrowleft.svg') }}" class='showLight'>
                     <img src="{{ asset('assets/images/svg/arrowleftDark.svg') }}" class='showdark'>
                     Go Back to Dashboard
                 </a>
-                <div class="mt-4 myVideo connected-video">
+                <div id="video-message">
+                 
+                </div>
+                </div>
+                <div class="  myVideo connected-video">
                     <div class="watermaker-logo">
                         <img src="{{asset('assets/images/logo/logo-dark.png')}}"  class="img-fluid"/> 
                     </div>
@@ -212,8 +222,9 @@
                         <button class="report-btn">Report</button>    
                     </div>
                 </div>
-                <div class="justify-content-center justify-content-md-start mt-4 row skip-video d-none">
-                    <div class="col-md-6 mb-3 pr-md-2 myVideo">
+                <div class="justify-content-center justify-content-md-start row skip-video d-none">
+                    <div class="col-md-6   pr-md-2 myVideo">
+                        
                         <video id="localVideo" autoplay muted></video>
                         <div class='videoActions'>
                             <button class='actionIcon' id="skip_mic">
@@ -224,25 +235,28 @@
                             </button>
                         </div>
                     </div>
-                    <div class="col-md-6 mb-3 pl-md-2 oponentVideo">
+                    <div class="col-md-6  pl-md-2 oponentVideo">
                         <video id="remoteVideo" autoplay muted></video>
                     </div>
                 </div>
-                <div class="row justify-content-center">
-                    <button class="btn skip-video-btn rounded btn-small" type="button" id="skip_call"><i
-                            class="mdi mdi-24px mdi-reload"></i> Skip</button>
-                </div>
-                <div class='row mt-4'>
-                    <div class='col-md-7'>
-                        <p>Search for interests <span class='text-muted'> (Optional)</span></p>
-                        <input type='text' class='form--control w-100' id="intrest-input">
+               
+                <div class=' align-items-center row'>
+                    <div class='col-md-7  '>
+                      <div class="form-group ijosc">
+                            <p >Search for interests <span class='text-muted'> (Optional)</span></p>
+                            <input type='text' class='form--control w-100' id="intrest-input">
+                      </div>
+                      <div class=" " id="multiple-intrest"></div>
                     </div>
-                    <div class='col-md-7 mt-4' id="multiple-intrest">
-                        
+                    <div class='col-md-5 '>
+                        <div class="d-flex justify-content-end">
+                             <button class="btn skip-video-btn rounded btn-small" type="button" id="skip_call"><i
+                            class="mdi mdi-24px mdi-reload"></i> Skip</button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-lg-4 col-md-5 pt-3 videochattright">
                 <div class=" chat-box card h-100">
                     <div class="chat-header card-header ">
                         <h6 class=" ">Live Chat</h6>
@@ -416,7 +430,8 @@
                 dataType: "JSON",
                 success: function(result) {
                     if (result["res"] == "success") {
-                        toastr["success"]("Status Change To Connected Successfully!")
+                      
+                           $("#video-message").html(result["message"]);
                     }
                 }
             })
@@ -440,16 +455,16 @@
                 }
                 // Add the list item to the chat window
                 document.getElementById('chat-messages').appendChild(messageLi);
-                const getScrollContainer = document.querySelector('.chat-conversation-box');
-                getScrollContainer.scrollTop = 0;
+                 const getScrollContainer = document.querySelector('.chat-conversation-box');
+                getScrollContainer.scrollTop = getScrollContainer.scrollHeight;
             });
         }
         const ps = new PerfectScrollbar('.chat-conversation-box', {
     suppressScrollX : true
   });
 
-  const getScrollContainer = document.querySelector('.chat-conversation-box');
-  getScrollContainer.scrollBottom = 0;
+const getScrollContainer = document.querySelector('.chat-conversation-box');
+  getScrollContainer.scrollTop = 0;
         $("#chat-from").on("submit", function(e) {
             e.preventDefault();
             var message = $(this).find("input[name='message']");
@@ -462,7 +477,7 @@
                 socket.emit('sendChatToServer', conent);
                 message.val("");
                 const getScrollContainer = document.querySelector('.chat-conversation-box');
-  getScrollContainer.scrollBottom = 0;
+        getScrollContainer.scrollTop = getScrollContainer.scrollHeight;
             }
         });
         var intrest_count = 0;
@@ -477,7 +492,6 @@
                                 class="px-2">&times;</span>
                         </div>`);
                 $(this).val("");
-                console.log(intrest);
                 $.ajax({
                 url: "{{ route('front.change-intrest') }}",
                 type: "POST",
@@ -490,6 +504,7 @@
                 dataType: "JSON",
                 success: function(result) {
                     if (result["res"] == "success") {
+                     
                         toastr["success"]("Intrest Added Successfully!")
                     }
                 }
@@ -522,9 +537,9 @@
             })
         }
         
-         setInterval(updateStatus, 2000);
+         setInterval(updateTime, 2000);
         
-        function updateStatus(){
+        function updateTime(){
              
               $.ajax({
                 url: "{{ route('front.change-time') }}",

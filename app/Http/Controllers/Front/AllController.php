@@ -214,6 +214,8 @@ class AllController extends Controller
         }
         return view('front.text-meeting', compact('user','blockwords'));
     }
+    
+    
     public function connect_with(Request $request)
     {
         $ip = $request->session()->get('ip');
@@ -253,6 +255,8 @@ class AllController extends Controller
         while (true) {
  
             $online_users = $this->all_online_user($user->id,$ip);
+            // print_r($online_users);
+            // exit();
             if (count($online_users) >= 2) {
                 $other = 0;
                 $user1 = $online_users[0]["id"];
@@ -270,7 +274,7 @@ class AllController extends Controller
                                     "status" => 1
                                 ]);
                             }
-                        return response()->json(["res" => "success", "room" => $room,"other_username"=>$otheruser->username]);
+                        return response()->json(["res" => "success", "room" => $room,"other_username"=>'Oppenent: '.$otheruser->username]);
                     } else {
                     $room = Rooms::where('room_date', $date)->where('my_id', $other)->orwhere('other_id', $other)->orderBy('created_at', 'desc')->first();
                     if (empty($room)) {
@@ -283,7 +287,7 @@ class AllController extends Controller
                             $room = Rooms::where('room_date', $date)->where('my_id', $user->id)->orwhere('other_id', $user->id)->orderBy('created_at', 'desc')->first();
                             OnlineUsers::where('user_id', $user1)->delete();
                             OnlineUsers::where('user_id', $user2)->delete();
-                            return response()->json(["res" => "success", "room" => $room,"other_username"=>$otheruser->username]);
+                            return response()->json(["res" => "success", "room" => $room,"other_username"=>'Oppenent: '.$otheruser->username]);
                         }
                         exit();
                     }
@@ -307,7 +311,14 @@ class AllController extends Controller
                 ->get();
         } elseif (!empty($user->interest)) {
             $allusers =  UserList::where('online_status', '>', $time)
-                ->whereIn('interest', $user->interest)
+                ->where(function ($query) use ($user) {
+                    $interests = explode(",", $user->interest);
+                    $query->where(function ($query) use ($interests) {
+                        foreach ($interests as $interest) {
+                            $query->orWhere('interest', 'LIKE', '%' . $interest . '%');
+                        }
+                    });
+                })
                 ->where('type',$user->type)
                 ->where('status', 0)
                 ->orwhere('status', 2)
@@ -317,7 +328,14 @@ class AllController extends Controller
                 ->toArray();
         } elseif (!empty($user->interest) && !empty($user->connect_with)) {
             $allusers =  UserList::where('online_status', '>', $time)
-                ->whereIn('interest', $user->interest)
+                ->where(function ($query) use ($user) {
+                    $interests = explode(",", $user->interest);
+                    $query->where(function ($query) use ($interests) {
+                        foreach ($interests as $interest) {
+                            $query->orWhere('interest', 'LIKE', '%' . $interest . '%');
+                        }
+                    });
+                })
                 ->where('connect_with', $user->connect_with)
                 ->where('type',$user->type)
                 ->where('status', 0)
@@ -339,27 +357,63 @@ class AllController extends Controller
         // $allonline_users = OnlineUsers::inRandomOrder()->limit(2)->get()->toArray();
         return $allusers;
     }
+    public function ReligionName($val)
+    { 
+        
+        if($val == 'Islam'){
+            return 'Muslim';
+        }
+        else if($val == 'Christianity'){
+            return 'Christian';
+        }
+        else if($val == 'Judaism'){
+            return 'Jews';
+        }
+        else if($val == 'Atheists'){
+            return 'Atheism';
+        }else{
+            return '';
+        }
+        
+    }
     public function change_status(Request $request)
     {
         $ip = $request->session()->get('ip');
         $user =  UserList::where('ip_address', $ip)->first();
+        $user_interest= explode(",",$user->interest);
+        $intrestess = array();
         $other = (($user->id != $request->myid)? $request->myid : (($user->id != $request->otherid) ? $request->otherid : 0) );
-        // echo $other;
-        // exit();
+        
         if($user->type == "text") {
             $other_user = UserList::where('id',$other)->where('status',1)->first();
             if(!empty($other_user)){
+                $other_interest = explode(",",$other_user->interest);
+                foreach($other_interest as $value){
+                    if(in_array($value,$user_interest)){
+                        array_push($intrestess,$value);
+                    }
+                }
                     if ($request->myid != 0 && $request->otherid != 0) {
                     $old_room = Rooms::where('my_id', $request->myid)->orwhere('other_id', $request->otherid)->first();
                     if (!empty($old_room)) {
                         Rooms::destroy($old_room->id);
                     }
                 }
-                return response()->json(["res" => "success"]);
+                    $religion = $this->ReligionName($other_user->religion);
+                return response()->json(["res" => "success","message"=>"You have connected to ".$other_user->username." (".$religion.")!<br>".((!empty($intrestess))?"You both share interests in: ".implode($intrestess):"")]);
             }else{
                 return response()->json(["res" => "error"]);
             }
         }else{
+             $other_user = UserList::where('id',$other)->where('status',1)->first();
+             if(!empty($other_user)){
+                $other_interest = explode(",",$other_user->interest);
+                foreach($other_interest as $value){
+                    if(in_array($value,$user_interest)){
+                        array_push($intrestess,$value);
+                    }
+                }
+             }
             UserList::where('id', $request->myid)->update([
                 "status" => 1
             ]);
@@ -372,12 +426,13 @@ class AllController extends Controller
                     Rooms::destroy($old_room->id);
                 }
             }
-            return response()->json(["res" => "success"]);
+                  $religion = $this->ReligionName($other_user->religion);
+            return response()->json(["res" => "success","message"=>"You have connected to ".$other_user->username." (".$religion.")!<br>".((!empty($intrestess))?"You both share interests in: ".implode($intrestess):"")]);
         }
     }
     public function change_intrest(Request $request)
     {
-        $ip = $_SERVER['REMOTE_ADDR'];
+        $ip = $request->session()->get('ip');
         $user =  UserList::where('ip_address', $ip)->first();
         if (!empty($user)){
             UserList::where('id', $user->id)->update([

@@ -44,8 +44,8 @@
                         Go Back to Dashboard
                     </a>
                     <h4 class="room-number"></h4>
-                    <button class="btn skip-video-btn rounded btn-small m-0" type="button" id="skip_call"><i
-                            class="mdi mdi-24px mdi-reload"></i> Skip</button>
+                    <button class="btn skip-video-btn rounded btn-small m-0" type="button" id="skip_call">
+                        <i class="mdi mdi-24px mdi-reload"></i> Skip</button>
                 </div>
                 <div class="chat-box card">
                     <div class="chat-header card-header ">
@@ -224,14 +224,14 @@
                 // Add the list item to the chat window
                 document.getElementById('chat-messages').appendChild(messageLi);
                 const getScrollContainer = document.querySelector('.chat-conversation-box');
-                getScrollContainer.scrollTop = 0;
+                getScrollContainer.scrollTop = getScrollContainer.scrollHeight;
             });
         }
         const ps = new PerfectScrollbar('.chat-conversation-box', {
             suppressScrollX: true
         });
         const getScrollContainer = document.querySelector('.chat-conversation-box');
-        getScrollContainer.scrollBottom = 0;
+        getScrollContainer.scrollTop = 0;
         $("#chat-from").on("submit", function(e) {
             e.preventDefault();
             var message = $(this).find("input[name='message']");
@@ -243,8 +243,8 @@
                 };
                 socket.emit('sendChatToServer', conent);
                 message.val("");
-                const getScrollContainer = document.querySelector('.chat-conversation-box');
-                getScrollContainer.scrollBottom = 0;
+                        const getScrollContainer = document.querySelector('.chat-conversation-box');
+                getScrollContainer.scrollTop = getScrollContainer.scrollHeight;
             }
         });
         function updateOnlineTime() {

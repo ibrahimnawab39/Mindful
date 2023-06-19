@@ -5,7 +5,7 @@
 @endsection
 @section('content')
     <section class="container">
-       <h2 class="rules-heading">Mindful Rule's</h2>
+       <h2 class="rules-heading">Mindful Terms & Conditions</h2>
        
        <ul class="rules-list">
                 <li>

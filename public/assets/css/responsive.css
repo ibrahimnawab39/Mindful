@@ -54,6 +54,31 @@
 
 
 @media (max-width:767px) {
+        .videolefttt { 
+    height: fit-content; 
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.getstartedWizard .signup-step-container {
+    padding: 15px; 
+}
+.tab-pane h2 {
+    margin-bottom: 24px; 
+    font-size: 20px;
+    line-height: 25px; 
+}
+    .welcome-page .content-container { 
+    max-width: 100%; 
+}
+    .navbar-collapse {
+    order: 2;
+}
+    .jjkd{
+        
+        flex: 1;
+        display: flex;
+        justify-content: end;
+    }
     .left-contentx img.img-fluid.top-logo {
     width: 180px;
     margin: 6px 20px;
@@ -144,6 +169,11 @@
 }
 /* MOBILE SCREEN */
 @media screen and (max-width:650px)  {
+    .videolefttt { 
+    height: fit-content; 
+    gap: 10px;
+    margin-bottom: 20px;
+}
       .deahboardSecLeft h1 {
         font-size:2rem;
     }
