@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Http\Request;
 use Nette\Utils\Random;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cookie;
 
 class AllController extends Controller
 {
@@ -59,6 +60,13 @@ class AllController extends Controller
     
     public function blocked()
     {
+        $blockip = $_SERVER['REMOTE_ADDR'];
+         $countIp = count(BlockUser::where('block_ip',$blockip)->get());
+        if($countIp <=2){
+            
+                return redirect()->route('front.welcome');
+                exit;
+        }
        return view("front.blocked");
       
     }
@@ -75,7 +83,7 @@ class AllController extends Controller
         return view("front.rules");
     }
     
-    public function welcome()
+    public function welcome(Request $request)
     {
         $blockip = $_SERVER['REMOTE_ADDR'];
          $countIp = count(BlockUser::where('block_ip',$blockip)->get());
@@ -83,6 +91,11 @@ class AllController extends Controller
             
                 return redirect()->route('front.blocked');
                 exit;
+        }
+        if(!empty($request->cookie('ip'))) {
+            $request->session()->put('ip',$request->cookie('ip'));
+            return redirect()->route('front.main');
+            exit;
         }
         return view("front.welcome");
     }
@@ -126,25 +139,35 @@ class AllController extends Controller
                 "religion" => "required",
             ]);
             
-           
+             if(!empty($request->session()->get('ip'))){
+            $alreadyip =  $request->session()->get('ip');
+                $user = UserList::where('ip_address', $alreadyip)->first();
+                UserList::where('id',$user->id)->update([
+                    "username" => $request->nickname,
+                    "religion" => $request->religion,
+                    "online_status" => $time+ 10,
+                    "status" => '1',
+                ]);
+             }else{
             
-            $lastRow = UserList::latest()->first();         
-            if (!empty($lastRow)) {
-                $lastId = intval($lastRow->id) + 1;
-            } else {
-                $lastId = 1;
-            }
-         
-            UserList::create([
-                "username" => $request->nickname,
-                "religion" => $request->religion,
-                "online_status" => $time+ 10,
-                "status" => '1',
-                'ip_address' => $ip . 'Uid=' . $lastId
-            ]);
-            
-            $request->session()->put('ip', $ip . 'Uid=' . $lastId);
-           
+                $lastRow = UserList::latest()->first();         
+                if (!empty($lastRow)) {
+                    $lastId = intval($lastRow->id) + 1;
+                } else {
+                    $lastId = 1;
+                }
+             
+                UserList::create([
+                    "username" => $request->nickname,
+                    "religion" => $request->religion,
+                    "online_status" => $time+ 10,
+                    "status" => '1',
+                    'ip_address' => $ip . 'Uid=' . $lastId
+                ]);
+                
+                $request->session()->put('ip', $ip . 'Uid=' . $lastId);
+                Cookie::queue(Cookie::make('ip',  $ip . 'Uid=' . $lastId, 525600)); // 525600 minutes = 1 year
+             }
              return redirect()->route('front.main');
         }
         

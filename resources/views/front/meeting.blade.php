@@ -1,6 +1,9 @@
 @extends('layouts.app')
 @section('pagename', 'Video')
-
+@php
+    $interest_count = 0;
+    $interests = explode(",",$user->interest);
+@endphp
 @section('styles')
     <link href="{{asset('assets/css/perfect-scrollbar.css')}}" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -246,7 +249,19 @@
                             <p >Search for interests <span class='text-muted'> (Optional)</span></p>
                             <input type='text' class='form--control w-100' id="intrest-input">
                       </div>
-                      <div class=" " id="multiple-intrest"></div>
+                      <div class=" " id="multiple-intrest">
+                          @if(!empty($interests) && !empty($user->interest))
+                          @foreach($interests as $interest)
+                            <div class='btn btn-small rounded-pill btn-light-dark interest-{{$interest_count}} mb-1 mr-1'>
+                            {{$interest}} <span onClick="remove_intrest({{$interest_count}},'{{$interest}}')"
+                                class="px-2">&times;</span>
+                            </div>
+                            @php
+                            $interest_count = count($interests)-1;
+                            @endphp
+                          @endforeach
+                          @endif
+                      </div>
                     </div>
                     <div class='col-md-5 '>
                         <div class="d-flex justify-content-end">
@@ -480,8 +495,8 @@ const getScrollContainer = document.querySelector('.chat-conversation-box');
         getScrollContainer.scrollTop = getScrollContainer.scrollHeight;
             }
         });
-        var intrest_count = 0;
-        var intrest  = [];
+        var intrest_count = {{count($interests)}};
+        var intrest  = [{!!((!empty($user->interest ) && $user->interest !=null && !empty($interests))? "'".implode("','",$interests)."'": null)!!}];
         $("#intrest-input").on("change",function(){
             var value =$(this).val();
             if(value !=""){
@@ -531,7 +546,7 @@ const getScrollContainer = document.querySelector('.chat-conversation-box');
                 dataType: "JSON",
                 success: function(result) {
                     if (result["res"] == "success") {
-                        toastr["success"]("Interest Added Successfully!")
+                        toastr["success"]("Interest Remove Successfully!")
                     }
                 }
             })
