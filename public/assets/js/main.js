@@ -8,7 +8,7 @@ $(document).ready(function () {
      
         $('.showLight').show()
         $('.showdark').hide()
-
+        
     } else {
         $('.showdark').show()
         $('.showLight').hide()

@@ -5,7 +5,7 @@
     <style>
         .chat-input-group .chat-input {
             /*bottom: 60px;*/
-            width: 98%;
+            width: 88%;
         }
         button.chat-btn {
             /*bottom: 67px;*/
@@ -56,9 +56,28 @@
                         </ul>
                     </div>
                     <div class="card-footer  chat-footer">
+                        <div class="chatbotbox" style="display:none">
+                            <ul>
+                                
+                            </ul>
+                        
+                        <form id="chat-bot">
+                            <div class="chat-input-group"> 
+                               
+                                   <textarea id="messageInput" class="chat-input" name="botmessage" placeholder="Type your message"></textarea>
+                                <button type="submit" class="chat-btn ssesxa">
+                                    <img src="{{ asset('assets/images/svg/send_msg.svg') }}">
+                                </button>
+                                <button disabled="disabled" type="button" class="chat-btn fa-spin fa fa-spinner" style="display:none">
+                                
+                                </button>
+                            </div>
+                        </form>
+                        </div>
                         <form id="chat-from">
                             <div class="chat-input-group">
-                                <input class="chat-input" placeholder="Type your message" type="text" name="message">
+                                <img src="{{asset('assets/images/icons/chatbot.png')}}" class="aichat">
+                                <input class="chat-input sfcraerffadferfadwedascdfvrwascfrgwasd" placeholder="Type your message" type="text" name="message">
                                 <button class="chat-btn">
                                     <img src="{{ asset('assets/images/svg/send_msg.svg') }}">
                                 </button>
@@ -108,10 +127,66 @@
           return false; // Return false if no blocked words are found
         }
         
+        $(document).on('click','.aichat',function(){
+            $('.chatbotbox').toggle();
+        })
         
+        $(document).on('submit', '#chat-bot', function(event) {
+            event.preventDefault();
+            let chatList = $('.chatbotbox ul');
+            let val = $.trim($("textarea[name='botmessage']").val());
+            if(val == ''){
+                return;
+            }
+            $('.ssesxa').hide();
+            $('.chat-btn.fa').show();
+            $("textarea[name='botmessage']").val(' ');
+            $.ajax({
+                url: "{{ route('front.chat_gpt') }}",
+                type: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                dataType: "json",
+                data: JSON.stringify({ val: val }),
+                success: function(result) {
+                    if(result.completion){
+                       chatList.append(`
+                            <li>
+                                <span></span>
+                                <div class="botquestion">${val}</div>
+                                <div class="botanswer">${decode_utf8((result.completion))}</div>
+                            </li>
+                        `);
+                        
+                        chatList.scrollTop(chatList[0].scrollHeight);
+                    }
+                }
+            });
+            $('.ssesxa').show();
+           $('.chat-btn.fa').hide();
+        });
+     
+     $(document).on('click', '.chatbotbox ul span', function() {
+          let AItext = $.trim($(this).parent().find('.botanswer').text());
+          let msgText = $.trim($("input[name='message']").val());
+            console.log(msgText + ' + ' + AItext);
+          $(".sfcraerffadferfadwedascdfvrwascfrgwasd").val(msgText + ' ' + AItext);
+          $('.chatbotbox').hide();
+        });
 
+
+  function decode_utf8(s) { 
+
+     return decodeURIComponent(escape(s)); 
+
+ }
+        
         $("input[name='message']").on("input",function(){
             const userInput = $(this).val();
+            
+            
             const containsBlockedWords = hasBlockedWords(userInput.toLowerCase());
             if (containsBlockedWords) {
                 $("#chat-from button").attr("disabled",true);

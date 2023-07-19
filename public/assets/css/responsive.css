@@ -169,6 +169,10 @@
 }
 /* MOBILE SCREEN */
 @media screen and (max-width:650px)  {
+    input.chat-input.sfcraerffadferfadwedascdfvrwascfrgwasd {
+    padding-left: 40px;
+    width: 91%;
+}
     .videolefttt { 
     height: fit-content; 
     gap: 10px;

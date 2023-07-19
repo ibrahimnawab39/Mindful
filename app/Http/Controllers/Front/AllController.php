@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 use Nette\Utils\Random;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cookie;
-
+use Illuminate\Support\Facades\Http;
 class AllController extends Controller
 {
     public function report(Request $req)
@@ -100,9 +100,8 @@ class AllController extends Controller
         return view("front.welcome");
     }
     
-    
-        public function dashboard(Request $request)
-        {
+    public function dashboard(Request $request)
+    {
             $blockip = $_SERVER['REMOTE_ADDR'];
          $countIp = count(BlockUser::where('block_ip',$blockip)->get());
         if($countIp >=2){
@@ -121,9 +120,9 @@ class AllController extends Controller
         
             return view('front.index', compact('user'));
         }
-        
-        public function store(Request $request)
-        {
+    
+    public function store(Request $request)
+    {
             $blockip = $_SERVER['REMOTE_ADDR'];
          $countIp = count(BlockUser::where('block_ip',$blockip)->get());
         if($countIp >=2){
@@ -179,7 +178,6 @@ class AllController extends Controller
         }
     }
         
- 
     public function settings()
     {
         $blockip = $_SERVER['REMOTE_ADDR'];
@@ -215,6 +213,7 @@ class AllController extends Controller
         }
         return view('front.meeting', compact('user','blockwords'));
     }
+    
     public function text(Request $request)
     {
         $blockip = $_SERVER['REMOTE_ADDR'];
@@ -237,7 +236,6 @@ class AllController extends Controller
         }
         return view('front.text-meeting', compact('user','blockwords'));
     }
-    
     
     public function connect_with(Request $request)
     {
@@ -319,6 +317,7 @@ class AllController extends Controller
             sleep(1);
         }
     }
+    
     public function all_online_user($id,$ip)
     {   
           $time = time();
@@ -380,6 +379,7 @@ class AllController extends Controller
         // $allonline_users = OnlineUsers::inRandomOrder()->limit(2)->get()->toArray();
         return $allusers;
     }
+    
     public function ReligionName($val)
     { 
         
@@ -453,6 +453,7 @@ class AllController extends Controller
             return response()->json(["res" => "success","message"=>"You have connected to ".$other_user->username." (".$religion.")!<br>".((!empty($intrestess))?"You both share interests in: ".implode($intrestess):"")]);
         }
     }
+    
     public function change_intrest(Request $request)
     {
         $ip = $request->session()->get('ip');
@@ -464,4 +465,41 @@ class AllController extends Controller
             return response()->json(["res" => "success"]);
         }
     }
+    
+    
+    public function chat_gpt(Request $request){
+        // Make an API call to OpenAI
+         
+            try {
+                $response = Http::timeout(80)->withHeaders([
+                    'Authorization' => 'Bearer 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',
+                    'Content-Type' => 'application/json',
+                ])->post('https://api.openai.com/v1/engines/text-davinci-003/completions', [
+                    'prompt' => $request->val.' , only answer/response in text ,',
+                    'max_tokens' => 20,
+                    'temperature' => 0.8,
+                ]);
+            
+                $response = $response->json();
+            
+                if (isset($response['choices'][0]['text'])) {
+                    $completion = $response['choices'][0]['text'];
+                    return response()->json(['completion' => $completion]);
+                }
+            
+                $errorCode = $response['error']['code'] ?? null;
+                $errorType = $response['error']['type'] ?? null;
+            
+                return response()->json([
+                    'error' => $response['error']['message'],
+                    'errorCode' => $errorCode,
+                    'errorType' => $errorType
+                ]);
+            } catch (\Exception $e) {
+                return response()->json(['error' => $e->getMessage()]);
+            }
+            
+    }
+    
+    
 }

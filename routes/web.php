@@ -39,6 +39,7 @@ Route::post('/connect-with',[AllController::class,'connect_with'])->name('front.
 Route::post('/change-status',[AllController::class,'change_status'])->name('front.change-status');
 Route::post('/change-intrest',[AllController::class,'change_intrest'])->name('front.change-intrest');
 Route::post('/skip',[AllController::class,'skipping'])->name('front.skipping');
+Route::post('/chat_gpt',[AllController::class,'chat_gpt'])->name('front.chat_gpt');
 Route::get('/rules',[AllController::class,'rules'])->name('front.rules');
 Route::post('/report',[AllController::class,'report'])->name('front.report');
 Route::get('/blocked',[AllController::class,'blocked'])->name('front.blocked');

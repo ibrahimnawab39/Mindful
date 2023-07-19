@@ -54,8 +54,13 @@
                             chats to challenge their perspectives, promote critical thinking, and foster common
                             understanding to build a community of passionate and intellectually curious individuals.</p>
                         <a href="{{ route('front.get-started') }}" class="btn btn-block button-dark">Setup your preferences <img src="{{ asset('assets/images/svg/arrowRight.svg') }}" class=" ml-2"></a>
-                        <button type="button" class="btn btn-block button-ouline-dark switch-icon-button">
-                            Switch to dark mode
+                        <button type="button" class="btn btn-block button-ouline-dark ssecarvae switch-icon-button">
+                            <span  class="light">
+                                 Switch to dark mode
+                            </span> 
+                            <span class="dark">
+                                 Switch to light mode
+                            </span> 
                             <img src="{{ asset('assets/images/svg/moon.svg') }}" class="light ml-2">
                             <img src="{{ asset('assets/images/svg/moonDark.svg') }}" class="dark ml-2">
                         </button>
@@ -65,9 +70,9 @@
             <div class="col-md-6">
                 <div class="right-images-slider">
                     <img src="{{ asset('assets/images/slider/01.png') }}" alt="">
-                    <img src="{{ asset('assets/images/slider/01.png') }}" alt="">
-                    <img src="{{ asset('assets/images/slider/01.png') }}" alt="">
-                    <img src="{{ asset('assets/images/slider/01.png') }}" alt="">
+                    <img src="{{ asset('assets/images/slider/03.jpeg') }}" alt="">
+                    <img src="{{ asset('assets/images/slider/04.jpeg') }}" alt="">
+                    <img src="{{ asset('assets/images/slider/05.jpeg') }}" alt="">
                 </div>
             </div>
         </div>

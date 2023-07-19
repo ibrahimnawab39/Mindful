@@ -1139,3 +1139,123 @@ div#video-message {
     color: var(--chat-header-color);
     margin: 0 auto;
 }
+.chatbotbox {
+    position: absolute;
+    overflow: hidden;
+    z-index: 9999;
+    background: #2e3450;
+    max-width: 300px;
+    bottom: 100px;
+    left: 10px;
+    height: 300px;
+    width: 100%;
+    box-shadow: 4px 5px 5px #52525c7d;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 5px;
+}
+.chatbotbox ul {
+      height: calc(100% - 70px);
+    /* flex: 2; */
+    overflow-y: auto;
+    margin: 0;
+}
+.chatbotbox ul::-webkit-scrollbar {
+    background: #343541;
+    width: 5px;
+}
+
+.chatbotbox ul::-webkit-scrollbar-thumb {
+    background: #b8b9c3;
+    border-radius: 10px;
+}
+.chatbotbox ul::-webkit-scrollbar-track {
+    background: #343541;
+    width: 10px;
+    border-radius: 10px;
+}
+
+
+.chatbotbox form#chat-bot {
+     position: relative !important;
+    overflow: hidden;
+    height: 100%;
+    flex: 1;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: end;
+}
+.chatbotbox form#chat-bot textarea#messageInput {
+    position: relative;
+    height: 100%;
+    top: 0;
+    resize: none;
+    border-radius: 5px;
+    width: 98%;
+    padding: 5px 10px;
+    padding-right: 45px;
+    background-color: #585a66;
+    color: #fff;
+    font-size: 14px;
+}
+.chatbotbox form#chat-bot button.chat-btn {
+    bottom: 5px;
+    right: 5px;
+}
+img.aichat {
+    z-index: 999999;
+    position: absolute;
+    bottom: 25px;
+    left: 20px;
+    cursor:pointer;
+}
+.chatbotbox li {
+    margin-bottom: 5px;
+    position: relative;
+}
+
+.botquestion {
+    background: #343541;
+    color: #fff;
+    font-size: 12px;
+    padding: 5px;
+}
+.botanswer {
+    background: #585a66;
+    padding: 5px;
+    color: #fff;
+    font-size: 14px;
+}
+
+
+.chatbotbox li span {
+    display: block;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    z-index: 99;
+    background-image: url(../images/icons/selection.png);
+    background-size: contain;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
