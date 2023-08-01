@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ChatBlockWords;
 use App\Models\OnlineUsers;
 use App\Models\Rooms;
+use App\Models\GptRequests;
 use App\Models\UserList;
 use App\Models\BlockUser;
 use Illuminate\Support\Facades\Artisan;
@@ -469,35 +470,55 @@ class AllController extends Controller
     
     public function chat_gpt(Request $request){
         // Make an API call to OpenAI
-         
-            try {
-                $response = Http::timeout(80)->withHeaders([
-                    'Authorization' => 'Bearer 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',
-                    'Content-Type' => 'application/json',
-                ])->post('https://api.openai.com/v1/engines/text-davinci-003/completions', [
-                    'prompt' => $request->val.' , only answer/response in text ,',
-                    'max_tokens' => 20,
-                    'temperature' => 0.8,
-                ]);
+         try {
+    $response = Http::timeout(80)->withHeaders([
+        'Authorization' => 'Bearer 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',
+        'Content-Type' => 'application/json',
+    ])->post('https://api.openai.com/v1/chat/completions', [
+        'model' => 'gpt-3.5-turbo',
+        'messages' => [
+            [
+                'role' => 'system',
+                'content' => 'You are a helpful assistant.',
+            ],
+            [
+                'role' => 'user',
+                'content' => $request->val . ', only answer/response in text',
+            ],
+        ],
+        'max_tokens' => 1000,
+        'temperature' => 0.8,
+    ]);
+
+    $response = $response->json();
+
+    if (isset($response['choices'][0]['message']['content'])) {
+        $completion = $response['choices'][0]['message']['content'];
+        
+        GptRequests::create([
+            'prompt'=> $request->val,
+            'user_id'=> $request->user_id,
             
-                $response = $response->json();
-            
-                if (isset($response['choices'][0]['text'])) {
-                    $completion = $response['choices'][0]['text'];
-                    return response()->json(['completion' => $completion]);
-                }
-            
-                $errorCode = $response['error']['code'] ?? null;
-                $errorType = $response['error']['type'] ?? null;
-            
-                return response()->json([
-                    'error' => $response['error']['message'],
-                    'errorCode' => $errorCode,
-                    'errorType' => $errorType
-                ]);
-            } catch (\Exception $e) {
-                return response()->json(['error' => $e->getMessage()]);
-            }
+        ]);
+        return response()->json(['completion' => $completion]);
+    }
+
+    if (isset($response['error']['message'])) {
+        $errorCode = $response['error']['code'] ?? null;
+        $errorType = $response['error']['type'] ?? null;
+        return response()->json([
+            'error' => $response['error']['message'],
+            'errorCode' => $errorCode,
+            'errorType' => $errorType
+        ]);
+    }
+
+    // Handle other unexpected cases here if needed
+    // ...
+
+} catch (\Exception $e) {
+    return response()->json(['error' => $e->getMessage()]);
+}
             
     }
     

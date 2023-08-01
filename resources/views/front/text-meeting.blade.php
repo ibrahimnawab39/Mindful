@@ -75,8 +75,10 @@
                         </form>
                         </div>
                         <form id="chat-from">
-                            <div class="chat-input-group">
-                                <img src="{{asset('assets/images/icons/chatbot.png')}}" class="aichat">
+                            <div class="chat-input-group nnasnejca">
+                                <img src="{{asset('assets/images/icons/chatbot.png')}}" class="aichat" style="display:none">
+                                <span class="ai-badge">AI Prompt</span>
+                                <button class="closeGpt" type="button"><i class="fa-regular fa-keyboard"></i></button>
                                 <input class="chat-input sfcraerffadferfadwedascdfvrwascfrgwasd" placeholder="Type your message" type="text" name="message">
                                 <button class="chat-btn">
                                     <img src="{{ asset('assets/images/svg/send_msg.svg') }}">
@@ -94,6 +96,9 @@
     <script src="{{ asset('assets/js/meeting.js') }}"></script>
     <script src="{{ asset('assets/js/perfect-scrollbar.min.js') }}"></script>
     <script>
+        
+        
+        
         var mic = true;
         var room = "0";
         var myid = 0;
@@ -183,9 +188,24 @@
 
  }
         
+        $(document).on('click','.closeGpt',function(){
+             $(".closeGpt").hide();
+              $(".nnasnejca").removeClass('gptprompt').attr('prompt',false);
+              $(this).val('');
+        })
+        
         $("input[name='message']").on("input",function(){
             const userInput = $(this).val();
-            
+             const inputValue = $(this).val();
+            const searchTerm = "/gpt";
+            const searchTerm1 = " /gpt";
+ 
+            if (inputValue.includes(searchTerm) || inputValue.includes(searchTerm1)) {
+              $(".closeGpt").show();
+              $(".nnasnejca").addClass('gptprompt').attr('prompt',true);
+              $(this).val('');
+              
+            }  
             
             const containsBlockedWords = hasBlockedWords(userInput.toLowerCase());
             if (containsBlockedWords) {
@@ -307,9 +327,44 @@
         });
         const getScrollContainer = document.querySelector('.chat-conversation-box');
         getScrollContainer.scrollTop = 0;
+        
+        
         $("#chat-from").on("submit", function(e) {
             e.preventDefault();
-            var message = $(this).find("input[name='message']");
+             var message = $(this).find("input[name='message']");
+             console.log(user_id)
+            if($('.nnasnejca').attr('prompt') == 'true'){
+                 $(".closeGpt").hide();
+              $(".nnasnejca").removeClass('gptprompt').attr('prompt',false);
+                message.val("");
+              $.ajax({
+                url: "{{ route('front.chat_gpt') }}",
+                type: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                dataType: "json",
+                data: JSON.stringify({ val: message.val(),user_id:user_id }),
+                success: function(result) {
+                    if(result.completion){
+                       
+                   const conent = {
+                    content:decode_utf8((result.completion)),
+                    room: room,
+                    sender: user_id // where currentUserID is the unique ID of the current user
+                };
+                socket.emit('sendChatToServer', conent);
+                
+                        const getScrollContainer = document.querySelector('.chat-conversation-box');
+                getScrollContainer.scrollTop = getScrollContainer.scrollHeight;
+                    }
+                }
+            });
+            }else{
+                
+       
+           
             if (message.val() != "") {
                 const conent = {
                     content: message.val(),
@@ -321,7 +376,11 @@
                         const getScrollContainer = document.querySelector('.chat-conversation-box');
                 getScrollContainer.scrollTop = getScrollContainer.scrollHeight;
             }
+            }
         });
+        
+        
+        
         function updateOnlineTime() {
             $.ajax({
                 url: "{{ route('front.change-time') }}",
