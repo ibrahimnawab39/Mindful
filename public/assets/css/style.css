@@ -930,14 +930,7 @@ section.meeting-section {
 }
 .welcome-page .content-container button, .welcome-page .content-container a { 
     transition: .5s;
-}
-
-.room-number{
-        
-}
-
-
-
+} 
 
  select#connect-dropdown {
      display: flex;

@@ -332,11 +332,11 @@
         $("#chat-from").on("submit", function(e) {
             e.preventDefault();
              var message = $(this).find("input[name='message']");
-             console.log(user_id)
+            
             if($('.nnasnejca').attr('prompt') == 'true'){
                  $(".closeGpt").hide();
               $(".nnasnejca").removeClass('gptprompt').attr('prompt',false);
-                message.val("");
+               
               $.ajax({
                 url: "{{ route('front.chat_gpt') }}",
                 type: "POST",
@@ -347,6 +347,7 @@
                 dataType: "json",
                 data: JSON.stringify({ val: message.val(),user_id:user_id }),
                 success: function(result) {
+                    message.val("");
                     if(result.completion){
                        
                    const conent = {
