@@ -1030,6 +1030,7 @@ section.meeting-section {
 
 #chat-messages li.my-message {
     float: right;
+    margin-right: 15px;
     background-color: var(--chat-my-msg-bg)  ;
 }
 
@@ -1043,6 +1044,11 @@ section.meeting-section {
 }
 .chat-input-group {
     position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 10px;
 }
 .chat-input-group .chat-input {
     background: var(--chat-input-bg);
@@ -1056,10 +1062,10 @@ section.meeting-section {
     border: none !important;
     outline: none;
     width: 95%;
-    position: absolute;
+    /* position: absolute; */
     right: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    /* transform: translateX(-50%); */
     bottom: 10px;
     font-family: 'Plus Jakarta Sans';
     font-style: normal;
@@ -1069,7 +1075,7 @@ section.meeting-section {
     color:var(--chat-input-color);
 }
 button.chat-btn {
-    position: absolute;
+    /* position: absolute; */
     bottom: 17px;
     right: 20px;
     padding: 20px;

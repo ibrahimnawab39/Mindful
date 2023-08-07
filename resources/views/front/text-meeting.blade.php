@@ -5,7 +5,7 @@
     <style>
         .chat-input-group .chat-input {
             /*bottom: 60px;*/
-            width: 88%;
+            /* width: 88%; */
         }
         button.chat-btn {
             /*bottom: 67px;*/
@@ -26,6 +26,7 @@
             list-style: none;
             margin: 0;
             padding: 0;
+            position: relative;
             height: 485px;
         }
         #chat-messages li:last-child {
