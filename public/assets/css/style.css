@@ -1033,7 +1033,9 @@ section.meeting-section {
     margin-right: 15px;
     background-color: var(--chat-my-msg-bg)  ;
 }
-
+.gap-10 {
+    gap: 10px;
+}
 
 
 

@@ -38,7 +38,7 @@
     <section class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="row justify-content-between mb-3 align-items-center m-0">
+                <div class="row justify-content-between mb-3 align-items-center m-0 gap-10">
                     <a class="btn btn-dark rounded gotodashboard Goback-Btn" href="{{ route('front.main') }}">
                         <img src="{{ asset('assets/images/svg/arrowleft.svg') }}" class='showLight'>
                         <img src="{{ asset('assets/images/svg/arrowleftDark.svg') }}" class='showdark'>
