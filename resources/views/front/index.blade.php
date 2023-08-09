@@ -15,21 +15,24 @@
     <section class='dashboard-section standard'>
         <div class='deahboardSecLeft col-md-5 col-lg-6 pr-0'>
             <h1>Connecting Minds</h1>
-            <p>Mindful is a social networking application that encourages lively debates on a range of topics, with an emphasis on politics, religion and science. Users can engage in random video or text chats to challenge their perspectives, promote critical thinking, and foster common understanding to build a community of passionate and intellectually curious individuals.</p>
+            <p>Mindful is a social networking application that encourages lively debates on a range of topics, with an
+                emphasis on politics, religion and science. Users can engage in random video or text chats to challenge
+                their perspectives, promote critical thinking, and foster common understanding to build a community of
+                passionate and intellectually curious individuals.</p>
             <button class='btn btn-light-dark rounded-pill btn-small'>Start Chatting</button>
             <div class='dashboardbtngrp'>
-                <a class='btn btn-light-dark rounded ' href="{{route('front.text')}}">
-                    <img src="{{asset('assets/images/svg/envelope.svg')}}" class='showLight'>
-                    <img src="{{asset('assets/images/svg/envelope-dark.svg')}}" class='showdark'>
+                <a class='btn btn-light-dark rounded ' href="{{ route('front.text') }}">
+                    <img src="{{ asset('assets/images/svg/envelope.svg') }}" class='showLight'>
+                    <img src="{{ asset('assets/images/svg/envelope-dark.svg') }}" class='showdark'>
                     Text</a>
-                <a class='btn btn-dark rounded ' href="{{ route('front.video') }}"> 
-                    <img src="{{asset('assets/images/svg/video.svg')}}" class=''>
+                <a class='btn btn-dark rounded ' href="{{ route('front.video') }}">
+                    <img src="{{ asset('assets/images/svg/video.svg') }}" class=''>
                     Video</a>
             </div>
             <div class="row">
                 <div class="col-md-12 mt-4">
                     <label for="">Connect to <span class='text-muted'>(Optional)</span></label>
-                    <select id="connect-dropdown"  >
+                    <select id="connect-dropdown">
                         <option value="" selected disabled>Select from drop down</option>
                         <option value="Everyone">Everyone</option>
                         <option value="Jews">Jews</option>
@@ -41,16 +44,18 @@
             </div>
         </div>
         <div class='deahboardSecRight col-md-5 col-lg-6 '>
-            <div class='dashpoardslider'>
+            <img src="{{ asset('assets/images/dashboard/gpt-icon-black.png') }}" class='img-fluid w-50 showLight'>
+            <img src="{{ asset('assets/images/dashboard/gpt-icon-white.png') }}" class='img-fluid w-50 showdark'>
+            {{-- <div class='dashpoardslider'>
                 <img src="{{ asset('assets/images/slider/02.svg') }}">
                 <img src="{{ asset('assets/images/slider/02.svg') }}">
                 <img src="{{ asset('assets/images/slider/02.svg') }}">
-            </div>
+            </div> --}}
             <p>
                 Chat GPT: Generative Pre-trained Transformer for Open-Domain Conversational AI
             </p>
             <button class='btn btn-dark rounded '>
-            <img src="{{asset('assets/images/svg/openai.svg')}}" class=''>
+                <img src="{{ asset('assets/images/svg/openai.svg') }}" class=''>
                 Open GPT</button>
         </div>
     </section>
@@ -71,7 +76,7 @@
                     },
                     dataType: "JSON",
                     success: function(result) {
-                        if(result["res"] == "success"){
+                        if (result["res"] == "success") {
                             toastr["success"]("Connect Added Successfully!")
                         }
                     }

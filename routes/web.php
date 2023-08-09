@@ -26,7 +26,7 @@ Route::get('/meeting/{username}/{useremail}/{mid}', function ($username,$userema
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 // Front Controller 
 
-Route::get('/',[AllController::class,'welcome'])->name('front.welcome');
+Route::get('/',[AllController::class, 'dashboard'])->name('front.welcome');
 Route::get('/dashboard',[AllController::class,'dashboard'])->name('front.main');
 
 Route::get('/get-started',[AllController::class,'settings'])->name('front.get-started');

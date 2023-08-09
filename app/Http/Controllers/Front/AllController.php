@@ -113,9 +113,9 @@ class AllController extends Controller
 
         $user = UserList::where('ip_address', $ip)->first();
 
-        if (empty($user)) {
-            return redirect()->route('front.get-started');
-        }
+        // if (empty($user)) {
+        //     return redirect()->route('front.get-started');
+        // }
 
         return view('front.index', compact('user'));
     }
