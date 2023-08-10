@@ -144,13 +144,15 @@ class AllController extends Controller
                 UserList::where('id', $user->id)->update([
                     "username" => $request->nickname,
                     "religion" => $request->religion,
+                    "type" => $request->type,
                     "online_status" => $time + 10,
                     "status" => '1',
                 ]);
-            }else{
+            } else {
                 UserList::create([
                     "username" => $request->nickname,
                     "religion" => $request->religion,
+                    "type" => $request->type,
                     "online_status" => $time + 10,
                     "status" => '1',
                     'ip_address' => $alreadyip
@@ -169,6 +171,7 @@ class AllController extends Controller
                 "username" => $request->nickname,
                 "religion" => $request->religion,
                 "online_status" => $time + 10,
+                "type" => $request->type,
                 "status" => '1',
                 'ip_address' => $ip . 'Uid=' . $lastId
             ]);
@@ -176,7 +179,7 @@ class AllController extends Controller
             $request->session()->put('ip', $ip . 'Uid=' . $lastId);
             Cookie::queue(Cookie::make('ip',  $ip . 'Uid=' . $lastId, 525600)); // 525600 minutes = 1 year
         }
-        return redirect()->route('front.main');
+        return redirect()->route(($request->type == "text") ? 'front.text' : (($request->type == "video") ? 'front.video' : 'front.main'));
     }
 
     public function updateStatus(Request $request)
@@ -188,7 +191,7 @@ class AllController extends Controller
         }
     }
 
-    public function settings()
+    public function settings($type = null)
     {
         $blockip = $_SERVER['REMOTE_ADDR'];
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
@@ -197,7 +200,7 @@ class AllController extends Controller
             return redirect()->route('front.blocked');
             exit;
         }
-        return view('front.settings');
+        return view('front.settings', compact('type'));
     }
 
     public function video(Request $request)
@@ -214,7 +217,7 @@ class AllController extends Controller
 
         $user =  UserList::where('ip_address', $ip)->first();
         if (empty($user)) {
-            return redirect()->route('front.get-started');
+            return redirect()->route('front.get-started-type', 'video');
         } else {
             UserList::where('id', $user->id)->update([
                 "type" => "video",
@@ -237,7 +240,7 @@ class AllController extends Controller
         $blockwords = ChatBlockWords::pluck('block_words')->toArray();
         $user =  UserList::where('ip_address', $ip)->first();
         if (empty($user)) {
-            return redirect()->route('front.get-started');
+            return redirect()->route('front.get-started-type', 'text');
         } else {
             UserList::where('id', $user->id)->update([
                 "type" => "text",

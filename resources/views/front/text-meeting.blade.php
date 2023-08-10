@@ -7,21 +7,26 @@
             /*bottom: 60px;*/
             /* width: 88%; */
         }
+
         button.chat-btn {
             /*bottom: 67px;*/
             right: 20px;
         }
+
         .skip-video .myVideo .videoActions {
             left: 50%;
             transform: translateX(-50%);
         }
+
         .chat-header.card-header h6 {
             width: 100%;
         }
+
         .chat-box .card-body {
             height: 500px;
             overflow: hidden;
         }
+
         #chat-messages {
             list-style: none;
             margin: 0;
@@ -29,6 +34,7 @@
             position: relative;
             height: 485px;
         }
+
         #chat-messages li:last-child {
             margin-bottom: 20px
         }
@@ -59,28 +65,31 @@
                     <div class="card-footer  chat-footer">
                         <div class="chatbotbox" style="display:none">
                             <ul>
-                                
+
                             </ul>
-                        
-                        <form id="chat-bot">
-                            <div class="chat-input-group"> 
-                               
-                                   <textarea id="messageInput" class="chat-input" name="botmessage" placeholder="Type your message"></textarea>
-                                <button type="submit" class="chat-btn ssesxa">
-                                    <img src="{{ asset('assets/images/svg/send_msg.svg') }}">
-                                </button>
-                                <button disabled="disabled" type="button" class="chat-btn fa-spin fa fa-spinner" style="display:none">
-                                
-                                </button>
-                            </div>
-                        </form>
+
+                            <form id="chat-bot">
+                                <div class="chat-input-group">
+
+                                    <textarea id="messageInput" class="chat-input" name="botmessage" placeholder="Type your message"></textarea>
+                                    <button type="submit" class="chat-btn ssesxa">
+                                        <img src="{{ asset('assets/images/svg/send_msg.svg') }}">
+                                    </button>
+                                    <button disabled="disabled" type="button" class="chat-btn fa-spin fa fa-spinner"
+                                        style="display:none">
+
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                         <form id="chat-from">
                             <div class="chat-input-group nnasnejca">
-                                <img src="{{asset('assets/images/icons/chatbot.png')}}" class="aichat" style="display:none">
+                                <img src="{{ asset('assets/images/icons/chatbot.png') }}" class="aichat"
+                                    style="display:none">
                                 <span class="ai-badge">AI Prompt</span>
                                 <button class="closeGpt" type="button"><i class="fa-regular fa-keyboard"></i></button>
-                                <input class="chat-input sfcraerffadferfadwedascdfvrwascfrgwasd" placeholder="Type your message" type="text" name="message">
+                                <input class="chat-input sfcraerffadferfadwedascdfvrwascfrgwasd"
+                                    placeholder="Type your message" type="text" name="message">
                                 <button class="chat-btn">
                                     <img src="{{ asset('assets/images/svg/send_msg.svg') }}">
                                 </button>
@@ -97,9 +106,6 @@
     <script src="{{ asset('assets/js/meeting.js') }}"></script>
     <script src="{{ asset('assets/js/perfect-scrollbar.min.js') }}"></script>
     <script>
-        
-        
-        
         var mic = true;
         var room = "0";
         var myid = 0;
@@ -118,30 +124,31 @@
         $(function() {
             SkipQuery();
         });
-        const blockedWords = [{!!'"'.implode('","', $blockwords).'"'!!}];
-        
+        const blockedWords = [{!! '"' . implode('","', $blockwords) . '"' !!}];
+
         function hasBlockedWords(input) {
-          for (let i = 0; i < blockedWords.length; i++) {
-            const blockedWord = blockedWords[i];
-            const regex = new RegExp(`\\b${blockedWord}\\b`, 'gi'); // Create a case-insensitive word boundary regular expression
-            
-            if (regex.test(input)) {
-              return true; // Return true if a blocked word is found
+            for (let i = 0; i < blockedWords.length; i++) {
+                const blockedWord = blockedWords[i];
+                const regex = new RegExp(`\\b${blockedWord}\\b`,
+                'gi'); // Create a case-insensitive word boundary regular expression
+
+                if (regex.test(input)) {
+                    return true; // Return true if a blocked word is found
+                }
             }
-          }
-          
-          return false; // Return false if no blocked words are found
+
+            return false; // Return false if no blocked words are found
         }
-        
-        $(document).on('click','.aichat',function(){
+
+        $(document).on('click', '.aichat', function() {
             $('.chatbotbox').toggle();
         })
-        
+
         $(document).on('submit', '#chat-bot', function(event) {
             event.preventDefault();
             let chatList = $('.chatbotbox ul');
             let val = $.trim($("textarea[name='botmessage']").val());
-            if(val == ''){
+            if (val == '') {
                 return;
             }
             $('.ssesxa').hide();
@@ -155,69 +162,79 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 dataType: "json",
-                data: JSON.stringify({ val: val }),
+                data: JSON.stringify({
+                    val: val
+                }),
                 success: function(result) {
-                    if(result.completion){
-                       chatList.append(`
+                    if (result.completion) {
+                        chatList.append(`
                             <li>
                                 <span></span>
                                 <div class="botquestion">${val}</div>
                                 <div class="botanswer">${decode_utf8((result.completion))}</div>
                             </li>
                         `);
-                        
+
                         chatList.scrollTop(chatList[0].scrollHeight);
                     }
                 }
             });
             $('.ssesxa').show();
-           $('.chat-btn.fa').hide();
+            $('.chat-btn.fa').hide();
         });
-     
-     $(document).on('click', '.chatbotbox ul span', function() {
-          let AItext = $.trim($(this).parent().find('.botanswer').text());
-          let msgText = $.trim($("input[name='message']").val());
+
+        $(document).on('click', '.chatbotbox ul span', function() {
+            let AItext = $.trim($(this).parent().find('.botanswer').text());
+            let msgText = $.trim($("input[name='message']").val());
             console.log(msgText + ' + ' + AItext);
-          $(".sfcraerffadferfadwedascdfvrwascfrgwasd").val(msgText + ' ' + AItext);
-          $('.chatbotbox').hide();
+            $(".sfcraerffadferfadwedascdfvrwascfrgwasd").val(msgText + ' ' + AItext);
+            $('.chatbotbox').hide();
         });
 
 
-  function decode_utf8(s) { 
+        function decode_utf8(s) {
 
-     return decodeURIComponent(escape(s)); 
+            return decodeURIComponent(escape(s));
 
- }
-        
-        $(document).on('click','.closeGpt',function(){
-             $(".closeGpt").hide();
-              $(".nnasnejca").removeClass('gptprompt').attr('prompt',false);
-              $(this).val('');
+        }
+
+        $(document).on('click', '.closeGpt', function() {
+            $(".closeGpt").hide();
+            $(".aichat").hide();
+            $(".chatbotbox").hide();
+            $(".nnasnejca").removeClass('gptprompt').attr('prompt', false);
+            $(this).val('');
         })
-        
-        $("input[name='message']").on("input",function(){
+
+        $("input[name='message']").on("input", function() {
             const userInput = $(this).val();
-             const inputValue = $(this).val();
-            const searchTerm = "/gpt";
-            const searchTerm1 = " /gpt";
- 
-            if (inputValue.includes(searchTerm) || inputValue.includes(searchTerm1)) {
-              $(".closeGpt").show();
-              $(".nnasnejca").addClass('gptprompt').attr('prompt',true);
-              $(this).val('');
-              
-            }  
-            
+            const inputValue = $(this).val();
+            const searchTerm = "/gpt query";
+            const searchTerm1 = " /gpt Query";
+            const searchTerm2 = " /gptquery";
+            const searchTerm3 = " /gptQuery";
+
+            if (inputValue.includes(searchTerm) || inputValue.includes(searchTerm1) || inputValue.includes(
+                    searchTerm2) || inputValue.includes(searchTerm3)) {
+                $(".closeGpt").show();
+                $(".aichat").show();
+                // $(".chatbotbox").show();
+                $(".nnasnejca").addClass('gptprompt').attr('prompt', true);
+                $(this).val('');
+
+            }
+
             const containsBlockedWords = hasBlockedWords(userInput.toLowerCase());
             if (containsBlockedWords) {
-                $("#chat-from button").attr("disabled",true);
-                 toastr["warning"]("If You Are Using illegal, nudity/sexual any kind of words!");
-            //   console.log("Input contains blocked words. Please revise your message.");
+                $("#chat-from button").attr("disabled", true);
+                toastr["warning"]("If You Are Using illegal, nudity/sexual any kind of words!");
+                //   console.log("Input contains blocked words. Please revise your message.");
             } else {
-                $("#chat-from button").attr("disabled",false);
-              console.log("Input is clean. Proceed with further processing.");
+                $("#chat-from button").attr("disabled", false);
+                console.log("Input is clean. Proceed with further processing.");
             }
         });
+
         function SkipQuery() {
 
             $("#chat-messages").html("");
@@ -268,7 +285,7 @@
                                 myid = result["room"]["my_id"];
                                 otherid = result["room"]["other_id"];
                                 room = result["room"]["room_name"];
-                                
+
                                 chat_list(room);
                                 $(".room-number").html(result["other_username"]);
                                 clearInterval(clearinterval);
@@ -281,6 +298,7 @@
                 })
             }
         }
+
         function ChangeStatus() {
             $.ajax({
                 url: "{{ route('front.change-status') }}",
@@ -301,6 +319,7 @@
                 }
             })
         }
+
         function chat_list(room) {
             socket.on("connection");
             socket.emit('joinRoom', room);
@@ -328,61 +347,64 @@
         });
         const getScrollContainer = document.querySelector('.chat-conversation-box');
         getScrollContainer.scrollTop = 0;
-        
-        
+
+
         $("#chat-from").on("submit", function(e) {
             e.preventDefault();
-             var message = $(this).find("input[name='message']");
-            
-            if($('.nnasnejca').attr('prompt') == 'true'){
-                 $(".closeGpt").hide();
-              $(".nnasnejca").removeClass('gptprompt').attr('prompt',false);
-               
-              $.ajax({
-                url: "{{ route('front.chat_gpt') }}",
-                type: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                dataType: "json",
-                data: JSON.stringify({ val: message.val(),user_id:user_id }),
-                success: function(result) {
-                    message.val("");
-                    if(result.completion){
-                       
-                   const conent = {
-                    content:decode_utf8((result.completion)),
-                    room: room,
-                    sender: user_id // where currentUserID is the unique ID of the current user
-                };
-                socket.emit('sendChatToServer', conent);
-                
-                        const getScrollContainer = document.querySelector('.chat-conversation-box');
-                getScrollContainer.scrollTop = getScrollContainer.scrollHeight;
+            var message = $(this).find("input[name='message']");
+
+            if ($('.nnasnejca').attr('prompt') == 'true') {
+                $(".closeGpt").hide();
+                $(".nnasnejca").removeClass('gptprompt').attr('prompt', false);
+
+                $.ajax({
+                    url: "{{ route('front.chat_gpt') }}",
+                    type: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    dataType: "json",
+                    data: JSON.stringify({
+                        val: message.val(),
+                        user_id: user_id
+                    }),
+                    success: function(result) {
+                        message.val("");
+                        if (result.completion) {
+
+                            const conent = {
+                                content: decode_utf8((result.completion)),
+                                room: room,
+                                sender: user_id // where currentUserID is the unique ID of the current user
+                            };
+                            socket.emit('sendChatToServer', conent);
+
+                            const getScrollContainer = document.querySelector('.chat-conversation-box');
+                            getScrollContainer.scrollTop = getScrollContainer.scrollHeight;
+                        }
                     }
+                });
+            } else {
+
+
+
+                if (message.val() != "") {
+                    const conent = {
+                        content: message.val(),
+                        room: room,
+                        sender: user_id // where currentUserID is the unique ID of the current user
+                    };
+                    socket.emit('sendChatToServer', conent);
+                    message.val("");
+                    const getScrollContainer = document.querySelector('.chat-conversation-box');
+                    getScrollContainer.scrollTop = getScrollContainer.scrollHeight;
                 }
-            });
-            }else{
-                
-       
-           
-            if (message.val() != "") {
-                const conent = {
-                    content: message.val(),
-                    room: room,
-                    sender: user_id // where currentUserID is the unique ID of the current user
-                };
-                socket.emit('sendChatToServer', conent);
-                message.val("");
-                        const getScrollContainer = document.querySelector('.chat-conversation-box');
-                getScrollContainer.scrollTop = getScrollContainer.scrollHeight;
-            }
             }
         });
-        
-        
-        
+
+
+
         function updateOnlineTime() {
             $.ajax({
                 url: "{{ route('front.change-time') }}",

@@ -30,6 +30,7 @@ Route::get('/',[AllController::class, 'dashboard'])->name('front.welcome');
 Route::get('/dashboard',[AllController::class,'dashboard'])->name('front.main');
 
 Route::get('/get-started',[AllController::class,'settings'])->name('front.get-started');
+Route::get('/get-started/{type}', [AllController::class, 'settings'])->name('front.get-started-type');
 Route::post('/get-started/store',[AllController::class,'store'])->name('front.get-started-store');
 Route::get('/settings',[AllController::class,'settings'])->name('front.settings');
 Route::get('/video',[AllController::class,'video'])->name('front.video');
