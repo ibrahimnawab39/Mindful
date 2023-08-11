@@ -1,5 +1,9 @@
 @extends('layouts.app')
 @section('pagename', 'Text Meeting')
+@php
+    $interest_count = 0;
+    $interests = explode(',', $user->interest);
+@endphp
 @section('styles')
     <link href="{{ asset('assets/css/perfect-scrollbar.css') }}" rel="stylesheet" type="text/css" />
     <style>
@@ -7,26 +11,21 @@
             /*bottom: 60px;*/
             /* width: 88%; */
         }
-
         button.chat-btn {
             /*bottom: 67px;*/
             right: 20px;
         }
-
         .skip-video .myVideo .videoActions {
             left: 50%;
             transform: translateX(-50%);
         }
-
         .chat-header.card-header h6 {
             width: 100%;
         }
-
         .chat-box .card-body {
             height: 500px;
             overflow: hidden;
         }
-
         #chat-messages {
             list-style: none;
             margin: 0;
@@ -34,7 +33,6 @@
             position: relative;
             height: 485px;
         }
-
         #chat-messages li:last-child {
             margin-bottom: 20px
         }
@@ -51,6 +49,27 @@
                         Go Back to Dashboard
                     </a>
                     <h4 class="room-number"></h4>
+                    <div class='col-md-4'>
+                        <div class="form-group ijosc">
+                            <p>Search for interests <span class='text-muted'> (Optional)</span></p>
+                            <input type='text' class='form--control w-100' id="intrest-input">
+                        </div>
+                        <div class=" " id="multiple-intrest">
+                            @if (!empty($interests) && !empty($user->interest))
+                                @foreach ($interests as $interest)
+                                    <div
+                                        class='btn btn-small rounded-pill btn-light-dark interest-{{ $interest_count }} mb-1 mr-1'>
+                                        {{ $interest }} <span
+                                            onClick="remove_intrest({{ $interest_count }},'{{ $interest }}')"
+                                            class="px-2">&times;</span>
+                                    </div>
+                                    @php
+                                        $interest_count = count($interests) - 1;
+                                    @endphp
+                                @endforeach
+                            @endif
+                        </div>
+                    </div>
                     <button class="btn skip-video-btn rounded btn-small m-0" type="button" id="skip_call">
                         <i class="mdi mdi-24px mdi-reload"></i> Skip</button>
                 </div>
@@ -65,19 +84,15 @@
                     <div class="card-footer  chat-footer">
                         <div class="chatbotbox" style="display:none">
                             <ul>
-
                             </ul>
-
                             <form id="chat-bot">
                                 <div class="chat-input-group">
-
                                     <textarea id="messageInput" class="chat-input" name="botmessage" placeholder="Type your message"></textarea>
                                     <button type="submit" class="chat-btn ssesxa">
                                         <img src="{{ asset('assets/images/svg/send_msg.svg') }}">
                                     </button>
                                     <button disabled="disabled" type="button" class="chat-btn fa-spin fa fa-spinner"
                                         style="display:none">
-
                                     </button>
                                 </div>
                             </form>
@@ -125,25 +140,20 @@
             SkipQuery();
         });
         const blockedWords = [{!! '"' . implode('","', $blockwords) . '"' !!}];
-
         function hasBlockedWords(input) {
             for (let i = 0; i < blockedWords.length; i++) {
                 const blockedWord = blockedWords[i];
                 const regex = new RegExp(`\\b${blockedWord}\\b`,
-                'gi'); // Create a case-insensitive word boundary regular expression
-
+                    'gi'); // Create a case-insensitive word boundary regular expression
                 if (regex.test(input)) {
                     return true; // Return true if a blocked word is found
                 }
             }
-
             return false; // Return false if no blocked words are found
         }
-
         $(document).on('click', '.aichat', function() {
             $('.chatbotbox').toggle();
         })
-
         $(document).on('submit', '#chat-bot', function(event) {
             event.preventDefault();
             let chatList = $('.chatbotbox ul');
@@ -155,7 +165,7 @@
             $('.chat-btn.fa').show();
             $("textarea[name='botmessage']").val(' ');
             $.ajax({
-                url: "{{ route('front.chat_gpt') }}",
+                url: "{{ route('front.chat-gpt') }}",
                 type: "POST",
                 headers: {
                     'Content-Type': 'application/json',
@@ -163,8 +173,9 @@
                 },
                 dataType: "json",
                 data: JSON.stringify({
-                    val: val
-                }),
+                        val: val,
+                        user_id: user_id
+                    }),
                 success: function(result) {
                     if (result.completion) {
                         chatList.append(`
@@ -174,7 +185,6 @@
                                 <div class="botanswer">${decode_utf8((result.completion))}</div>
                             </li>
                         `);
-
                         chatList.scrollTop(chatList[0].scrollHeight);
                     }
                 }
@@ -182,7 +192,6 @@
             $('.ssesxa').show();
             $('.chat-btn.fa').hide();
         });
-
         $(document).on('click', '.chatbotbox ul span', function() {
             let AItext = $.trim($(this).parent().find('.botanswer').text());
             let msgText = $.trim($("input[name='message']").val());
@@ -190,14 +199,9 @@
             $(".sfcraerffadferfadwedascdfvrwascfrgwasd").val(msgText + ' ' + AItext);
             $('.chatbotbox').hide();
         });
-
-
         function decode_utf8(s) {
-
             return decodeURIComponent(escape(s));
-
         }
-
         $(document).on('click', '.closeGpt', function() {
             $(".closeGpt").hide();
             $(".aichat").hide();
@@ -205,25 +209,18 @@
             $(".nnasnejca").removeClass('gptprompt').attr('prompt', false);
             $(this).val('');
         })
-
         $("input[name='message']").on("input", function() {
             const userInput = $(this).val();
             const inputValue = $(this).val();
-            const searchTerm = "/gpt query";
+            const searchTerm = "/gpt";
             const searchTerm1 = " /gpt Query";
-            const searchTerm2 = " /gptquery";
-            const searchTerm3 = " /gptQuery";
-
-            if (inputValue.includes(searchTerm) || inputValue.includes(searchTerm1) || inputValue.includes(
-                    searchTerm2) || inputValue.includes(searchTerm3)) {
+            if (inputValue.includes(searchTerm) || inputValue.includes(searchTerm1)) {
                 $(".closeGpt").show();
                 $(".aichat").show();
                 // $(".chatbotbox").show();
                 $(".nnasnejca").addClass('gptprompt').attr('prompt', true);
                 $(this).val('');
-
             }
-
             const containsBlockedWords = hasBlockedWords(userInput.toLowerCase());
             if (containsBlockedWords) {
                 $("#chat-from button").attr("disabled", true);
@@ -234,9 +231,7 @@
                 console.log("Input is clean. Proceed with further processing.");
             }
         });
-
         function SkipQuery() {
-
             $("#chat-messages").html("");
             if (myid != 0 && otherid != 0) {
                 socket.emit('leaveRoom', room);
@@ -285,7 +280,6 @@
                                 myid = result["room"]["my_id"];
                                 otherid = result["room"]["other_id"];
                                 room = result["room"]["room_name"];
-
                                 chat_list(room);
                                 $(".room-number").html(result["other_username"]);
                                 clearInterval(clearinterval);
@@ -298,7 +292,6 @@
                 })
             }
         }
-
         function ChangeStatus() {
             $.ajax({
                 url: "{{ route('front.change-status') }}",
@@ -319,7 +312,6 @@
                 }
             })
         }
-
         function chat_list(room) {
             socket.on("connection");
             socket.emit('joinRoom', room);
@@ -347,18 +339,14 @@
         });
         const getScrollContainer = document.querySelector('.chat-conversation-box');
         getScrollContainer.scrollTop = 0;
-
-
         $("#chat-from").on("submit", function(e) {
             e.preventDefault();
             var message = $(this).find("input[name='message']");
-
             if ($('.nnasnejca').attr('prompt') == 'true') {
                 $(".closeGpt").hide();
                 $(".nnasnejca").removeClass('gptprompt').attr('prompt', false);
-
                 $.ajax({
-                    url: "{{ route('front.chat_gpt') }}",
+                    url: "{{ route('front.chat-gpt') }}",
                     type: "POST",
                     headers: {
                         'Content-Type': 'application/json',
@@ -372,23 +360,18 @@
                     success: function(result) {
                         message.val("");
                         if (result.completion) {
-
                             const conent = {
                                 content: decode_utf8((result.completion)),
                                 room: room,
                                 sender: user_id // where currentUserID is the unique ID of the current user
                             };
                             socket.emit('sendChatToServer', conent);
-
                             const getScrollContainer = document.querySelector('.chat-conversation-box');
                             getScrollContainer.scrollTop = getScrollContainer.scrollHeight;
                         }
                     }
                 });
             } else {
-
-
-
                 if (message.val() != "") {
                     const conent = {
                         content: message.val(),
@@ -402,9 +385,62 @@
                 }
             }
         });
-
-
-
+        var intrest_count = {{ count($interests) }};
+        var intrest = [{!! !empty($user->interest) && $user->interest != null && !empty($interests)
+            ? "'" . implode("','", $interests) . "'"
+            : null !!}];
+        $("#intrest-input").on("change", function() {
+            var value = $(this).val();
+            if (value != "") {
+                const newLength = intrest.push(value);
+                intrest_count = newLength - 1;
+                $("#multiple-intrest").append(`<div class='btn btn-small rounded-pill btn-light-dark interest-${intrest_count} mb-1 mr-1'>
+                            ${value} <span onClick="remove_intrest(${intrest_count},'${value}')"
+                                class="px-2">&times;</span>
+                        </div>`);
+                $(this).val("");
+                $.ajax({
+                    url: "{{ route('front.change-intrest') }}",
+                    type: "POST",
+                    data: {
+                        intrest: intrest.join(","),
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    dataType: "JSON",
+                    success: function(result) {
+                        if (result["res"] == "success") {
+                            toastr["success"]("Intrest Added Successfully!")
+                        }
+                    }
+                })
+            }
+        })
+        function remove_intrest(idd, value) {
+            const index = intrest.indexOf(value);
+            if (index !== -1) {
+                intrest.splice(index, 1);
+            }
+            $(`.interest-${idd}`).remove();
+            console.log(intrest);
+            $.ajax({
+                url: "{{ route('front.change-intrest') }}",
+                type: "POST",
+                data: {
+                    intrest: intrest.join(","),
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                dataType: "JSON",
+                success: function(result) {
+                    if (result["res"] == "success") {
+                        toastr["success"]("Interest Remove Successfully!")
+                    }
+                }
+            })
+        }
         function updateOnlineTime() {
             $.ajax({
                 url: "{{ route('front.change-time') }}",

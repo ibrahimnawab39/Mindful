@@ -1285,3 +1285,6 @@ span.ai-badge {
     position: inherit;
     padding: 10px 5px;
 }
+.room-number span {
+    color:var(--chat-header-color);
+}

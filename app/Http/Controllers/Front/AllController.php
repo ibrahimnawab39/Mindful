@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers\Front;
-
 use App\Http\Controllers\Controller;
 use App\Models\ChatBlockWords;
 use App\Models\OnlineUsers;
@@ -15,7 +13,6 @@ use Nette\Utils\Random;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Http;
-
 class AllController extends Controller
 {
     public function report(Request $req)
@@ -23,7 +20,6 @@ class AllController extends Controller
         $blockip = $_SERVER['REMOTE_ADDR'];
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
         if ($countIp >= 2) {
-
             return redirect()->route('front.blocked');
             exit;
         }
@@ -31,7 +27,6 @@ class AllController extends Controller
         $my_ip =  $req->session()->get('ip');
         $myid = $req->myid;
         $otherid = $req->otherid;
-
         $user = UserList::where('ip_address', $my_ip)->first();
         if ($user->id == $req->myid) {
             $myid = $req->myid;
@@ -40,54 +35,44 @@ class AllController extends Controller
             $myid = $req->otherid;
             $otherid = $req->myid;
         }
-
         $user = UserList::where('id', $otherid)->first();
-
         $block_ip = preg_replace($pattern, '', $user->ip_address);
         $my_ip = preg_replace($pattern, '', $my_ip);
-
         $addBlockUser =  BlockUser::create([
             'repoter_ip' => $my_ip,
             'block_ip' => $block_ip
         ]);
-
         if ($addBlockUser) {
             return response()->json(["res" => "success"]);
         } else {
             return response()->json(["res" => "success"]);
         }
     }
-
     public function blocked()
     {
         $blockip = $_SERVER['REMOTE_ADDR'];
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
         if ($countIp <= 2) {
-
             return redirect()->route('front.welcome');
             exit;
         }
         return view("front.blocked");
     }
-
     public function rules()
     {
         $blockip = $_SERVER['REMOTE_ADDR'];
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
         if ($countIp >= 2) {
-
             return redirect()->route('front.blocked');
             exit;
         }
         return view("front.rules");
     }
-
     public function welcome(Request $request)
     {
         $blockip = $_SERVER['REMOTE_ADDR'];
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
         if ($countIp >= 2) {
-
             return redirect()->route('front.blocked');
             exit;
         }
@@ -98,45 +83,36 @@ class AllController extends Controller
         }
         return view("front.welcome");
     }
-
     public function dashboard(Request $request)
     {
         $blockip = $_SERVER['REMOTE_ADDR'];
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
         if ($countIp >= 2) {
-
             return redirect()->route('front.blocked');
             exit;
         }
         Artisan::call('optimize', ['--quiet' => true]);
         $ip =  $request->session()->get('ip');
-
         $user = UserList::where('ip_address', $ip)->first();
-
         // if (empty($user)) {
         //     return redirect()->route('front.get-started');
         // }
-
         return view('front.index', compact('user'));
     }
-
     public function store(Request $request)
     {
         $blockip = $_SERVER['REMOTE_ADDR'];
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
         if ($countIp >= 2) {
-
             return redirect()->route('front.blocked');
             exit;
         }
         $ip = $request->ip();
         $time = time();
-
         $request->validate([
             "nickname" => "required",
             "religion" => "required",
         ]);
-
         if (!empty($request->session()->get('ip'))) {
             $alreadyip =  $request->session()->get('ip');
             $user = UserList::where('ip_address', $alreadyip)->first();
@@ -159,14 +135,12 @@ class AllController extends Controller
                 ]);
             }
         } else {
-
             $lastRow = UserList::latest()->first();
             if (!empty($lastRow)) {
                 $lastId = intval($lastRow->id) + 1;
             } else {
                 $lastId = 1;
             }
-
             UserList::create([
                 "username" => $request->nickname,
                 "religion" => $request->religion,
@@ -175,13 +149,11 @@ class AllController extends Controller
                 "status" => '1',
                 'ip_address' => $ip . 'Uid=' . $lastId
             ]);
-
             $request->session()->put('ip', $ip . 'Uid=' . $lastId);
             Cookie::queue(Cookie::make('ip',  $ip . 'Uid=' . $lastId, 525600)); // 525600 minutes = 1 year
         }
         return redirect()->route(($request->type == "text") ? 'front.text' : (($request->type == "video") ? 'front.video' : 'front.main'));
     }
-
     public function updateStatus(Request $request)
     {
         $ip = $request->session()->get('ip');
@@ -190,31 +162,26 @@ class AllController extends Controller
             UserList::where('ip_address', $ip)->update(["online_status" => $time]);
         }
     }
-
     public function settings($type = null)
     {
         $blockip = $_SERVER['REMOTE_ADDR'];
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
         if ($countIp >= 2) {
-
             return redirect()->route('front.blocked');
             exit;
         }
         return view('front.settings', compact('type'));
     }
-
     public function video(Request $request)
     {
         $blockip = $_SERVER['REMOTE_ADDR'];
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
         if ($countIp >= 2) {
-
             return redirect()->route('front.blocked');
             exit;
         }
         $blockwords = ChatBlockWords::pluck('block_words')->toArray();
         $ip = $request->session()->get('ip');
-
         $user =  UserList::where('ip_address', $ip)->first();
         if (empty($user)) {
             return redirect()->route('front.get-started-type', 'video');
@@ -226,13 +193,11 @@ class AllController extends Controller
         }
         return view('front.meeting', compact('user', 'blockwords'));
     }
-
     public function text(Request $request)
     {
         $blockip = $_SERVER['REMOTE_ADDR'];
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
         if ($countIp >= 2) {
-
             return redirect()->route('front.blocked');
             exit;
         }
@@ -249,7 +214,6 @@ class AllController extends Controller
         }
         return view('front.text-meeting', compact('user', 'blockwords'));
     }
-
     public function connect_with(Request $request)
     {
         $ip = $request->session()->get('ip');
@@ -261,7 +225,6 @@ class AllController extends Controller
             return response()->json(["res" => "success", "user" => $user]);
         }
     }
-
     public function skipping(Request $request)
     {
         $time = time();
@@ -271,23 +234,16 @@ class AllController extends Controller
         UserList::where('id', $user->id)->update([
             "status" => 0
         ]);
-
         $date = date("Y-m-d");
         $room_name = rand(99999999, 10000000);
-
         $filtrip = str_replace($pattern, '', $ip);
-
         $blockip = $_SERVER['REMOTE_ADDR'];
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
-
         if ($countIp >= 1) {
-
             return response()->json(["res" => "ipblocked"]);
             exit;
         }
-
         while (true) {
-
             $online_users = $this->all_online_user($user->id, $ip);
             // print_r($online_users);
             // exit();
@@ -308,7 +264,7 @@ class AllController extends Controller
                                 "status" => 1
                             ]);
                         }
-                        return response()->json(["res" => "success", "room" => $room, "other_username" => 'Oppenent: ' . $otheruser->username]);
+                        return response()->json(["res" => "success", "room" => $room, "other_username" => '<span>Oppenent: </span>' . $otheruser->username]);
                     } else {
                         $room = Rooms::where('room_date', $date)->where('my_id', $other)->orwhere('other_id', $other)->orderBy('created_at', 'desc')->first();
                         if (empty($room)) {
@@ -321,7 +277,7 @@ class AllController extends Controller
                             $room = Rooms::where('room_date', $date)->where('my_id', $user->id)->orwhere('other_id', $user->id)->orderBy('created_at', 'desc')->first();
                             OnlineUsers::where('user_id', $user1)->delete();
                             OnlineUsers::where('user_id', $user2)->delete();
-                            return response()->json(["res" => "success", "room" => $room, "other_username" => 'Oppenent: ' . $otheruser->username]);
+                            return response()->json(["res" => "success", "room" => $room, "other_username" => '<span>Oppenent: </span>' . $otheruser->username]);
                         }
                         exit();
                     }
@@ -330,11 +286,9 @@ class AllController extends Controller
             sleep(1);
         }
     }
-
     public function all_online_user($id, $ip)
     {
         $time = time();
-
         $user =  UserList::where('ip_address', $ip)->first();
         $allusers = array();
         if (!empty($user->connect_with)) {
@@ -392,10 +346,8 @@ class AllController extends Controller
         // $allonline_users = OnlineUsers::inRandomOrder()->limit(2)->get()->toArray();
         return $allusers;
     }
-
     public function ReligionName($val)
     {
-
         if ($val == 'Islam') {
             return 'Muslim';
         } else if ($val == 'Christianity') {
@@ -415,7 +367,6 @@ class AllController extends Controller
         $user_interest = explode(",", $user->interest);
         $intrestess = array();
         $other = (($user->id != $request->myid) ? $request->myid : (($user->id != $request->otherid) ? $request->otherid : 0));
-
         if ($user->type == "text") {
             $other_user = UserList::where('id', $other)->where('status', 1)->first();
             if (!empty($other_user)) {
@@ -462,7 +413,6 @@ class AllController extends Controller
             return response()->json(["res" => "success", "message" => "You have connected to " . $other_user->username . " (" . $religion . ")!<br>" . ((!empty($intrestess)) ? "You both share interests in: " . implode($intrestess) : "")]);
         }
     }
-
     public function change_intrest(Request $request)
     {
         $ip = $request->session()->get('ip');
@@ -474,8 +424,6 @@ class AllController extends Controller
             return response()->json(["res" => "success"]);
         }
     }
-
-
     public function chat_gpt(Request $request)
     {
         // Make an API call to OpenAI
@@ -498,20 +446,15 @@ class AllController extends Controller
                 'max_tokens' => 1000,
                 'temperature' => 0.8,
             ]);
-
-            $response = $response->json();
-
+            // $response = $response->json();
             if (isset($response['choices'][0]['message']['content'])) {
                 $completion = $response['choices'][0]['message']['content'];
-
                 GptRequests::create([
                     'prompt' => $request->val,
                     'user_id' => $request->user_id,
-
                 ]);
-                return response()->json(['completion' => $completion]);
+                return response()->json(['completion' => $completion,'response'=> $response->json()]);
             }
-
             if (isset($response['error']['message'])) {
                 $errorCode = $response['error']['code'] ?? null;
                 $errorType = $response['error']['type'] ?? null;
@@ -521,10 +464,8 @@ class AllController extends Controller
                     'errorType' => $errorType
                 ]);
             }
-
             // Handle other unexpected cases here if needed
             // ...
-
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()]);
         }
