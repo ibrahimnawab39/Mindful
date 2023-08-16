@@ -160,6 +160,7 @@ class AllController extends Controller
         $time = time() + 10;
         if (!empty($ip)) {
             UserList::where('ip_address', $ip)->update(["online_status" => $time]);
+             return response()->json(["res" => "Time Update For Session!"]);
         }
     }
     public function settings($type = null)

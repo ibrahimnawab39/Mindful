@@ -686,9 +686,9 @@
         });
         $(document).on('click', '.chatbotbox ul span', function() {
             let AItext = $.trim($(this).parent().find('.botanswer').text());
-            let msgText = $.trim($("input[name='message']").val());
+            let msgText = $.trim($(this).parent().find('.botquestion').text());
             console.log(msgText + ' + ' + AItext);
-            $(".sfcraerffadferfadwedascdfvrwascfrgwasd").val(msgText + ' ' + AItext);
+            $(".sfcraerffadferfadwedascdfvrwascfrgwasd").val(msgText + '<br>' + AItext);
             $('.chatbotbox').hide();
         });
         function decode_utf8(s) {
