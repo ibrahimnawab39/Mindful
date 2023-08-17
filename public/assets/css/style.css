@@ -1292,14 +1292,16 @@ span.ai-badge {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: 20px;
+    top: 50px;
     padding: 10px;
     background: var(--blue-purple);
     font-size: 15px;
     border-radius: 20px;
-    height: 20px;
     z-index: 1;
     color: var(--light);
     min-width: 10%;
     max-width: 60%;
+}
+.oppentent-detail span {
+    color: var(--light);
 }
