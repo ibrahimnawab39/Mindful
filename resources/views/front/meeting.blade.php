@@ -11,15 +11,18 @@
         .chrome-extension-banner {
             display: none !important;
         }
+
         #sideToolbarContainer {
             background-color: #4DC2C1 !important;
         }
+
         .vi {
             margin-top: 7px;
             position: absolute;
             margin-left: 6px;
             width: 15%;
         }
+
         .leftwatermark {
             left: 372px !important;
             top: 113px !important;
@@ -27,6 +30,7 @@
             background-repeat: no-repea !important;
             background-size: contain !important;
         }
+
         .watermark {
             display: none !important;
             position: absolute !important;
@@ -36,6 +40,7 @@
             background-repeat: no-repeat !important;
             z-index: 1 !important;
         }
+
         @media screen and (max-width:650px) {
             .leftwatermark {
                 left: 84px !important;
@@ -44,9 +49,11 @@
                 background-repeat: no-repeat !important;
                 background-size: contain !important;
             }
+
             .dispName {
                 font-size: 16px !important;
             }
+
             .watermark {
                 display: none !important;
                 position: absolute !important;
@@ -56,17 +63,20 @@
                 background-repeat: no-repeat !important;
                 z-index: 1 !important;
             }
+
             .vi {
                 margin-top: 23px !important;
                 margin-left: 24px !important;
                 width: 54% !important;
             }
         }
+
         @media screen and (max-width:768px) {
             .disName {
                 font-size: 32px !important;
             }
         }
+
         @media (min-width:652px) and (max-width:769px) {
             .leftwatermark {
                 left: 218px !important;
@@ -75,11 +85,13 @@
                 background-repeat: no-repea !important;
                 background-size: contain !important;
             }
+
             .vi {
                 margin-top: 30px !important;
                 margin-left: 24px !important;
                 width: 19% !important;
             }
+
             .watermark {
                 display: none !important;
                 position: absolute !important;
@@ -90,14 +102,17 @@
                 z-index: 1 !important;
             }
         }
+
         .watermark__performanceStats {
             display: none;
         }
+
         .video-container {
             display: grid;
             grid-template-columns: repeat(1, 1fr);
             grid-gap: 10px;
         }
+
         #local-video,
         #remote-video,
         #localVideo,
@@ -108,11 +123,13 @@
             border-radius: 5px;
             object-fit: cover;
         }
+
         #local-video iframe,
         #remote-video iframe {
             border-radius: 5px;
             pointer-events: none;
         }
+
         #left-video-container {
             position: absolute;
             top: 0;
@@ -121,6 +138,7 @@
             height: 100%;
             background-color: black;
         }
+
         #right-video-container {
             position: absolute;
             top: 0;
@@ -129,6 +147,7 @@
             height: 100%;
             background-color: black;
         }
+
         #left-video,
         #right-video {
             position: absolute;
@@ -138,6 +157,7 @@
             height: 100%;
             overflow: hidden;
         }
+
         #left-video video,
         #right-video video {
             position: absolute;
@@ -147,13 +167,16 @@
             height: 100%;
             object-fit: cover;
         }
+
         .skip-video .myVideo .videoActions {
             left: 50%;
             transform: translateX(-50%);
         }
+
         .chat-box .card-body {
             padding-right: 0;
         }
+
         #chat-messages {
             list-style: none;
             margin: 0;
@@ -163,9 +186,11 @@
             margin-bottom: 40px;
             padding-right: 20px;
         }
+
         #chat-messages li:last-child {
             margin-bottom: 20px
         }
+
         .watermaker-logo {
             position: absolute;
             background: #000;
@@ -174,6 +199,7 @@
             left: 0%;
             border-radius: 5px;
         }
+
         @media screen and (max-width:786px) {
             .watermaker-logo {
                 width: 125px;
@@ -184,6 +210,7 @@
                 justify-content: center;
                 top: 3px;
             }
+
             #local-video,
             #remote-video,
             #localVideo,
@@ -191,6 +218,7 @@
                 height: 185px;
             }
         }
+
         main.py-4 {
             padding: 0 !important;
         }
@@ -279,6 +307,7 @@
                         <h6 class=" ">Live Chat</h6>
                     </div>
                     <div class="card-body chat-body">
+                        <div class="oppentent-detail"></div>
                         <ul id="chat-messages" class="chat-conversation-box">
                         </ul>
                     </div>
@@ -305,7 +334,8 @@
                                 <span class="ai-badge">AI Prompt</span>
                                 <button class="closeGpt" type="button"><i class="fa-regular fa-keyboard"></i></button>
                                 <input class="chat-input sfcraerffadferfadwedascdfvrwascfrgwasd"
-                                    placeholder="Type your message" type="text" name="message">
+                                    placeholder="Type '/gpt' followed by your question. Try it now!" type="text"
+                                    name="message">
                                 <button class="chat-btn">
                                     <img src="{{ asset('assets/images/svg/send_msg.svg') }}">
                                 </button>
@@ -361,6 +391,7 @@
         $(function() {
             skip_query();
         });
+
         function skiping_video(video, audio) {
             $("#local-video").empty();
             $(".connected-video").addClass("d-none");
@@ -382,6 +413,7 @@
                 })
                 .catch(error => console.log(error));
         }
+
         function skip_query() {
             var icon = $("#skip_call").find(".mdi");
             $("#chat-messages").html("");
@@ -409,6 +441,7 @@
                                 myid = result["room"]["my_id"];
                                 otherid = result["room"]["other_id"];
                                 room = result["room"]["room_name"];
+                                $(".room-number,.oppentent-detail").html(result["other_username"]);
                                 StartMeeting(room, dispNme, video, mic);
                                 chat_list(room);
                             } else {
@@ -440,6 +473,7 @@
                                 myid = result["room"]["my_id"];
                                 otherid = result["room"]["other_id"];
                                 room = result["room"]["room_name"];
+                                $(".room-number,.oppentent-detail").html(result["other_username"]);
                                 StartMeeting(room, dispNme, video, mic);
                                 chat_list(room);
                             } else {
@@ -450,6 +484,7 @@
                 })
             }
         }
+
         function change_status() {
             $.ajax({
                 url: "{{ route('front.change-status') }}",
@@ -469,6 +504,7 @@
                 }
             })
         }
+
         function chat_list(room) {
             socket.on("connection");
             socket.emit('joinRoom', room);
@@ -574,6 +610,7 @@
                 })
             }
         })
+
         function remove_intrest(idd, value) {
             const index = intrest.indexOf(value);
             if (index !== -1) {
@@ -599,6 +636,7 @@
             })
         }
         setInterval(updateTime, 2000);
+
         function updateTime() {
             $.ajax({
                 url: "{{ route('front.change-time') }}",
@@ -609,6 +647,7 @@
             })
         }
         const blockedWords = [{!! '"' . implode('","', $blockwords) . '"' !!}];
+
         function hasBlockedWords(input) {
             for (let i = 0; i < blockedWords.length; i++) {
                 const blockedWord = blockedWords[i];
@@ -664,9 +703,9 @@
                 },
                 dataType: "json",
                 data: JSON.stringify({
-                        val: val,
-                        user_id: user_id
-                    }),
+                    val: val,
+                    user_id: user_id
+                }),
                 success: function(result) {
                     console.log(result);
                     if (result.completion) {
@@ -691,6 +730,7 @@
             $(".sfcraerffadferfadwedascdfvrwascfrgwasd").val(msgText + '<br>' + AItext);
             $('.chatbotbox').hide();
         });
+
         function decode_utf8(s) {
             return decodeURIComponent(escape(s));
         }

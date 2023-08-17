@@ -78,6 +78,7 @@
                         <h6 class=" ">Live Chat</h6>
                     </div>
                     <div class="card-body chat-body">
+                        <div class="oppentent-detail"></div>    
                         <ul id="chat-messages" class="chat-conversation-box">
                         </ul>
                     </div>
@@ -104,7 +105,7 @@
                                 <span class="ai-badge">AI Prompt</span>
                                 <button class="closeGpt" type="button"><i class="fa-regular fa-keyboard"></i></button>
                                 <input class="chat-input sfcraerffadferfadwedascdfvrwascfrgwasd"
-                                    placeholder="Type your message" type="text" name="message">
+                                    placeholder="Type '/gpt' followed by your question. Try it now!" type="text" name="message">
                                 <button class="chat-btn">
                                     <img src="{{ asset('assets/images/svg/send_msg.svg') }}">
                                 </button>
@@ -128,12 +129,12 @@
         var video = true;
         var dispNme = "{{ $user->username }}";
         var meeting_id = "585689757";
-        var clearinterval = setInterval(updateOnlineTime, 2000);
+        var clearinterval = setInterval(updateOnlineTime, 5000);
         var statusconntion = null;
         $("#skip_call").on("click", function() {
             var icon = $(this).find(".mdi");
             icon.addClass("mdi-spin");
-            clearinterval = setInterval(updateOnlineTime, 2000);
+            clearinterval = setInterval(updateOnlineTime, 5000);
             SkipQuery();
         });
         $(function() {
@@ -252,7 +253,8 @@
                                 myid = result["room"]["my_id"];
                                 otherid = result["room"]["other_id"];
                                 room = result["room"]["room_name"];
-                                $(".room-number").html(result["other_username"]);
+                                $(".room-number,.oppentent-detail").html(result["other_username"]);
+
                                 chat_list(room);
                                 clearInterval(clearinterval);
                                 statusconntion = setInterval(ChangeStatus, 2000)
@@ -281,7 +283,7 @@
                                 otherid = result["room"]["other_id"];
                                 room = result["room"]["room_name"];
                                 chat_list(room);
-                                $(".room-number").html(result["other_username"]);
+                               $(".room-number,.oppentent-detail").html(result["other_username"]);
                                 clearInterval(clearinterval);
                                 statusconntion = setInterval(ChangeStatus, 2000)
                             } else {
