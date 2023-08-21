@@ -430,7 +430,7 @@ class AllController extends Controller
         // Make an API call to OpenAI
         try {
             $response = Http::timeout(80)->withHeaders([
-                'Authorization' => 'Bearer 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',
+                'Authorization' => 'Bearer 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',
                 'Content-Type' => 'application/json',
             ])->post('https://api.openai.com/v1/chat/completions', [
                 'model' => 'gpt-3.5-turbo',
