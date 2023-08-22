@@ -508,6 +508,7 @@
             $(this).val('');
         })
         $("#share").jsSocials({
+            url: "{{ $currentUrl }}",
             showLabel: false,
             showCount: false,
             shares: ["email", "twitter", "facebook", "linkedin", "pinterest", "whatsapp"
