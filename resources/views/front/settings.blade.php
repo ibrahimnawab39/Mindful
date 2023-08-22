@@ -51,6 +51,7 @@
                     <form role="form" action="{{route('front.get-started-store')}}" method="post" class="login-box">
                         @csrf
                         <input type="hidden" name="type" value="{{ $type }}">
+                        <input type="hidden" name="meeting_id" value="{{ $meeting_id }}">
                         <div class="tab-content" id="main_form">
                             <div class="tab-pane active" role="tabpanel" id="step1">
                                 <h2 class="">If you like to use a nickname for yourself, what would that be?

@@ -25,6 +25,9 @@
                     <img src="{{ asset('assets/images/svg/envelope.svg') }}" class='showLight'>
                     <img src="{{ asset('assets/images/svg/envelope-dark.svg') }}" class='showdark'>
                     Text</a>
+                <a class='btn btn-primary rounded ' href="{{ route('front.share') }}">
+                    <img src="{{ asset('assets/images/svg/video.svg') }}" class=''>
+                    Share Meeting</a>
                 <a class='btn btn-dark rounded ' href="{{ route('front.video') }}">
                     <img src="{{ asset('assets/images/svg/video.svg') }}" class=''>
                     Video</a>

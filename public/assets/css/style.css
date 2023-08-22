@@ -171,6 +171,10 @@ h1 {
 }
 .btn {
     padding: 15px 32px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
 }
 .btn-outline-dark {
     color: var(--btnOutlineColor);
@@ -188,7 +192,20 @@ h1 {
     color: var(--GobackColor);
     border: none;
 }
-
+.btn-primary {
+    background-color: var(--btnDBg);
+    color: var(--btncolor);
+    background-color: var(--blue-purple);
+    border-color: var(--blue-purple);
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: var(--btnDBg) !important;
+    border: 1px solid var(--btnDBg) !important;
+    color: var(--btncolor) !important;
+    filter: invert(0) !important;
+}
 .skip-video-btn {
     background-color: var(--skipBg);
     color: var(--skipColor) !important;
@@ -1194,7 +1211,7 @@ div#video-message {
     position: relative;
     height: 100%;
     top: 0;
-    bottom:0;
+    bottom: 0;
     left: 0;
     right: 0;
     resize: none;
@@ -1286,7 +1303,7 @@ span.ai-badge {
     padding: 10px 5px;
 }
 .room-number span {
-    color:var(--chat-header-color);
+    color: var(--chat-header-color);
 }
 .oppentent-detail {
     position: absolute;

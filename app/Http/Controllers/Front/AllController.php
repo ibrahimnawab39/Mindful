@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers\Front;
+
 use App\Http\Controllers\Controller;
 use App\Models\ChatBlockWords;
 use App\Models\OnlineUsers;
@@ -9,10 +11,11 @@ use App\Models\UserList;
 use App\Models\BlockUser;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Http\Request;
-use Nette\Utils\Random;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Http;
+use Share;
+
+
 class AllController extends Controller
 {
     public function report(Request $req)
@@ -152,7 +155,29 @@ class AllController extends Controller
             $request->session()->put('ip', $ip . 'Uid=' . $lastId);
             Cookie::queue(Cookie::make('ip',  $ip . 'Uid=' . $lastId, 525600)); // 525600 minutes = 1 year
         }
-        return redirect()->route(($request->type == "text") ? 'front.text' : (($request->type == "video") ? 'front.video' : 'front.main'));
+        if ($request->type == "text") {
+            return redirect()->route('front.text');
+        } elseif ($request->type == "video") {
+            return redirect()->route('front.video');
+        } elseif ($request->type == "share") {
+            $ip = $request->session()->get('ip');
+            $date = date("Y-m-d");
+            $user =  UserList::where('ip_address', $ip)->first();
+            $room_name = rand(99999999, 10000000);
+            if ($request->meeting_id == null && $request->meeting_id == "") {
+                Rooms::create([
+                    'my_id' => $user->id,
+                    'other_id' => 0,
+                    'room_date' => $date,
+                    'room_name' => $room_name
+                ]);
+            }
+            $meeting_id = ($request->meeting_id == null && $request->meeting_id == "") ? $room_name : $request->meeting_id;
+
+            return redirect()->route('front.share', $meeting_id);
+        } else {
+            return redirect()->route('front.main');
+        }
     }
     public function updateStatus(Request $request)
     {
@@ -160,10 +185,10 @@ class AllController extends Controller
         $time = time() + 10;
         if (!empty($ip)) {
             UserList::where('ip_address', $ip)->update(["online_status" => $time]);
-             return response()->json(["res" => "Time Update For Session!"]);
+            return response()->json(["res" => "Time Update For Session!"]);
         }
     }
-    public function settings($type = null)
+    public function settings($type = null, $meeting_id = null)
     {
         $blockip = $_SERVER['REMOTE_ADDR'];
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
@@ -171,7 +196,7 @@ class AllController extends Controller
             return redirect()->route('front.blocked');
             exit;
         }
-        return view('front.settings', compact('type'));
+        return view('front.settings', compact('type', 'meeting_id'));
     }
     public function video(Request $request)
     {
@@ -214,6 +239,47 @@ class AllController extends Controller
             ]);
         }
         return view('front.text-meeting', compact('user', 'blockwords'));
+    }
+    public function share(Request $request, $meeting_id = null)
+    {
+        $blockip = $_SERVER['REMOTE_ADDR'];
+        $countIp = count(BlockUser::where('block_ip', $blockip)->get());
+        if ($countIp >= 2) {
+            return redirect()->route('front.blocked');
+            exit;
+        }
+        $ip = $request->session()->get('ip');
+        $blockwords = ChatBlockWords::pluck('block_words')->toArray();
+        $user =  UserList::where('ip_address', $ip)->first();
+        if (empty($user)) {
+            if ($request->meeting_id != null) {
+                return redirect()->route('front.get-started-type-meeting-id', ['share', $request->meeting_id]);
+            } else {
+                return redirect()->route('front.get-started-type', 'share');
+            }
+        } else {
+            UserList::where('id', $user->id)->update([
+                "type" => "share",
+                "status" => 0
+            ]);
+            $date = date("Y-m-d");
+            $room_name = rand(99999999, 10000000);
+            if ($meeting_id == null && $meeting_id == "") {
+                Rooms::create([
+                    'my_id' => $user->id,
+                    'other_id' => 0,
+                    'room_date' => $date,
+                    'room_name' => $room_name
+                ]);
+                UserList::where('id', $user->id)->update([
+                    "type" => "share",
+                    "status" => 0
+                ]);
+            }
+            $meeting_id = ($meeting_id == null && $meeting_id == "") ? $room_name : $meeting_id;
+            $currentUrl = route('front.share', $meeting_id);
+        }
+        return view('front.share-meeting', compact('user', 'blockwords', 'meeting_id', 'currentUrl'));
     }
     public function connect_with(Request $request)
     {
@@ -454,7 +520,7 @@ class AllController extends Controller
                     'prompt' => $request->val,
                     'user_id' => $request->user_id,
                 ]);
-                return response()->json(['completion' => $completion,'response'=> $response->json()]);
+                return response()->json(['completion' => $completion, 'response' => $response->json()]);
             }
             if (isset($response['error']['message'])) {
                 $errorCode = $response['error']['code'] ?? null;
