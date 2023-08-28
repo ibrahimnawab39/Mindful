@@ -7,9 +7,10 @@ $(document).ready(function () {
     if (cuurentTheme == "lightTheme") {
         $(".showLight").show();
         $(".showdark").hide();
+
     } else {
-        $(".showdark").hide();
-        $(".showLight").show();
+        $(".showLight").hide();
+        $(".showdark").show();
     }
 
     $(".right-images-slider").slick({

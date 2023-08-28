@@ -499,7 +499,7 @@ class AllController extends Controller
                 'Authorization' => 'Bearer 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',
                 'Content-Type' => 'application/json',
             ])->post('https://api.openai.com/v1/chat/completions', [
-                'model' => 'gpt-3.5-turbo',
+                'model' => 'text-davinci-003',
                 'messages' => [
                     [
                         'role' => 'system',
