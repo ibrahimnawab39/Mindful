@@ -417,6 +417,7 @@
         function skip_query() {
             var icon = $("#skip_call").find(".mdi");
             $("#chat-messages").html("");
+            $(".room-number,.oppentent-detail").html("");
             skiping_video(video, mic);
             if (myid != 0 && otherid != 0) {
                 socket.emit('leaveRoom', room);

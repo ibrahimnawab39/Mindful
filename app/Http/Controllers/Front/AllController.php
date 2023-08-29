@@ -56,7 +56,7 @@ class AllController extends Controller
     {
         $blockip = $_SERVER['REMOTE_ADDR'];
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
-        if ($countIp <= 2) {
+        if ($countIp < 2) {
             return redirect()->route('front.welcome');
         }
         return view("front.blocked");
@@ -302,7 +302,7 @@ class AllController extends Controller
         $filtrip = str_replace($pattern, '', $ip);
         $blockip = $_SERVER['REMOTE_ADDR'];
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
-        if ($countIp >= 1) {
+        if ($countIp >= 2) {
             return response()->json(["res" => "ipblocked"]);
             exit;
         }
