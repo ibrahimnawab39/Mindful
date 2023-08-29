@@ -128,20 +128,19 @@
         var skipStatus = 'finding' // connected, finding, confirm
 
         function changeSkipButton(data) {
-            skipStatus = data
+           
             console.log(data);
             if (data == 'confirm') {
                 $("#skip_call").addClass('btn-primaryyy').removeClass('skip-video-btn').html('Are you sure?');
             }
-            if (data == 'finding') {
+            else if (data == 'finding') {
                 $("#skip_call").addClass('btn-primaryyy').removeClass('skip-video-btn').html(
                     '<p class="mb-0 dotloading">Finding a stranger</p>');
-            }
-
-            if (data == 'connected') {
-                $("#skip_call").addClass('skip-video-btn').removeClass('btn-primary').html(
+            }else if (data == 'connected') {
+                $("#skip_call").addClass('skip-video-btn').removeClass('btn-primaryyy').html(
                     '<i class="mdi mdi-24px mdi-reload"></i> Skip')
             }
+             skipStatus = data
         }
 
         $("#skip_call").on("click", function() {
