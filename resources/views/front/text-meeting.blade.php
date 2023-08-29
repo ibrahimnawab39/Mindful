@@ -308,10 +308,10 @@
             socket.emit('joinRoom', room);
             socket.on('sendChatToClient', (message) => {
                 console.log("Received message:", message);
-                if (lastMessageLi.innerHTML.trim() === message.content.trim()) {
-                    // If the last message content is the same as the current message, remove the current message
-                    return;
-                }
+                // if (lastMessageLi.innerHTML.trim() === message.content.trim()) {
+                //     // If the last message content is the same as the current message, remove the current message
+                //     return;
+                // }
                 const messageLi = document.createElement('li');
                 // Add the message content to the list item
                 messageLi.innerHTML = message.content;
