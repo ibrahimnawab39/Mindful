@@ -52,7 +52,7 @@
                     <a class="btn btn-dark rounded gotodashboard Goback-Btn" href="{{ route('front.main') }}">
                         <img src="{{ asset('assets/images/svg/arrowleft.svg') }}" class='showLight'>
                         <img src="{{ asset('assets/images/svg/arrowleftDark.svg') }}" class='showdark'>
-                        Go Back to Dashboard
+                        Go Back to Dashboard Call
                     </a>
                     <h4 class="room-number"></h4>
                     <div class='col-md-4'>
