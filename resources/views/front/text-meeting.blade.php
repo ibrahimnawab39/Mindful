@@ -11,21 +11,26 @@
             /*bottom: 60px;*/
             /* width: 88%; */
         }
+
         button.chat-btn {
             /*bottom: 67px;*/
             right: 20px;
         }
+
         .skip-video .myVideo .videoActions {
             left: 50%;
             transform: translateX(-50%);
         }
+
         .chat-header.card-header h6 {
             width: 100%;
         }
+
         .chat-box .card-body {
             height: 500px;
             overflow: hidden;
         }
+
         #chat-messages {
             list-style: none;
             margin: 0;
@@ -33,6 +38,7 @@
             position: relative;
             height: 485px;
         }
+
         #chat-messages li:last-child {
             margin-bottom: 20px
         }
@@ -71,41 +77,29 @@
                         </div>
                     </div>
                     <button class="btn skip-video-btn rounded btn-small m-0" type="button" id="skip_call">
-                        <i class="mdi mdi-24px mdi-reload"></i> Skip</button>
+                        <i class="mdi mdi-24px mdi-reload"></i> Skip
+                    </button>
+
                 </div>
                 <div class="chat-box card">
                     <div class="chat-header card-header ">
                         <h6 class=" ">Live Chat</h6>
                     </div>
                     <div class="card-body chat-body">
-                        <div class="oppentent-detail"></div>    
+                        <div class="oppentent-detail"></div>
                         <ul id="chat-messages" class="chat-conversation-box">
                         </ul>
                     </div>
                     <div class="card-footer  chat-footer">
-                        <div class="chatbotbox" style="display:none">
-                            <ul>
-                            </ul>
-                            <form id="chat-bot">
-                                <div class="chat-input-group">
-                                    <textarea id="messageInput" class="chat-input" name="botmessage" placeholder="Type your message"></textarea>
-                                    <button type="submit" class="chat-btn ssesxa">
-                                        <img src="{{ asset('assets/images/svg/send_msg.svg') }}">
-                                    </button>
-                                    <button disabled="disabled" type="button" class="chat-btn fa-spin fa fa-spinner"
-                                        style="display:none">
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+
                         <form id="chat-from">
                             <div class="chat-input-group nnasnejca">
-                                <img src="{{ asset('assets/images/icons/chatbot.png') }}" class="aichat"
-                                    style="display:none">
+
                                 <span class="ai-badge">AI Prompt</span>
                                 <button class="closeGpt" type="button"><i class="fa-regular fa-keyboard"></i></button>
                                 <input class="chat-input sfcraerffadferfadwedascdfvrwascfrgwasd"
-                                    placeholder="Type '/gpt' followed by your question. Try it now!" type="text" name="message">
+                                    placeholder="Type '/gpt' followed by your question. Try it now!" type="text"
+                                    name="message">
                                 <button class="chat-btn">
                                     <img src="{{ asset('assets/images/svg/send_msg.svg') }}">
                                 </button>
@@ -131,16 +125,43 @@
         var meeting_id = "585689757";
         var clearinterval = setInterval(updateOnlineTime, 5000);
         var statusconntion = null;
+        var skipStatus = 'finding' // connected, finding, confirm
+
+        function changeSkipButton(data) {
+            skipStatus = data
+            console.log(data);
+            if (data == 'confirm') {
+                $("#skip_call").addClass('btn-primaryyy').removeClass('skip-video-btn').html('Are you sure?');
+            }
+            if (data == 'finding') {
+                $("#skip_call").addClass('btn-primaryyy').removeClass('skip-video-btn').html(
+                    '<p class="mb-0 dotloading">Finding a stranger</p>');
+            }
+
+            if (data == 'connected') {
+                $("#skip_call").addClass('skip-video-btn').removeClass('btn-primary').html(
+                    '<i class="mdi mdi-24px mdi-reload"></i> Skip')
+            }
+        }
+
         $("#skip_call").on("click", function() {
-            var icon = $(this).find(".mdi");
-            icon.addClass("mdi-spin");
-            clearinterval = setInterval(updateOnlineTime, 5000);
-            SkipQuery();
+
+            if (skipStatus == 'connected') {
+                changeSkipButton('confirm')
+            }
+
+            if (skipStatus == 'confirm') {
+                changeSkipButton('finding')
+                SkipQuery();
+            }
+
         });
         $(function() {
             SkipQuery();
+            changeSkipButton('finding')
         });
         const blockedWords = [{!! '"' . implode('","', $blockwords) . '"' !!}];
+
         function hasBlockedWords(input) {
             for (let i = 0; i < blockedWords.length; i++) {
                 const blockedWord = blockedWords[i];
@@ -152,54 +173,8 @@
             }
             return false; // Return false if no blocked words are found
         }
-        $(document).on('click', '.aichat', function() {
-            $('.chatbotbox').toggle();
-        })
-        $(document).on('submit', '#chat-bot', function(event) {
-            event.preventDefault();
-            let chatList = $('.chatbotbox ul');
-            let val = $.trim($("textarea[name='botmessage']").val());
-            if (val == '') {
-                return;
-            }
-            $('.ssesxa').hide();
-            $('.chat-btn.fa').show();
-            $("textarea[name='botmessage']").val(' ');
-            $.ajax({
-                url: "{{ route('front.chat-gpt') }}",
-                type: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                dataType: "json",
-                data: JSON.stringify({
-                        val: val,
-                        user_id: user_id
-                    }),
-                success: function(result) {
-                    if (result.completion) {
-                        chatList.append(`
-                            <li>
-                                <span></span>
-                                <div class="botquestion">${val}</div>
-                                <div class="botanswer">${decode_utf8((result.completion))}</div>
-                            </li>
-                        `);
-                        chatList.scrollTop(chatList[0].scrollHeight);
-                    }
-                }
-            });
-            $('.ssesxa').show();
-            $('.chat-btn.fa').hide();
-        });
-        $(document).on('click', '.chatbotbox ul span', function() {
-            let AItext = $.trim($(this).parent().find('.botanswer').text());
-            let msgText = $.trim($(this).parent().find('.botquestion').text());
-            console.log(msgText + ' + ' + AItext);
-            $(".sfcraerffadferfadwedascdfvrwascfrgwasd").val(msgText + '<br>' + AItext);
-            $('.chatbotbox').hide();
-        });
+
+
         function decode_utf8(s) {
             return decodeURIComponent(escape(s));
         }
@@ -215,6 +190,7 @@
             const inputValue = $(this).val();
             const searchTerm = "/gpt";
             const searchTerm1 = " /gpt Query";
+            let containsBlockedWords = '';
             if (inputValue.includes(searchTerm) || inputValue.includes(searchTerm1)) {
                 $(".closeGpt").show();
                 $(".aichat").show();
@@ -222,16 +198,18 @@
                 $(".nnasnejca").addClass('gptprompt').attr('prompt', true);
                 $(this).val('');
             }
-            const containsBlockedWords = hasBlockedWords(userInput.toLowerCase());
+
+            if (userInput.length > 3) {
+                containsBlockedWords = hasBlockedWords(userInput.toLowerCase());
+            }
             if (containsBlockedWords) {
                 $("#chat-from button").attr("disabled", true);
                 toastr["warning"]("If You Are Using illegal, nudity/sexual any kind of words!");
-                //   console.log("Input contains blocked words. Please revise your message.");
             } else {
                 $("#chat-from button").attr("disabled", false);
-                console.log("Input is clean. Proceed with further processing.");
             }
         });
+
         function SkipQuery() {
             $("#chat-messages").html("");
             if (myid != 0 && otherid != 0) {
@@ -248,6 +226,7 @@
                     },
                     dataType: "JSON",
                     success: function(result) {
+
                         if (result["res"] == "success") {
                             if (result["room"] != null) {
                                 myid = result["room"]["my_id"];
@@ -262,6 +241,7 @@
                                 SkipQuery();
                             }
                         }
+                        changeSkipButton('connected')
                     }
                 })
             } else {
@@ -283,17 +263,22 @@
                                 otherid = result["room"]["other_id"];
                                 room = result["room"]["room_name"];
                                 chat_list(room);
-                               $(".room-number,.oppentent-detail").html(result["other_username"]);
+                                $(".room-number,.oppentent-detail").html(result["other_username"]);
                                 clearInterval(clearinterval);
                                 statusconntion = setInterval(ChangeStatus, 2000)
                             } else {
                                 SkipQuery();
+
                             }
                         }
+
+                        changeSkipButton('connected')
+
                     }
                 })
             }
         }
+
         function ChangeStatus() {
             $.ajax({
                 url: "{{ route('front.change-status') }}",
@@ -314,6 +299,7 @@
                 }
             })
         }
+
         function chat_list(room) {
             socket.on("connection");
             socket.emit('joinRoom', room);
@@ -419,6 +405,7 @@
                 })
             }
         })
+
         function remove_intrest(idd, value) {
             const index = intrest.indexOf(value);
             if (index !== -1) {
@@ -443,6 +430,7 @@
                 }
             })
         }
+
         function updateOnlineTime() {
             $.ajax({
                 url: "{{ route('front.change-time') }}",

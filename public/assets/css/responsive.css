@@ -1,38 +1,44 @@
 @media (max-width:1400px) {
     .welcome-page .content-container p {
-    font-size: clamp(14px, 1vw, 2rem);
-}
-    .welcome-page .content-container button, .welcome-page .content-container a {
-    padding: 10px 10px;
-    font-size: clamp(.7rem, 1vw, 2rem);
-}
-.welcome-page .content-container h3 {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 800;
-    font-size: 24px;
-}
+        font-size: clamp(14px, 1vw, 2rem);
+    }
+
+    .welcome-page .content-container button,
+    .welcome-page .content-container a {
+        padding: 10px 10px;
+        font-size: clamp(.7rem, 1vw, 2rem);
+    }
+
+    .welcome-page .content-container h3 {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 800;
+        font-size: 24px;
+    }
 }
 
 @media (max-width:1220px) {
-.welcome-page .content-container p {
-    font-size: clamp(12px, 1vw, 2rem);
-}
-.welcome-page .content-container button, .welcome-page .content-container a {
-    padding: 8px 10px;
-    font-size: clamp(.6rem, 1vw, 2rem);
-}
-.welcome-page .logo-container {
-    margin-bottom: 20px;
-    width: 60%;
-}
+    .welcome-page .content-container p {
+        font-size: clamp(12px, 1vw, 2rem);
+    }
 
-.welcome-page .content-container h3 {
-    font-size: 22px;
-}
+    .welcome-page .content-container button,
+    .welcome-page .content-container a {
+        padding: 8px 10px;
+        font-size: clamp(.6rem, 1vw, 2rem);
+    }
 
-   .deahboardSecLeft h1 {
-        font-size:2rem;
+    .welcome-page .logo-container {
+        margin-bottom: 20px;
+        width: 60%;
+    }
+
+    .welcome-page .content-container h3 {
+        font-size: 22px;
+    }
+
+    .deahboardSecLeft h1 {
+        font-size: 2rem;
     }
 
 
@@ -44,86 +50,99 @@
 
 @media (max-width:991px) {
     .deahboardSecLeft h1 {
-        font-size:2rem;
+        font-size: 2rem;
     }
-    .deahboardSecLeft { 
-    padding-left: 0px;
-}
+
+    .deahboardSecLeft {
+        padding-left: 0px;
+    }
 
 }
 
 
 @media (max-width:767px) {
-        .videolefttt { 
-    height: fit-content; 
-    gap: 10px;
-    margin-bottom: 20px;
-}
-.getstartedWizard .signup-step-container {
-    padding: 15px; 
-}
-.tab-pane h2 {
-    margin-bottom: 24px; 
-    font-size: 20px;
-    line-height: 25px; 
-}
-    .welcome-page .content-container { 
-    max-width: 100%; 
-}
+    .videolefttt {
+        height: fit-content;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .getstartedWizard .signup-step-container {
+        padding: 15px;
+    }
+
+    .tab-pane h2 {
+        margin-bottom: 24px;
+        font-size: 20px;
+        line-height: 25px;
+    }
+
+    .welcome-page .content-container {
+        max-width: 100%;
+    }
+
     .navbar-collapse {
-    order: 2;
-}
-    .jjkd{
-        
+        order: 2;
+    }
+
+    .jjkd {
+
         flex: 1;
         display: flex;
         justify-content: end;
     }
+
     .left-contentx img.img-fluid.top-logo {
-    width: 180px;
-    margin: 6px 20px;
-}
+        width: 180px;
+        margin: 6px 20px;
+    }
 
     .right-images-slider {
-    padding: 0px 15px;
-}
-      .left-content .logo-container{
-       display:none;
-   }
-    .left-contentx.msa {
-    display: block;
-}
-    .welcome-page .left-content{
-            height: 50vh;
+        padding: 0px 15px;
     }
+
+    .left-content .logo-container {
+        display: none;
+    }
+
+    .left-contentx.msa {
+        display: block;
+    }
+
+    .welcome-page .left-content {
+        height: 50vh;
+    }
+
     .welcome-page .right-images-slider img {
-    height: 35vh;
-    object-fit: cover;
-}
-    .mindfulNevbar { 
+        height: 35vh;
+        object-fit: cover;
+    }
+
+    .mindfulNevbar {
         padding-left: 15px;
         padding-right: 15px;
     }
-    
+
     section.dashboard-section {
-        display: flex; 
+        display: flex;
         justify-content: center;
         flex-direction: column;
         align-items: center;
-        height: 100%; 
-        padding:10px;
+        height: 100%;
+        padding: 10px;
     }
-    
-    .deahboardSecLeft { 
+
+    .deahboardSecLeft {
         flex-direction: column;
         align-items: center;
         justify-content: center;
         padding-left: 0px;
     }
-    
-    .deahboardSecLeft p {  
+
+    .deahboardSecLeft p {
         text-align: center;
     }
+
     .getStartedColumnLeft {
         height: 50%;
         padding: 20px 40px;
@@ -133,61 +152,104 @@
         padding-top: 20px;
         width: 150px;
     }
+
     .getStartedPage>.row {
         height: 100%;
         margin: 0;
     }
+
     .getStartedColumnRight {
         height: 50%;
         background-position: center;
     }
+
     .stickybar {
-        position: relative; 
+        position: relative;
         height: 100px !important;
     }
 }
+
 /* 4K SCREEN SIZE   */
-@media (min-width:1450px) and (max-width:3000px)  {
-    .welcome-page .left-content { 
+@media (min-width:1450px) and (max-width:3000px) {
+    .welcome-page .left-content {
         padding-bottom: 40px;
     }
-    .welcome-page.logo-container{
+
+    .welcome-page.logo-container {
         margin-bottom: 100px;
     }
 }
+
 /* TABLET SCREEN */
-@media (min-width:655px) and (max-width:786px)  {
+@media (min-width:655px) and (max-width:786px) {
     .welcome-page .left-content {
         padding-right: 20px;
         padding-left: 20px;
         padding-bottom: 40px;
     }
-    .welcome-page .logo-container{
+
+    .welcome-page .logo-container {
         margin-bottom: 18px;
         width: 250px;
     }
 }
-/* MOBILE SCREEN */
-@media screen and (max-width:650px)  {
-    input.chat-input.sfcraerffadferfadwedascdfvrwascfrgwasd {
-    padding-left: 40px;
-    width: 91%;
-}
 
-    .videolefttt { 
-    height: fit-content; 
-    gap: 10px;
-    margin-bottom: 20px;
-}
-      .deahboardSecLeft h1 {
-        font-size:2rem;
+/* MOBILE SCREEN */
+@media screen and (max-width:650px) {
+    .chat-input-group {
+        padding: 10px 5px;
+        gap: 5px;
     }
+
+    .chat-input-group .gptprompt input.chat-input.sfcraerffadferfadwedascdfvrwascfrgwasd {
+        padding-left: 80px;
+    }
+
+    .chat-input-group .chat-input {
+        padding: 10px 30px 10px 16px;
+    }
+
+    span.ai-badge {
+        left: 14px;
+        padding: 5px 5px;
+        font-weight: 400;
+        font-size: 12px;
+    }
+
+    button.chat-btn {
+        padding: 10px;
+        width: 35px;
+        height: 35px;
+    }
+
+    .closeGpt {
+        transform: translateY(-50%) rotate(90deg);
+        right: 55px;
+    }
+
+
+    input.chat-input.sfcraerffadferfadwedascdfvrwascfrgwasd {
+        padding-left: 15px;
+        width: 91%;
+    }
+
+    .videolefttt {
+        height: fit-content;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .deahboardSecLeft h1 {
+        font-size: 2rem;
+    }
+
     .welcome-page .left-content {
         padding-right: 20px;
         padding-left: 20px;
         padding-bottom: 40px;
     }
-    .welcome-page .logo-container{
+
+    .welcome-page .logo-container {
         margin-bottom: 18px;
         width: 150px;
     }

@@ -57,11 +57,43 @@
             <p>
                 Chat GPT: Generative Pre-trained Transformer for Open-Domain Conversational AI
             </p>
-            <button class='btn btn-dark rounded '>
+            <button class='btn btn-dark rounded ' type="button" data-toggle="modal" data-target="#exampleModal">
                 <img src="{{ asset('assets/images/svg/openai.svg') }}" class=''>
-                Open GPT</button>
+                Instructions</button>
         </div>
+
     </section>
+
+    <!-- Modal -->
+    <div class=" fade modal  instruction-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Instructions</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Mindful GPT, powered by OpenAI, is an advanced language model designed to generate human-like text
+                        based
+                        on the input it receives. It's trained on vast amounts of data, enabling it to respond to a wide
+                        range
+                        of queries, assisting in debates and discussions.
+                    </p>
+                    <p>
+                        Tip: Type <strong>‘/gpt YourQuery’</strong> in a text or video chat to use this tool mid-discussion!
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-small btn-success rounded " data-dismiss="modal">Got it!</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('scripts')
     <script>

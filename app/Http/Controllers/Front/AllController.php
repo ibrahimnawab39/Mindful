@@ -12,6 +12,7 @@ use App\Models\BlockUser;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Share;
 
@@ -57,7 +58,6 @@ class AllController extends Controller
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
         if ($countIp <= 2) {
             return redirect()->route('front.welcome');
-            exit;
         }
         return view("front.blocked");
     }
@@ -67,7 +67,6 @@ class AllController extends Controller
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
         if ($countIp >= 2) {
             return redirect()->route('front.blocked');
-            exit;
         }
         return view("front.rules");
     }
@@ -77,12 +76,10 @@ class AllController extends Controller
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
         if ($countIp >= 2) {
             return redirect()->route('front.blocked');
-            exit;
         }
         if (!empty($request->cookie('ip'))) {
             $request->session()->put('ip', $request->cookie('ip'));
             return redirect()->route('front.main');
-            exit;
         }
         return view("front.welcome");
     }
@@ -92,7 +89,6 @@ class AllController extends Controller
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
         if ($countIp >= 2) {
             return redirect()->route('front.blocked');
-            exit;
         }
         Artisan::call('optimize', ['--quiet' => true]);
         $ip =  $request->session()->get('ip');
@@ -108,7 +104,6 @@ class AllController extends Controller
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
         if ($countIp >= 2) {
             return redirect()->route('front.blocked');
-            exit;
         }
         $ip = $request->ip();
         $time = time();
@@ -495,46 +490,53 @@ class AllController extends Controller
     {
         // Make an API call to OpenAI
         try {
-            $response = Http::timeout(80)->withHeaders([
-                'Authorization' => 'Bearer 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',
-                'Content-Type' => 'application/json',
-            ])->post('https://api.openai.com/v1/chat/completions', [
-                'model' => 'text-davinci-003',
-                'messages' => [
-                    [
-                        'role' => 'system',
-                        'content' => 'You are a helpful assistant.',
+            $todayRequests = GptRequests::whereDate('created_at', DB::raw('CURDATE()'))->count('id');
+            if ($todayRequests < 5) {
+                $response = Http::timeout(80)->withHeaders([
+                    'Authorization' => 'Bearer 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',
+                    'Content-Type' => 'application/json',
+                ])->post('https://api.openai.com/v1/completions', [
+                    'model' => 'text-davinci-003',
+                    'messages' => [
+                        [
+                            'role' => 'system',
+                            'content' => 'You are a helpful assistant.',
+                        ],
+                        [
+                            'role' => 'user',
+                            'content' => $request->input('val') . ', only answer/response in text',
+                        ],
                     ],
-                    [
-                        'role' => 'user',
-                        'content' => $request->val . ', only answer/response in text',
-                    ],
-                ],
-                'max_tokens' => 1000,
-                'temperature' => 0.8,
-            ]);
-            // $response = $response->json();
-            if (isset($response['choices'][0]['message']['content'])) {
-                $completion = $response['choices'][0]['message']['content'];
-                GptRequests::create([
-                    'prompt' => $request->val,
-                    'user_id' => $request->user_id,
+                    'max_tokens' => 1000,
+                    'temperature' => 0.8,
                 ]);
-                return response()->json(['completion' => $completion, 'response' => $response->json()]);
-            }
-            if (isset($response['error']['message'])) {
-                $errorCode = $response['error']['code'] ?? null;
-                $errorType = $response['error']['type'] ?? null;
+                // $response = $response->json();
+                if (isset($response['choices'][0]['message']['content'])) {
+                    $completion = $response['choices'][0]['message']['content'];
+                    GptRequests::create([
+                        'prompt' => $request->val,
+                        'user_id' => $request->user_id,
+                    ]);
+                    return response()->json(['status' => 'success', 'completion' => $completion, 'response' => $response->json()]);
+                }
+                if (isset($response['error']['message'])) {
+                    $errorCode = $response['error']['code'] ?? null;
+                    $errorType = $response['error']['type'] ?? null;
+                    return response()->json([
+                        'status' => 'warning',
+                        'error' => $response['error']['message'],
+                        'errorCode' => $errorCode,
+                        'errorType' => $errorType
+                    ]);
+                }
+            } else {
                 return response()->json([
-                    'error' => $response['error']['message'],
-                    'errorCode' => $errorCode,
-                    'errorType' => $errorType
+                    'error' => 'Your reached your today limit',
+                    'status' => 'warning',
                 ]);
             }
-            // Handle other unexpected cases here if needed
-            // ...
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()]);
+            return response()->json(['status' => 'warning', 'error' => $e->getMessage()]);
         }
     }
 }
