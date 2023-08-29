@@ -52,7 +52,7 @@
                     <a class="btn btn-dark rounded gotodashboard Goback-Btn" href="{{ route('front.main') }}">
                         <img src="{{ asset('assets/images/svg/arrowleft.svg') }}" class='showLight'>
                         <img src="{{ asset('assets/images/svg/arrowleftDark.svg') }}" class='showdark'>
-                        Go Back to Dashboard Call
+                        Go Back to Dashboard
                     </a>
                     <h4 class="room-number"></h4>
                     <div class='col-md-4'>
@@ -128,29 +128,28 @@
         var skipStatus = 'finding' // connected, finding, confirm
 
         function changeSkipButton(data) {
-           
+
             console.log(data);
             if (data == 'confirm') {
                 $("#skip_call").addClass('btn-primaryyy').removeClass('skip-video-btn').html('Are you sure?');
-            }
-            else if (data == 'finding') {
+            } else if (data == 'finding') {
                 $("#skip_call").addClass('btn-primaryyy').removeClass('skip-video-btn').html(
                     '<p class="mb-0 dotloading">Finding a stranger</p>');
-            }else if (data == 'connected') {
+            } else if (data == 'connected') {
                 $("#skip_call").addClass('skip-video-btn').removeClass('btn-primaryyy').html(
                     '<i class="mdi mdi-24px mdi-reload"></i> Skip')
             }
-             skipStatus = data
+            skipStatus = data
         }
 
         $("#skip_call").on("click", function() {
 
             if (skipStatus == 'connected') {
                 changeSkipButton('confirm')
-            }
-
-            if (skipStatus == 'confirm') {
+            } else if (skipStatus == 'confirm') {
                 changeSkipButton('finding')
+                SkipQuery();
+            } else {
                 SkipQuery();
             }
 
@@ -211,6 +210,7 @@
 
         function SkipQuery() {
             $("#chat-messages").html("");
+            $(".room-number,.oppentent-detail").html("");
             if (myid != 0 && otherid != 0) {
                 socket.emit('leaveRoom', room);
                 $.ajax({
@@ -300,9 +300,18 @@
         }
 
         function chat_list(room) {
+            const chatMessages = document.getElementById('chat-messages');
+            const lastMessageLi = chatMessages.lastChild;
+
+
             socket.on("connection");
             socket.emit('joinRoom', room);
             socket.on('sendChatToClient', (message) => {
+                console.log("Received message:", message);
+                if (lastMessageLi.innerHTML.trim() === message.content.trim()) {
+                    // If the last message content is the same as the current message, remove the current message
+                    return;
+                }
                 const messageLi = document.createElement('li');
                 // Add the message content to the list item
                 messageLi.innerHTML = message.content;

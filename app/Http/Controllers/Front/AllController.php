@@ -129,7 +129,8 @@ class AllController extends Controller
                     "type" => $request->type,
                     "online_status" => $time + 10,
                     "status" => '1',
-                    'ip_address' => $alreadyip
+                    'ip_address' => $alreadyip,
+                    'user_status' => 1
                 ]);
             }
         } else {
@@ -538,5 +539,16 @@ class AllController extends Controller
         } catch (\Exception $e) {
             return response()->json(['status' => 'warning', 'error' => $e->getMessage()]);
         }
+    }
+    public function beforeunload(Request $request)
+    {
+        $ip = $request->session()->get('ip');
+        $user =  UserList::where('ip_address', $ip)->first();
+        if (!empty($user)) {
+            UserList::where('id', $user->id)->update([
+                "user_status" => 0
+            ]);
+        }
+        return response()->json(["res" => "success"]);
     }
 }

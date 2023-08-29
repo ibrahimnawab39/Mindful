@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" theme='lightTheme'>
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,7 +11,6 @@
     <link rel="mask-icon" href="{{ asset('assets/favicon/safari-pinned-tab.svg') }} " color="#5bbad5">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#f1f1f1">
-
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,7 +40,6 @@
     </style>
     @yield('styles')
 </head>
-
 <body>
     <div id="app">
         <nav class="navbar mindfulNevbar navbar-expand-md shadow-sm">
@@ -53,8 +50,6 @@
                     <img src="{{ asset('assets/images/logo/logo-dark.png') }}" alt=""
                         class="img-fluid showdark top-logo" style='display:none'>
                 </a>
-
-
                 <div class="collapse navbar-collapse justify-content-md-center" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mx-auto">
@@ -67,7 +62,6 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('front.settings') }}">{{ __('Settings') }}</a>
                         </li>
-
                     </ul>
                 </div>
                 <a href="javascript:void(0)" class="switch-icon-button jjkd desktop-switch-button">
@@ -77,8 +71,6 @@
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                     aria-label="Toggle navigation"><span class="fa fa-bars"></span></button>
-
-
             </div>
         </nav>
         <main class="py-4">
@@ -98,9 +90,7 @@
         let ip_address = "{{ env('APP_NODE_IP_ADDRESS') }}";
         // const port = process.env.PORT || 3000;
         let socket = io("node.suzukichampionmotors.com");
-
         socket.on("connection", (socket) => {
-
         });
         toastr.options = {
             "closeButton": false,
@@ -121,5 +111,4 @@
         }
     </script>
 </body>
-
 </html>
