@@ -572,7 +572,7 @@ class AllController extends Controller
                     return response()->json([
                         'status' => 'warning',
                         'error' => $response['error']['message'],
-                        'errorCode' => $errorCode,
+                        'errorCode' => $errorCode, 
                         'errorType' => $errorType
                     ]);
                 }
