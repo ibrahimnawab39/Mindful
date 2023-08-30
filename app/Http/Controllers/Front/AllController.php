@@ -547,24 +547,24 @@ class AllController extends Controller
         try {
             $todayRequests = GptRequests::whereDate('created_at', DB::raw('CURDATE()'))->count('id');
             if ($todayRequests < 5) {
-                $apiKey = 'Bearer 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';
-                $url = 'https://api.openai.com/v1/engines/text-davinci-003/completions';
-
-                $response = Http::post($url, [
-                    'prompt' => $request->val . ', only answer/response in text',
+                $response = Http::timeout(80)->withHeaders([
+                    'Authorization' => 'Bearer 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',
+                    'Content-Type' => 'application/json',
+                ])->post('https://api.openai.com/v1/engines/text-davinci-003/completions', [
+                    'prompt' => $request->val.' , only answer/response in text ,',
                     'max_tokens' => 100,
-                ], [
-                    'Authorization' => 'Bearer ' . $apiKey,
+                    'temperature' => 0.8,
                 ]);
 
+                $response = $response->json();
 
-                if (isset($response->json()['choices'][0]['text'])) {
-                    $completion = $response->json()['choices'][0]['text'];
+                if (isset($response['choices'][0]['text'])) {
+                    $completion = $response['choices'][0]['text'];
                     GptRequests::create([
                         'prompt' => $request->val,
                         'user_id' => $request->user_id,
                     ]);
-                    return response()->json(['status' => 'success', 'completion' => $completion, 'response' => $response->json()]);
+                    return response()->json(['status' => 'success', 'completion' => $completion, 'response' => $response]);
                 }
                 if (isset($response['error']['message'])) {
                     $errorCode = $response['error']['code'] ?? null;
