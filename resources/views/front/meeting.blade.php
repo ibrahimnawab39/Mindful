@@ -359,6 +359,22 @@
         var video = true;
         var dispNme = "{{ $user->username }}";
         var meeting_id = "585689757";
+        var skipStatus = 'finding' // connected, finding, confirm
+
+        function changeSkipButton(data) {
+
+            if (data == 'confirm') {
+                $("#skip_call").addClass('btn-primaryyy').removeClass('skip-video-btn').html('Are you sure?');
+            } else if (data == 'finding') {
+                $("#skip_call").addClass('btn-primaryyy').removeClass('skip-video-btn').html(
+                    '<p class="mb-0 dotloading">Finding a stranger</p>');
+            } else if (data == 'connected') {
+                $("#skip_call").addClass('skip-video-btn').removeClass('btn-primaryyy').html(
+                    '<i class="mdi mdi-24px mdi-reload"></i> Skip')
+            }
+            skipStatus = data
+        }
+
         $("#skip_mic").on("click", function() {
             var icon = $(this).find(".mdi");
             if (icon.hasClass("mdi-microphone")) {
@@ -383,13 +399,22 @@
                 skiping_video(video, mic);
             }
         });
+
         $("#skip_call").on("click", function() {
-            var icon = $(this).find(".mdi");
-            icon.addClass("mdi-spin");
-            skip_query();
+
+            if (skipStatus == 'connected') {
+                changeSkipButton('confirm')
+            } else if (skipStatus == 'confirm') {
+                changeSkipButton('finding')
+                skip_query();
+            } else {
+                skip_query();
+            }
+
         });
         $(function() {
             skip_query();
+            changeSkipButton('finding')
         });
 
         function skiping_video(video, audio) {
@@ -449,6 +474,7 @@
                                 skip_query();
                             }
                         }
+                        changeSkipButton('connected')
                     }
                 })
             } else {
@@ -481,6 +507,7 @@
                                 skip_query();
                             }
                         }
+                        changeSkipButton('connected')
                     }
                 })
             }
