@@ -487,14 +487,14 @@ class AllController extends Controller
             return response()->json(["res" => "success"]);
         }
     }
-    public function chat_gpt(Request $request)
+    public function chat_gpt_4(Request $request)
     {
         // Make an API call to OpenAI
         try {
             $todayRequests = GptRequests::whereDate('created_at', DB::raw('CURDATE()'))->count('id');
             if ($todayRequests < 5) {
                 $response = Http::timeout(80)->withHeaders([
-                    'Authorization' => 'Bearer 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',
+                    'Authorization' => 'Bearer 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',
                     'Content-Type' => 'application/json',
                 ])->post('https://api.openai.com/v1/completions', [
                     'model' => 'text-davinci-003',
@@ -540,6 +540,53 @@ class AllController extends Controller
             return response()->json(['status' => 'warning', 'error' => $e->getMessage()]);
         }
     }
+
+    public function chat_gpt(Request $request)
+    {
+        // Make an API call to OpenAI
+        try {
+            $todayRequests = GptRequests::whereDate('created_at', DB::raw('CURDATE()'))->count('id');
+            if ($todayRequests < 5) {
+                $apiKey = 'Bearer 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';
+                $url = 'https://api.openai.com/v1/engines/text-davinci-003/completions';
+
+                $response = Http::post($url, [
+                    'prompt' => $request->val . ', only answer/response in text',
+                    'max_tokens' => 100,
+                ], [
+                    'Authorization' => 'Bearer ' . $apiKey,
+                ]);
+
+
+                if (isset($response->json()['choices'][0]['text'])) {
+                    $completion = $response->json()['choices'][0]['text'];
+                    GptRequests::create([
+                        'prompt' => $request->val,
+                        'user_id' => $request->user_id,
+                    ]);
+                    return response()->json(['status' => 'success', 'completion' => $completion, 'response' => $response->json()]);
+                }
+                if (isset($response['error']['message'])) {
+                    $errorCode = $response['error']['code'] ?? null;
+                    $errorType = $response['error']['type'] ?? null;
+                    return response()->json([
+                        'status' => 'warning',
+                        'error' => $response['error']['message'],
+                        'errorCode' => $errorCode,
+                        'errorType' => $errorType
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    'error' => 'Your reached your today limit',
+                    'status' => 'warning',
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'warning', 'error' => $e->getMessage()]);
+        }
+    }
+
     public function beforeunload(Request $request)
     {
         $ip = $request->session()->get('ip');
