@@ -32,7 +32,7 @@
                     <img src="{{ asset('assets/images/svg/video.svg') }}" class=''>
                     Video</a>
             </div>
-            <div class="row">
+            <div class="row w-100">
                 <div class="col-md-12 mt-4">
                     <label for="">Connect to <span class='text-muted'>(Optional)</span></label>
                     <select id="connect-dropdown">
@@ -45,8 +45,11 @@
                     </select>
                 </div>
             </div>
+            <a href="#deahboardSecRight" class="sendToBottomBtn" style="display: none">
+                <img src="{{asset('assets/images/dashboard/mouse-cursor.png')}}">
+            </a>
         </div>
-        <div class='deahboardSecRight col-md-5 col-lg-6 '>
+        <div class='deahboardSecRight col-md-5 col-lg-6 ' id="deahboardSecRight">
             <img src="{{ asset('assets/images/dashboard/gpt-icon-black.png') }}" class='img-fluid w-50 showLight'>
             <img src="{{ asset('assets/images/dashboard/gpt-icon-white.png') }}" class='img-fluid w-50 showdark'>
             {{-- <div class='dashpoardslider'>

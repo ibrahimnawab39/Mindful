@@ -132,11 +132,18 @@
         padding: 10px;
     }
 
+    .sendToBottomBtn {
+        display: block !important;
+    }
+
     .deahboardSecLeft {
         flex-direction: column;
         align-items: center;
         justify-content: center;
         padding-left: 0px;
+        height: 85vh;
+        gap: 1vh;
+        margin-bottom: 20px;
     }
 
     .deahboardSecLeft p {
@@ -196,6 +203,17 @@
 
 /* MOBILE SCREEN */
 @media screen and (max-width:650px) {
+
+    .dashboardbtngrp a {
+        transition: 0.5s;
+        padding: 10px 7px;
+        font-size: 14px;
+    }
+
+    .videochattright {
+        display: none;
+    }
+
     .chat-input-group {
         padding: 10px 5px;
         gap: 5px;
@@ -236,7 +254,7 @@
     .videolefttt {
         height: fit-content;
         gap: 10px;
-        margin-bottom: 20px;
+        margin-bottom: 0px;
     }
 
     .deahboardSecLeft h1 {

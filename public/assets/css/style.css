@@ -100,12 +100,31 @@
     --prompt-input-color: #f9f9f9;
     --instruction-modal-bg-color: #000000;
     --instruction-modal-head-color: #ffffff;
+
 }
 
 * {
     margin: 0;
     padding: 0;
     text-decoration: none;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+    background-color: transparent;
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #83808969;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
 }
 
 body {
@@ -885,6 +904,7 @@ section.dashboard-section {
 
 .dashboardbtngrp a {
     transition: 0.5s;
+    padding: 10px 15px;
 }
 
 .dashboardbtngrp a:hover {
@@ -1247,7 +1267,7 @@ span#seemore {
 }
 
 .ijosc p {
-    font-size: clamp(0.5rem, 1.3vw, 2rem);
+    font-size: clamp(1rem, 1.3vw, 2rem);
     margin-bottom: 5px;
 }
 
@@ -1499,13 +1519,15 @@ span.ai-badge {
             .5em 0 0 white;
     }
 }
-.btn-primaryyy{
+
+.btn-primaryyy {
     background-color: var(--btnDBg);
     color: var(--btncolor);
     background-color: var(--blue-purple);
     border-color: var(--blue-purple);
-    padding: 5px 10px; 
+    padding: 5px 10px;
 }
-.btn-primaryyy p{
+
+.btn-primaryyy p {
     color: #fff;
 }

@@ -215,7 +215,7 @@
             #remote-video,
             #localVideo,
             #remoteVideo {
-                height: 185px;
+                height: 70vh;
             }
         }
 
