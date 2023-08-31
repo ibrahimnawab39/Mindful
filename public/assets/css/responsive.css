@@ -224,7 +224,9 @@
 
 /* MOBILE SCREEN */
 @media screen and (max-width:650px) {
-
+    .gptprompt input.chat-input.sfcraerffadferfadwedascdfvrwascfrgwasd{
+        padding-left: 80px;
+    }
     .dashboardbtngrp a {
         transition: 0.5s;
         padding: 10px 7px;
