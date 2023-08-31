@@ -295,7 +295,8 @@
                     </div>
                     <div class='col-md-5 '>
                         <div class="d-flex justify-content-end">
-                            <button class="btn skip-video-btn rounded btn-small" type="button" id="skip_call"><i
+                            <button class="btn skip-video-btn rounded btn-small" type="button" id="skip_call">
+                                <i
                                     class="mdi mdi-24px mdi-reload"></i> Skip</button>
                         </div>
                     </div>
