@@ -62,11 +62,11 @@
 
 @media (max-width:767px) {
     .bottomskipbutton {
-        display: none;
+        display: none !important;
     }
 
     .topskipbutton {
-        display: block;
+        display: block !important;
     }
 
     .gotodashboard {

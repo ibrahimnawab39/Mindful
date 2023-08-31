@@ -171,12 +171,13 @@ label {
 h1 {
     font-weight: 700;
 }
+
 .bottomskipbutton {
-    display: block;
+    display: block !important;
 }
 
 .topskipbutton {
-    display: none;
+    display: none !important;
 }
 
 .main-wrapper {

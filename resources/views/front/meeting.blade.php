@@ -243,7 +243,7 @@
                         <img src="{{ asset('assets/images/svg/arrowleftDark.svg') }}" class='showdark'>
                         Go Back to Dashboard
                     </a>
-                    <button class="btn skip-video-btn rounded btn-small topskipbutton" type="button" id="skip_call">
+                    <button class="btn skip-video-btn rounded btn-small topskipbutton skip_call" type="button" id="skip_call">
                         <i class="mdi mdi-24px mdi-reload"></i> Skip
                     </button>
                     <div id="video-message">
@@ -306,7 +306,7 @@
                     </div>
                     <div class='col-md-5 '>
                         <div class="d-flex justify-content-end">
-                            <button class="btn skip-video-btn rounded btn-small bottomskipbutton" type="button" id="skip_call">
+                            <button class="btn skip-video-btn rounded btn-small bottomskipbutton skip_call" type="button" id="skip_call">
                                 <i class="mdi mdi-24px mdi-reload"></i> Skip</button>
                         </div>
                     </div>
@@ -375,12 +375,12 @@
         function changeSkipButton(data) {
 
             if (data == 'confirm') {
-                $("#skip_call").addClass('btn-primaryyy').removeClass('skip-video-btn').html('Are you sure?');
+                $(".skip_call").addClass('btn-primaryyy').removeClass('skip-video-btn').html('Are you sure?');
             } else if (data == 'finding') {
-                $("#skip_call").addClass('btn-primaryyy').removeClass('skip-video-btn').html(
+                $(".skip_call").addClass('btn-primaryyy').removeClass('skip-video-btn').html(
                     '<p class="mb-0 dotloading">Finding a stranger</p>');
             } else if (data == 'connected') {
-                $("#skip_call").addClass('skip-video-btn').removeClass('btn-primaryyy').html(
+                $(".skip_call").addClass('skip-video-btn').removeClass('btn-primaryyy').html(
                     '<i class="mdi mdi-24px mdi-reload"></i> Skip')
             }
             skipStatus = data
@@ -411,7 +411,7 @@
             }
         });
 
-        $("#skip_call").on("click", function() {
+        $(".skip_call").on("click", function() {
 
             if (skipStatus == 'connected') {
                 changeSkipButton('confirm')
@@ -451,7 +451,7 @@
         }
 
         function skip_query() {
-            var icon = $("#skip_call").find(".mdi");
+            var icon = $(".skip_call").find(".mdi");
             $("#chat-messages").html("");
             $(".room-number,.oppentent-detail").html("");
             skiping_video(video, mic);
