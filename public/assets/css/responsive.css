@@ -84,6 +84,7 @@
     .videolefttt {
         height: fit-content;
         gap: 10px;
+        padding: 0;
         margin-bottom: 20px;
     }
 
