@@ -195,6 +195,22 @@
         position: relative;
         height: 100px !important;
     }
+
+    .text-toolbar .gotodashboard {
+        order: 1;
+    }
+
+    .text-toolbar .col-md-4 {
+        order: 3;
+    }
+
+    .text-toolbar button#skip_call {
+        order: 2;
+    }
+
+    .text-toolbar h4.room-number {
+        order: 4;
+    }
 }
 
 /* 4K SCREEN SIZE   */
@@ -224,9 +240,10 @@
 
 /* MOBILE SCREEN */
 @media screen and (max-width:650px) {
-    .gptprompt input.chat-input.sfcraerffadferfadwedascdfvrwascfrgwasd{
+    .gptprompt input.chat-input.sfcraerffadferfadwedascdfvrwascfrgwasd {
         padding-left: 80px;
     }
+
     .dashboardbtngrp a {
         transition: 0.5s;
         padding: 10px 7px;

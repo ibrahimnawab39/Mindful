@@ -55,7 +55,7 @@
                         Go Back to Dashboard
                     </a>
                     <h4 class="room-number"></h4>
-                    <div class='col-md-4'>
+                    <div class='col-md-4 p-0'>
                         <div class="form-group ijosc">
                             <p>Search for interests <span class='text-muted'> (Optional)</span></p>
                             <input type='text' class='form--control w-100' id="intrest-input">
