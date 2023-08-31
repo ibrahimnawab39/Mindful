@@ -61,6 +61,26 @@
 
 
 @media (max-width:767px) {
+    .bottomskipbutton {
+        display: none;
+    }
+
+    .topskipbutton {
+        display: block;
+    }
+
+    .gotodashboard {
+        padding: 8px 10px;
+        font-weight: 400;
+        font-size: 12px;
+        gap: 0px;
+    }
+
+    .btn-primaryyy {
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+
     .videolefttt {
         height: fit-content;
         gap: 10px;

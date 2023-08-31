@@ -211,6 +211,14 @@
                 top: 3px;
             }
 
+            .myVideo video#localVideo {
+                height: 35vh;
+            }
+
+            .oponentVideo video#remoteVideo {
+                height: 35vh;
+            }
+
             #local-video,
             #remote-video,
             #localVideo,
@@ -235,6 +243,9 @@
                         <img src="{{ asset('assets/images/svg/arrowleftDark.svg') }}" class='showdark'>
                         Go Back to Dashboard
                     </a>
+                    <button class="btn skip-video-btn rounded btn-small topskipbutton" type="button" id="skip_call">
+                        <i class="mdi mdi-24px mdi-reload"></i> Skip
+                    </button>
                     <div id="video-message">
                     </div>
                 </div>
@@ -295,9 +306,8 @@
                     </div>
                     <div class='col-md-5 '>
                         <div class="d-flex justify-content-end">
-                            <button class="btn skip-video-btn rounded btn-small" type="button" id="skip_call">
-                                <i
-                                    class="mdi mdi-24px mdi-reload"></i> Skip</button>
+                            <button class="btn skip-video-btn rounded btn-small bottomskipbutton" type="button" id="skip_call">
+                                <i class="mdi mdi-24px mdi-reload"></i> Skip</button>
                         </div>
                     </div>
                 </div>

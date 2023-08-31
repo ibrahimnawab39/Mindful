@@ -171,6 +171,13 @@ label {
 h1 {
     font-weight: 700;
 }
+.bottomskipbutton {
+    display: block;
+}
+
+.topskipbutton {
+    display: none;
+}
 
 .main-wrapper {
     width: 100%;
