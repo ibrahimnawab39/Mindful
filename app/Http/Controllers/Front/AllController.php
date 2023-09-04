@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Share;
 
-
 class AllController extends Controller
 {
     public function report(Request $req)
@@ -120,7 +119,7 @@ class AllController extends Controller
                     "religion" => $request->religion,
                     "type" => $request->type,
                     "online_status" => $time + 10,
-                    "status" => '1',
+                    "status" => '1'
                 ]);
             } else {
                 UserList::create([
@@ -146,7 +145,7 @@ class AllController extends Controller
                 "online_status" => $time + 10,
                 "type" => $request->type,
                 "status" => '1',
-                'ip_address' => $ip . 'Uid=' . $lastId
+                'ip_address' => $ip . 'Uid=' . $lastId,
             ]);
             $request->session()->put('ip', $ip . 'Uid=' . $lastId);
             Cookie::queue(Cookie::make('ip',  $ip . 'Uid=' . $lastId, 525600)); // 525600 minutes = 1 year
@@ -161,15 +160,23 @@ class AllController extends Controller
             $user =  UserList::where('ip_address', $ip)->first();
             $room_name = rand(99999999, 10000000);
             if ($request->meeting_id == null && $request->meeting_id == "") {
+                $check_room
+                    = Rooms::where('room_name', $room_name)
+                    ->first();
+                if ($check_room) {
+                    $room_name = rand(99999999, 10000000);
+                }
                 Rooms::create([
                     'my_id' => $user->id,
                     'other_id' => 0,
                     'room_date' => $date,
-                    'room_name' => $room_name
+                    'room_name' => $room_name,
+                ]);
+                UserList::where('id', $user->id)->update([
+                    "ismoderator" => 1,
                 ]);
             }
             $meeting_id = ($request->meeting_id == null && $request->meeting_id == "") ? $room_name : $request->meeting_id;
-
             return redirect()->route('front.share', $meeting_id);
         } else {
             return redirect()->route('front.main');
@@ -259,17 +266,26 @@ class AllController extends Controller
                 "status" => 0
             ]);
             $date = date("Y-m-d");
-            $room_name = rand(99999999, 10000000);
-            if ($meeting_id == null && $meeting_id == "") {
+            $check_room
+                = Rooms::where('my_id', $user->id)
+                ->orderBy('created_at', 'desc') // Order by the 'created_at' column in descending order
+                ->first();
+            $room_name = ($check_room) ? $check_room->room_name :  rand(99999999, 10000000);
+            if ($meeting_id == null && $meeting_id == "" && !$check_room) {
                 Rooms::create([
                     'my_id' => $user->id,
                     'other_id' => 0,
                     'room_date' => $date,
-                    'room_name' => $room_name
+                    'room_name' => $room_name,
                 ]);
                 UserList::where('id', $user->id)->update([
-                    "type" => "share",
-                    "status" => 0
+                    'status' => 1,
+                    'ismoderator' => 1
+                ]);
+            } else {
+                UserList::where('id', $user->id)->update([
+                    'status' => 1,
+                    'ismoderator' => 1
                 ]);
             }
             $meeting_id = ($meeting_id == null && $meeting_id == "") ? $room_name : $meeting_id;
@@ -540,7 +556,6 @@ class AllController extends Controller
             return response()->json(['status' => 'warning', 'error' => $e->getMessage()]);
         }
     }
-
     public function chat_gpt(Request $request)
     {
         // Make an API call to OpenAI
@@ -551,13 +566,11 @@ class AllController extends Controller
                     'Authorization' => 'Bearer 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',
                     'Content-Type' => 'application/json',
                 ])->post('https://api.openai.com/v1/engines/text-davinci-003/completions', [
-                    'prompt' => $request->val.' , only answer/response in text ,',
+                    'prompt' => $request->val . ' , only answer/response in text ,',
                     'max_tokens' => 100,
                     'temperature' => 0.8,
                 ]);
-
                 $response = $response->json();
-
                 if (isset($response['choices'][0]['text'])) {
                     $completion = $response['choices'][0]['text'];
                     GptRequests::create([
@@ -572,7 +585,7 @@ class AllController extends Controller
                     return response()->json([
                         'status' => 'warning',
                         'error' => $response['error']['message'],
-                        'errorCode' => $errorCode, 
+                        'errorCode' => $errorCode,
                         'errorType' => $errorType
                     ]);
                 }
@@ -586,7 +599,6 @@ class AllController extends Controller
             return response()->json(['status' => 'warning', 'error' => $e->getMessage()]);
         }
     }
-
     public function beforeunload(Request $request)
     {
         $ip = $request->session()->get('ip');
@@ -595,6 +607,14 @@ class AllController extends Controller
             UserList::where('id', $user->id)->update([
                 "user_status" => 0
             ]);
+        }
+        return response()->json(["res" => "success"]);
+    }
+    public function hangup($id, $meeting_id)
+    {
+        $old_room = Rooms::where('my_id', $id)->where('room_name', $meeting_id)->first();
+        if (!empty($old_room)) {
+            Rooms::destroy($old_room->id);
         }
         return response()->json(["res" => "success"]);
     }

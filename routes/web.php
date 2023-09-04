@@ -48,6 +48,7 @@ Route::get('/rules', [AllController::class, 'rules'])->name('front.rules');
 Route::post('/report', [AllController::class, 'report'])->name('front.report');
 Route::get('/blocked', [AllController::class, 'blocked'])->name('front.blocked');
 Route::get('/beforeunload', [AllController::class, 'beforeunload'])->name('front.beforeunload');
+Route::get('/hangup/{id}/{meeting_id}', [AllController::class, 'hangup'])->name('front.hangup');
 
 
 Route::get('/testing', function () {

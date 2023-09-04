@@ -87,6 +87,7 @@ function StartMeeting(roomName, dispNme) {
             $('#toolbox').hide();
             $('#container').hide();
             $('#joinMsg').show().text('Meeting Ended');
+            hangup();
         },
         audioMuteStatusChanged: function (data) {
             if (data.muted) {
@@ -123,10 +124,9 @@ function StartMeeting(roomName, dispNme) {
         participantLeft: function (data) {
             // console.log('participantLeft', data);
             apiObj.executeCommand('endConference');
-            skip_query();
         },
         videoConferenceJoined: function (data) {
-            // console.log("videoConferenceJoined", data);
+            // console.log("videoConferenceJoined", apiObj);
             const isModerator = apiObj.isModerator();
               if (isModerator) {
                 console.log('User is a moderator');

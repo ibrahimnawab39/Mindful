@@ -13,15 +13,18 @@
         .chrome-extension-banner {
             display: none !important;
         }
+
         #sideToolbarContainer {
             background-color: #4DC2C1 !important;
         }
+
         .vi {
             margin-top: 7px;
             position: absolute;
             margin-left: 6px;
             width: 15%;
         }
+
         .leftwatermark {
             left: 372px !important;
             top: 113px !important;
@@ -29,6 +32,7 @@
             background-repeat: no-repea !important;
             background-size: contain !important;
         }
+
         .watermark {
             display: none !important;
             position: absolute !important;
@@ -38,6 +42,7 @@
             background-repeat: no-repeat !important;
             z-index: 1 !important;
         }
+
         @media screen and (max-width:650px) {
             .leftwatermark {
                 left: 84px !important;
@@ -46,9 +51,11 @@
                 background-repeat: no-repeat !important;
                 background-size: contain !important;
             }
+
             .dispName {
                 font-size: 16px !important;
             }
+
             .watermark {
                 display: none !important;
                 position: absolute !important;
@@ -58,17 +65,20 @@
                 background-repeat: no-repeat !important;
                 z-index: 1 !important;
             }
+
             .vi {
                 margin-top: 23px !important;
                 margin-left: 24px !important;
                 width: 54% !important;
             }
         }
+
         @media screen and (max-width:768px) {
             .disName {
                 font-size: 32px !important;
             }
         }
+
         @media (min-width:652px) and (max-width:769px) {
             .leftwatermark {
                 left: 218px !important;
@@ -77,11 +87,13 @@
                 background-repeat: no-repea !important;
                 background-size: contain !important;
             }
+
             .vi {
                 margin-top: 30px !important;
                 margin-left: 24px !important;
                 width: 19% !important;
             }
+
             .watermark {
                 display: none !important;
                 position: absolute !important;
@@ -92,14 +104,17 @@
                 z-index: 1 !important;
             }
         }
+
         .watermark__performanceStats {
             display: none;
         }
+
         .video-container {
             display: grid;
             grid-template-columns: repeat(1, 1fr);
             grid-gap: 10px;
         }
+
         #local-video,
         #remote-video,
         #localVideo,
@@ -110,11 +125,13 @@
             border-radius: 5px;
             object-fit: cover;
         }
+
         #local-video iframe,
         #remote-video iframe {
             border-radius: 5px;
             pointer-events: none;
         }
+
         #left-video-container {
             position: absolute;
             top: 0;
@@ -123,6 +140,7 @@
             height: 100%;
             background-color: black;
         }
+
         #right-video-container {
             position: absolute;
             top: 0;
@@ -131,6 +149,7 @@
             height: 100%;
             background-color: black;
         }
+
         #left-video,
         #right-video {
             position: absolute;
@@ -140,6 +159,7 @@
             height: 100%;
             overflow: hidden;
         }
+
         #left-video video,
         #right-video video {
             position: absolute;
@@ -149,13 +169,16 @@
             height: 100%;
             object-fit: cover;
         }
+
         .skip-video .myVideo .videoActions {
             left: 50%;
             transform: translateX(-50%);
         }
+
         .chat-box .card-body {
             padding-right: 0;
         }
+
         #chat-messages {
             list-style: none;
             margin: 0;
@@ -165,9 +188,11 @@
             margin-bottom: 40px;
             padding-right: 20px;
         }
+
         #chat-messages li:last-child {
             margin-bottom: 20px
         }
+
         .watermaker-logo {
             position: absolute;
             background: #000;
@@ -176,6 +201,7 @@
             left: 0%;
             border-radius: 5px;
         }
+
         @media screen and (max-width:786px) {
             .watermaker-logo {
                 width: 125px;
@@ -186,6 +212,7 @@
                 justify-content: center;
                 top: 3px;
             }
+
             #local-video,
             #remote-video,
             #localVideo,
@@ -193,10 +220,14 @@
                 height: 185px;
             }
         }
+
         main.py-4 {
             padding: 0 !important;
         }
-        .jssocials-share-link { border-radius: 10%; }
+
+        .jssocials-share-link {
+            border-radius: 10%;
+        }
     </style>
 @endsection
 @section('content')
@@ -225,6 +256,11 @@
                         <button class='actionIcon' id="btnCustomCamera">
                             <i class="mdi mdi-video" aria-hidden="true"></i>
                         </button>
+                        @if ($user->ismoderator == 1)
+                            <button class='actionIcon' id="btnHangup">
+                                <i class="mdi mdi-phone-hangup" aria-hidden="true"></i>
+                            </button>
+                        @endif
                     </div>
                 </div>
                 <div class="justify-content-center justify-content-md-start row skip-video d-none">
@@ -235,6 +271,9 @@
                                 <i class="mdi mdi-microphone" aria-hidden="true"></i>
                             </button>
                             <button class='actionIcon' id="skip_video">
+                                <i class="mdi mdi-video" aria-hidden="true"></i>
+                            </button>
+                            <button class='actionIcon' id="btnHangup">
                                 <i class="mdi mdi-video" aria-hidden="true"></i>
                             </button>
                         </div>
@@ -328,7 +367,7 @@
     <script>
         var mic = true;
         var room = "{{ $meeting_id }}";
-        var myid = 0;
+        var myid = "{{ $user->id }}";
         var otherid = 0;
         var video = true;
         var dispNme = "{{ $user->username }}";
@@ -336,12 +375,14 @@
         $(function() {
             skip_query();
         });
+
         function skip_query() {
             $("#chat-messages").html("");
             BindEvent();
             StartMeeting(room, dispNme, video, mic);
             chat_list(room);
         }
+
         function chat_list(room) {
             socket.on("connection");
             socket.emit('joinRoom', room);
@@ -416,6 +457,7 @@
             }
         });
         const blockedWords = [{!! '"' . implode('","', $blockwords) . '"' !!}];
+
         function hasBlockedWords(input) {
             for (let i = 0; i < blockedWords.length; i++) {
                 const blockedWord = blockedWords[i];
@@ -497,6 +539,7 @@
             $(".sfcraerffadferfadwedascdfvrwascfrgwasd").val(msgText + '<br>' + AItext);
             $('.chatbotbox').hide();
         });
+
         function decode_utf8(s) {
             return decodeURIComponent(escape(s));
         }
@@ -511,8 +554,22 @@
             url: "{{ $currentUrl }}",
             showLabel: false,
             showCount: false,
-            shares: ["email", "twitter", "facebook", "linkedin", "pinterest", "whatsapp"
-            ]
+            shares: ["email", "twitter", "facebook", "linkedin", "pinterest", "whatsapp"]
         });
+
+        function hangup() {
+            $.ajax({
+                url: "{{ route('front.hangup', [$user->id,$meeting_id]) }}",
+                type: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {},
+                success:function(res){
+                    window.open("{{ route('front.welcome') }}","_self");
+                }
+            })
+        }
     </script>
 @endsection
