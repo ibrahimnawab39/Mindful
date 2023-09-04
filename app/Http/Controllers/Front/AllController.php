@@ -261,6 +261,12 @@ class AllController extends Controller
                 return redirect()->route('front.get-started-type', 'share');
             }
         } else {
+            $check_room
+                = Rooms::where('room_name', $meeting_id)
+                ->first();
+            if ($meeting_id != null && $meeting_id != "" && !$check_room) {
+                return redirect()->route('front.welcome');
+            }
             UserList::where('id', $user->id)->update([
                 "type" => "share",
                 "status" => 0
