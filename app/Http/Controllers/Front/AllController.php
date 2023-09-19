@@ -197,7 +197,7 @@ class AllController extends Controller
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
         if ($countIp >= 2) {
             return redirect()->route('front.blocked');
-            exit;
+         
         }
         return view('front.settings', compact('type', 'meeting_id'));
     }
@@ -207,7 +207,6 @@ class AllController extends Controller
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
         if ($countIp >= 2) {
             return redirect()->route('front.blocked');
-            exit;
         }
         $blockwords = ChatBlockWords::pluck('block_words')->toArray();
         $ip = $request->session()->get('ip');
@@ -228,7 +227,6 @@ class AllController extends Controller
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
         if ($countIp >= 2) {
             return redirect()->route('front.blocked');
-            exit;
         }
         $ip = $request->session()->get('ip');
         $blockwords = ChatBlockWords::pluck('block_words')->toArray();
@@ -249,7 +247,6 @@ class AllController extends Controller
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
         if ($countIp >= 2) {
             return redirect()->route('front.blocked');
-            exit;
         }
         $ip = $request->session()->get('ip');
         $blockwords = ChatBlockWords::pluck('block_words')->toArray();
@@ -326,7 +323,6 @@ class AllController extends Controller
         $countIp = count(BlockUser::where('block_ip', $blockip)->get());
         if ($countIp >= 2) {
             return response()->json(["res" => "ipblocked"]);
-            exit;
         }
         while (true) {
             $online_users = $this->all_online_user($user->id, $ip);
